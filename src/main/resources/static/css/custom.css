@@ -46,14 +46,4 @@ small {
 .toggleLogin, .toggleGalleryOut , .toggleBoardOut , .toggleCommunityOut , .toggleBoard, .toggleCommunity, .toggleJoin, .toggleLogout
  .beforeLogin, .afterLoginON, .afterLogin, .toggleLogout {
 	display: none;
-}
-
-/* 커뮤니티 탭 Video/poster toggle */
-.card_head toggleOFFvideo, .card_head toggleOFFposter{
-	display:none;
-}
-
-.card_head toggleOFFposter{
-	display: none;
-}
- 
+} 
