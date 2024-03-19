@@ -1,0 +1,59 @@
+
+
+/*회원가입 커스텀 css*/
+#inputline {
+	height: 300px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	align-items: flex-start;
+}
+
+#userEmail02-txt {
+	border: 1px solid black;
+}
+
+small {
+	visibility: hidden;
+	padding: 0px 0px 2px 10px;
+}
+
+.error small {
+	font-size: 14px;
+	color: #e74c3c;
+	visibility: visible;
+}
+
+#questnlevel {
+	text-wrap: nowrap;
+	font-size: 14px;
+	color: #e74c3c;
+}
+
+.beforeLogin, .afterLoginOFF, .AfterIdFormClassON, .AfterPwFormClassON {
+	display: flex;
+	justify-content: center;
+	padding-top: 50px;
+	margin-bottom: 50px;
+	text-align: center;
+}
+
+.pwFindFormClassON, .idFindFormClassON, .idFindForm,
+	.idFindAfterClassOFF, .pwFindForm, .pwFindAfterClassOFF {
+	display: none;
+}
+
+.toggleLogin, .toggleGalleryOut , .toggleBoardOut , .toggleCommunityOut , .toggleBoard, .toggleCommunity, .toggleJoin, .toggleLogout
+ .beforeLogin, .afterLoginON, .afterLogin, .toggleLogout {
+	display: none;
+}
+
+/* 커뮤니티 탭 Video/poster toggle */
+.card_head toggleOFFvideo, .card_head toggleOFFposter{
+	display:none;
+}
+
+.card_head toggleOFFposter{
+	display: none;
+}
+ 

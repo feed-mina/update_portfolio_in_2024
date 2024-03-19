@@ -1,0 +1,699 @@
+<!-- 강의*세미나 > 강의 개설 > 등록 > 강의 개설 등록 -->
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/html">
+<head>
+	<meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+    <meta name="author" content="">
+    <title>강의 개설 등록</title>
+    <link href="/css/style.css" rel="stylesheet"/>
+	<script src="/js/allVendors.js"></script>
+	<script src="/js/common.js"></script>
+	<script src="/sch/js/admin/lctreSemina/lctreRegist.js"></script>
+</head>
+<body>
+<!-- ===== header ====== -->
+<header id="header-html"></header>
+<!-- ===== /header ====== -->
+<div id="wrapper">
+	<!-- sidebar -->
+	<aside id="sidebar-html"></aside>
+	<!-- /sidebar -->
+	<div id="content-wrapper" class="d-flex flex-column">
+		<div id="content" class="pt-0">
+			<!-- ===== app ====== -->
+			<div id="app">
+				<!-- ===== container ====== -->
+			    <div id="container" class="d-flex flex-column">
+			        <div class="container-fluid">
+				        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+				            <h1 class="h1 mb-0 text-gray-800">강의 개설 등록</h1>
+				        </div>
+				        
+				        <div class="col">
+				        	<div class="row mb-4">
+				        		<div class="card shadow col">
+				        			<div class="card-body">
+				        				<div class="row justify-content-center mt25">
+				        					<div class="col">
+									        	<form class="d-flex justify-content-center col mb-3">
+									        		<div class="col tbl_col_typ1">
+									        			<table class="tableForm">
+									        				<tr>
+									        					<th class="col-2">
+									        						강의 종류 <span class="required">*</span>
+									        					</th>
+									        					<td colspan="2" class="col-4">
+																	<div>
+																		<select class="custom-select" v-model="lctreData.lctreKndCode">
+																			<option value="">강의 종류 선택</option>
+																			<option :value="obj.cmmnCode" v-for="(obj, idx) in lctreKndCodeList">{{obj.cmmnCodeNm}}</option>
+																		</select>
+																	</div>
+									        					</td>
+																<td class="col-2">
+
+																</td>
+																<td class="col-4">
+																	<div>
+																		<input type="checkbox" id="specialLctreYn" v-model="lctreData.specialLctreYn"/>
+																		<label for="specialLctreYn" class="form-check-label">특강여부</label>
+																	</div>
+																</td>
+									        				</tr>
+															<tr>
+																<th class="col-2">
+																	강의명 <span class="required">*</span>
+																</th>
+																<td colspan="4" col="10">
+																	<input class="form-control" id="lctreName" v-model="lctreData.lctreName" type="text" placeholder="강의명을 입력해 주세요." maxlength="100">
+																</td>
+															</tr>
+															<tr>
+																<th class="col-2">
+																	사용 언어 <span class="required">*</span>
+																</th>
+																<td colspan="2" class="col-4">
+																	<div>
+																		<select class="custom-select" v-model="lctreData.useLangCd">
+																			<option :value="obj.cmmnCode" v-for="(obj, idx) in useLangCdList">{{obj.cmmnCodeNm}}</option>
+																		</select>
+																	</div>
+																</td>
+																<td class="col-2">
+																</td>
+																<td class="col-4">
+																</td>
+															</tr>
+															<tr>
+																<th class="col-2">
+																	교수명 <span class="required">*</span>
+																</th>
+																<td colspan="2" v-if="userAuthor === 'SA'">
+																	<input class="form-control" id="profsrName" type="text" placeholder="교수님 선택" data-toggle="modal" data-target="#userSearchModal">
+																</td>
+																<td class="col-2" v-if="userAuthor === 'SA'">
+																	<a href="javascript:;" id="profsrNameBtn" class="btn btn-sm-icon btn-google btn_search_sm_width" data-toggle="modal" data-target="#userSearchModal">
+																		<span class="text">찾기</span>
+																	</a>
+																</td>
+																<td class="col-4" id="professorUserContainer" v-if="userAuthor === 'SA'">
+
+																</td>
+																<td v-else class="col-10" colspan="4">
+																	{{userEmail}}&nbsp;&nbsp;{{userName}}
+																</td>
+															</tr>
+															<tr>
+																<th class="col-2">
+																	동시통역 <span></span>
+																</th>
+																<td colspan="2">
+																	<input class="form-control" id="smtmIntrpr" type="text" placeholder="회원의 이메일을 입력하세요." data-toggle="modal" data-target="#userSearchModal">
+																</td>
+																<td class="col-2">
+																	<a href="javascript:;" id="smtmIntrprBtn" class="btn btn-sm-icon btn-google btn_search_sm_width" data-toggle="modal" data-target="#userSearchModal">
+																		<span class="text">찾기</span>
+																	</a>
+																</td>
+																<td class="col-4" id="smtmIntrprContainer">
+
+																</td>
+															</tr>
+															<tr>
+																<th class="col-sm-2">
+																	강의 기간 <span class="required">*</span>
+																</th>
+																<td colspan="2" class="col-md-4">
+																	<div class="input-group flex-nowrap bx_calendar">
+																		<input id="lctreStartDt" type="text" name="lctreDayArray" class="form-control ui-datepicker-vertical-m-size datepicker datepicker_from inputTextStyle" v-model="lctreData.startDt" maxlength="8"/>
+																		<span class="d-block mx-3" style="line-height: 38px">~</span>
+																		<input id="lctreEndDt" type="text" name="lctreDayArray" class="form-control ui-datepicker-vertical-m-size datepicker datepicker_to inputTextStyle" v-model="lctreData.endDt"/>
+																	</div>
+																</td>
+																<th class="col-sm-2">
+																	강의 시간 <span class="required">*</span>
+																</th>
+																<td class="col-md-4">
+																	<div class="input-group flex-nowrap">
+																		<select class="form-control watch" id="startHour" v-model="lctreData.startHour">
+																			<option value=""></option>
+																			<option value="00">00</option>
+																			<option value="01">01</option>
+																			<option value="02">02</option>
+																			<option value="03">03</option>
+																			<option value="04">04</option>
+																			<option value="05">05</option>
+																			<option value="06">06</option>
+																			<option value="07">07</option>
+																			<option value="08">08</option>
+																			<option value="09">09</option>
+																			<option value="10">10</option>
+																			<option value="11">11</option>
+																			<option value="12">12</option>
+																			<option value="13">13</option>
+																			<option value="14">14</option>
+																			<option value="15">15</option>
+																			<option value="16">16</option>
+																			<option value="17">17</option>
+																			<option value="18">18</option>
+																			<option value="19">19</option>
+																			<option value="20">20</option>
+																			<option value="21">21</option>
+																			<option value="22">22</option>
+																			<option value="23">23</option>
+																		</select>&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;
+																		<select class="form-control watch" id="startMinute" v-model="lctreData.startMinute">
+																			<option value=""></option>
+																			<option value="00">00</option>
+																			<option value="10">10</option>
+																			<option value="20">20</option>
+																			<option value="30">30</option>
+																			<option value="40">40</option>
+																			<option value="50">50</option>
+																		</select>&nbsp;&nbsp;&nbsp;~&nbsp;&nbsp;&nbsp;
+																		<select class="form-control watch" id="endHour" v-model="lctreData.endHour">
+																			<option value=""></option>
+																			<option value="00">00</option>
+																			<option value="01">01</option>
+																			<option value="02">02</option>
+																			<option value="03">03</option>
+																			<option value="04">04</option>
+																			<option value="05">05</option>
+																			<option value="06">06</option>
+																			<option value="07">07</option>
+																			<option value="08">08</option>
+																			<option value="09">09</option>
+																			<option value="10">10</option>
+																			<option value="11">11</option>
+																			<option value="12">12</option>
+																			<option value="13">13</option>
+																			<option value="14">14</option>
+																			<option value="15">15</option>
+																			<option value="16">16</option>
+																			<option value="17">17</option>
+																			<option value="18">18</option>
+																			<option value="19">19</option>
+																			<option value="20">20</option>
+																			<option value="21">21</option>
+																			<option value="22">22</option>
+																			<option value="23">23</option>
+																		</select>&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;
+																		<select class="form-control watch" id="endMinute" v-model="lctreData.endMinute">
+																			<option value=""></option>
+																			<option value="00">00</option>
+																			<option value="10">10</option>
+																			<option value="20">20</option>
+																			<option value="30">30</option>
+																			<option value="40">40</option>
+																			<option value="50">50</option>
+																		</select>
+																	</div>
+																</td>
+															</tr>
+															<tr>
+																<th class="col-sm-2">
+																	강의요일 <span class="required">*</span>
+																</th>
+																<td colspan="2">
+																	<div>
+																		<input type="checkbox" name="lctreDayArray" id="monday" v-model="lctreData.lctreDayArray" value="1"/>
+																		<label for="monday" class="form-check-label">월</label>&nbsp;&nbsp;&nbsp;
+																		<input type="checkbox" name="lctreDayArray" id="tuesday" v-model="lctreData.lctreDayArray" value="2"/>
+																		<label for="tuesday" class="form-check-label">화</label>&nbsp;&nbsp;&nbsp;
+																		<input type="checkbox" name="lctreDayArray" id="wednesday" v-model="lctreData.lctreDayArray" value="3"/>
+																		<label for="wednesday" class="form-check-label">수</label>&nbsp;&nbsp;&nbsp;
+																		<input type="checkbox" name="lctreDayArray" id="thursday" v-model="lctreData.lctreDayArray" value="4"/>
+																		<label for="thursday" class="form-check-label">목</label>&nbsp;&nbsp;&nbsp;
+																		<input type="checkbox" name="lctreDayArray" id="friday" v-model="lctreData.lctreDayArray" value="5"/>
+																		<label for="friday" class="form-check-label">금</label>&nbsp;&nbsp;&nbsp;
+																		<input type="checkbox" name="lctreDayArray" id="saturday" v-model="lctreData.lctreDayArray" value="6"/>
+																		<label for="saturday" class="form-check-label">토</label>
+																	</div>
+																</td>
+																<th class="col-sm-2">
+																	강의장소
+																</th>
+																<td class="col-md-4">
+																	<input class="form-control" id="lctrePlace" type="text" v-model="lctreData.lctrePlace" placeholder="강의장소를 입력해 주세요." maxlength="100">
+																</td>
+															</tr>
+															<tr>
+																<th class="col-sm-2">
+																	모집 기간 <span class="required">*</span>
+																</th>
+																<td colspan="4" class="flex-side-by-side">
+																	<div class="input-group flex-nowrap col-3 box_order bx_calendar">
+																		<input id="startPeriodDt" type="text" class="form-control ui-datepicker-vertical-m-size datepicker datepicker_from"/>
+																	</div>
+																	<div class="input-group flex-nowrap col-3">
+																		<input class="form-control watch" id="startPeriodHour" min="0" max="23" maxlength="2" v-model="lctreData.startPeriodHour" @input="hourValidation">&nbsp;:&nbsp;&nbsp;&nbsp;
+																		<input class="form-control watch" id="startPeriodMinute" min="0" max="59" maxlength="2" v-model="lctreData.startPeriodMinute" @input="minuteValidation">&nbsp;&nbsp;&nbsp;~
+																	</div>
+																	<div class="input-group flex-nowrap col-3 bx_calendar">
+																		<input id="endPeriodDt" type="text" class="form-control ui-datepicker-vertical-m-size datepicker datepicker_to"/>
+																	</div>
+																	<div class="input-group flex-nowrap col-3">
+																		<input class="form-control watch" id="endPeriodHour" min="0" max="23" maxlength="2" v-model="lctreData.endPeriodHour" @input="hourValidation">&nbsp;:&nbsp;&nbsp;&nbsp;
+																		<input class="form-control watch" id="endPeriodMinute" min="0" max="59" maxlength="2" v-model="lctreData.endPeriodMinute" @input="minuteValidation">
+																	</div>
+																</td>
+															</tr>
+															<tr>
+																<th class="col-sm-2">
+																	회원종류 <span class="required">*</span>
+																</th>
+																<td colspan="2" class="">
+																	<div v-for="(obj, idx) in authorList" class="side-by-side" :key="obj.cmmnCode">
+																		<input type="checkbox" name="userKndCode" :id="obj.cmmnCode" checked/>
+																		<label :for="obj.cmmnCode" class="form-check-label">{{obj.cmmnCodeNm}}</label>
+																	</div>
+																</td>
+																<th class="col-sm-2">
+																	수강생 수 <span class="required">*</span>
+																</th>
+																<td class="col-md-4" >
+																	<div>
+																		<select class="custom-select" id="studentCount" v-model="lctreData.studentCount">
+																			<option value="">수강생 명수 선택</option>
+																			<option v-for="(num, index) in optionsWithStep" :value="num" :key="num">{{num}}</option>
+																		</select>
+																	</div>
+																</td>
+															</tr>
+															<tr>
+																<th class="col-sm-2">
+																	강의 대표 이미지
+																</th>
+																<td colspan="2" class="row-height-6">
+																	<div class="flex-nowrap image-description">
+																		<div class="form-check col-7 ml-2 dp_center">
+																			<img src="/image/add.svg" @click="fnAddIconClick" class="link-style" style="width:4rem; margin:12px;" alt=""/>
+																			<div style="width:256px; height:144px; text-align:center;">
+																				<img id="previewSmall" :src="preview" style="margin:auto; padding-top:25%;" alt="강의 대표 이미지 작은 화면입니다."/>
+																			</div>
+																			<input type="file" hidden id="inputLctreImgFile" class="custom-file-input form-control" style="display: none;" accept="image/*" multiple/>
+																		</div>
+																	</div>
+																	<div class="flex-nowrap image-description">
+																		<ul>
+																			<li>
+																				16:9 가로 비율의 직사각형 이미지
+																			</li>
+																			<li>
+																				640px X 360px 이 적합함.
+																			</li>
+																		</ul>
+																	</div>
+																</td>
+																<td colspan="2">
+																	<div class="flex-nowrap image-description">
+																		<div class="form-check col-6 ml-2">
+																			<div style="width:400px; height:230px; text-align:center;">
+																				<img id="preview" :src="preview" style="margin:auto;" alt="강의 대표 이미지 큰 화면입니다."/>
+																			</div>
+																		</div>
+																	</div>
+																</td>
+															</tr>
+															<tr>
+																<th class="col-sm-2">
+																	강의설명
+																</th>
+																<td colspan="4">
+																	<div>
+																		<textarea class="col-12" maxlength="500" v-model="lctreData.lctreDescription" placeholder="강의설명을 200자 이내로 입력해주세요.">
+																		</textarea>
+																	</div>
+																</td>
+															</tr>
+															<tr>
+																<th class="col-sm-2">
+																	전체 강좌 수 <span class="required">*</span>
+																</th>
+																<td colspan="2">
+																	<div>
+																		<select class="custom-select col-10" id="detailLctreCount" name="detailLctreCount" disabled>
+																			<option value="">강좌수 선택</option>
+																			<option v-for="num in lctreData.lctreMax" :value="num">{{num}}</option>
+																		</select>
+																		<span>
+																			&nbsp;&nbsp;&nbsp;강
+																		</span>
+																	</div>
+																</td>
+																<th class="col-sm-2">
+																</th>
+																<td class="col-md-4">
+																</td>
+															</tr>
+															<tr id="lctreAddContainter" class="lctreAddContainter" v-if="lctreData.lctreNum.length > 0">
+																<td colspan="5">
+																	<div class="lctreAddInnerContainer">
+																		<table v-for="(obj, idx) in lctreData.lctreNum.length" class="add-table tableForm">
+																			<tr>
+																				<th class="col2">
+																					{{idx + 1}}강 제목
+																				</th>
+																				<td class="col-8">
+																					<input class="form-control" type="text" placeholder="제목 입력" maxlength="50" v-model="lctreData.lctreDetailSubjectArray[idx]">
+																				</td>
+																			</tr>
+																			<tr>
+																				<th class="col2">
+																					{{idx + 1}}강 개요
+																				</th>
+																				<td class="col-10">
+																					<textarea class="form-control" placeholder="강좌 개요를 200자 이내로 입력해주세요." maxlength="200" v-model="lctreData.lctreDetailOutlineArray[idx]">
+																					</textarea>
+																				</td>
+																			</tr>
+																		</table>
+																	</div>
+																</td>
+															</tr>
+															<tr>
+																<th rowspan="2">
+																	검색 키워드 등록
+																</th>
+																<td class="col-2">
+																	<div>
+																		<input class="form-control" id="lctreKwrd" @keyup.enter="createKeyword" type="text" placeholder="# 키워드 등록" maxlength="9">
+																	</div>
+																</td>
+																<td colspan="3" id="keywordContainer" class="keywordContainer">
+
+																</td>
+															</tr>
+															<tr>
+																<td colspan="4">
+																	<span id="message" class="message">* 키워드는 30개까지 등록이 가능합니다.</span>
+																</td>
+															</tr>
+									        			</table>
+									        		</div>
+									        	</form>
+									        	<div class="d-flex justify-content-center mb-3">
+									        		<div class="pr-5"  style="margin-left: 22rem;">
+									        			<a href="javascript:;" class="btn btn-icon btn-google btn_search_width" @click="fnCancel">
+									        				<span class="text">취소</span>
+									        			</a>
+									        		</div>
+													<div class="pl-5">
+														<a href="javascript:;" class="btn btn-icon btn-primary btn_search_width"  @click="fnSave" id="btnSave">
+														   <span class="text">저장</span>
+														</a>
+													</div>
+													<div style="margin-left: 14rem;">
+														<a href="javascript:;" data-toggle="modal" data-target="#lctreCopyModal" @click="fnCopyLctre" class="btn btn-icon btn-orange btn_search_width btn-side" id="btnCopy">
+															<span class="text">복사</span>
+														</a>
+													</div>
+									        	</div>
+									        </div>
+				        				</div>
+				        			</div>
+				        		</div>
+				        	</div>
+				        </div>
+			        </div>
+			    </div>
+			    <!-- ===== /container ====== -->
+			</div>
+			<!-- ===== /app ====== -->
+			<!-- ===== lctreCopyModal ====== -->
+			<div class="modal fade" id="lctreCopyModal" tabindex="-1" role="dialog" aria-labelledby="lctreCopyModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-grid" role="document">
+					<div class="modal-content modal-xxl-size" id="modalContent">
+						<div class="modal-header">
+							<h5 class="modal-title font-weight-bolder" id="detailModalLabel" style="margin:auto auto;">복사하기</h5>
+							<button class="close" type="button" data-dismiss="modal" aria-label="Close" style="margin: 0px !important;">
+								<span aria-hidden="true" id="closeModal">×</span>
+							</button>
+						</div>
+						<div class="modal-body" id="modalBody">
+							<div class="d-flex justify-content-center mt-2">
+								<div class="x-scroll">
+									<div class="d-flex flex-column">
+										<div class="container-fluid">
+											<div class="d-sm-flex align-items-center justify-content-between mb-4">
+												<h1 class="h1 mb-0 text-gray-800">강의 개설 리스트</h1>
+											</div>
+											<!-- noticeList -->
+											<div class="row justify-content-center">
+												<div class="col">
+													<!-- ==== search ==== -->
+													<div class="card shadow">
+														<div class="card-body">
+															<div class="d-flex align-items-center justify-content-center">
+																<div class="input-group dp_center mr-3" style="width:50%">
+																	<input type="text" v-model="searchData.searchText" class="form-control inp_search" @keyup.enter="fnSearch()" placeholder="검색어를 입력해주세요.">
+																</div>
+																<div class="input-group ml-3 dp_center btn_search_width" style="width:120px">
+																	<div>
+																		<button type="button" class="form-control btn btn-info btn_search_width" @click="fnSearch()"> 검색하기 </button>
+																	</div>
+																</div>
+																<div class="ml-3 dp_center">
+																	<a class="search_details">
+																		<img src="/image/bottom_icon.svg" alt="">
+																	</a>
+																</div>
+															</div>
+															<div class="row">
+																<div id="subSearch" style="margin-right: -0.75rem; margin-left: -0.75rem;">
+																	<div class="visibil">
+																		<div class="sup_btn_box3">
+																			<div class="form-check">
+																				<input type="checkbox" id="deletedLctreInclude" v-model="searchData.deletedLctreInclude"/>
+																				<label for="deletedLctreInclude" class="form-check-label">폐강 처리 포함</label>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<!-- </div> -->
+															</div>
+														</div>
+													</div>
+													<!-- ==== /search ==== -->
+
+													<!-- ==== searchList ==== -->
+													<div class="row mb-4" style="padding-top : 40px;">
+														<div class="col">
+															<div class="card shadow">
+																<div class="card-body">
+																	<div class="row">
+																		<div class="col-6 font-weight-bold">
+																			<span>출력 : 1~10</span>
+																		</div>
+																		<div class="col-6 mb-3 font-weight-bold d-flex justify-content-end">
+																			총건 &nbsp;
+																			<span>{{totalCount}}건</span>
+																		</div>
+																		<div class="table-responsive">
+																			<table class="table table-bordered table-hover text-center" id="tableList">
+																				<thead>
+																				<tr>
+																					<th>선택</th>
+																					<th style="width: 10%;">대표 이미지</th>
+																					<th>강의 종류</th>
+																					<th>강의명</th>
+																					<th>교수명</th>
+																					<th>강의 형태</th>
+																					<th>회원종류</th>
+																					<th>수강생 수</th>
+																					<th>강의요일</th>
+																					<th>강의시간</th>
+																					<th>강의횟수</th>
+																					<th>강의장소</th>
+																					<th>모집 상태</th>
+																					<th>현 수강신청자</th>
+																					<th>진행 상황</th>
+																				</tr>
+																				</thead>
+																				<tbody>
+																				<tr v-for="(obj, idx) in lctreList" v-if="lctreList.length">
+																					<td>
+																						<input type="radio" :id="obj.lctreSeq" name="lctreNum">
+																					</td>
+																					<td>
+																						<img :src="obj.lctreImageCn" class="w-50" alt="강의 대표 이미지 화면입니다.">
+																					</td>
+																					<td>
+																						{{obj.lctreKndCodeNm}}
+																					</td>
+																					<td><a href="javascript:;" class="link-style" @click="fnDtail(obj.lctreSeq)" id="lctreNm">{{ellipsisText(obj.lctreNm)}}</a></td>
+																					<td>{{obj.userNm}}</td>
+																					<td v-if="obj.speclLctreAt === 'N'">
+																						정규 강의
+																					</td>
+																					<td v-else>
+																						특강
+																					</td>
+																					<td>
+																						{{obj.userAuthor}}
+																					</td>
+																					<td>
+																						{{obj.atnlcCo}}명
+																					</td>
+																					<td>
+																						{{obj.lctreWeekArray}}
+																					</td>
+																					</td>
+																					<td>
+																						{{obj.lctreBeginTimeHour}}:{{obj.lctreBeginTimeMinutes}}~{{obj.lctreEndTimeHour}}:{{obj.lctreEndTimeMinutes}}
+																					</td>
+																					<td>
+																						{{obj.detailLctreCo}}회
+																					</td>
+																					<td>
+																						{{obj.lctrePlaceNm}}
+																					</td>
+																					<td>
+																						{{obj.lctreStatus}}
+																					</td>
+																					<td>
+																						<a href="javascript:;" class="link-style">
+																							{{obj.lctreUserCnt}}명
+																						</a>
+																					</td>
+																					<td>
+																						{{obj.lctreSttusSeStr}}
+																					</td>
+																				</tr>
+																				<tr v-else>
+																					<td colspan="14">조회된 데이터가 없습니다.</td>
+																				</tr>
+																				</tbody>
+																			</table>
+																			<ul id="pagination" class="pagination justify-content-center" style="margin-bottom: 1.5rem;"></ul>
+																			<div></div>
+																		</div>
+																	</div>
+																</div>
+
+															</div>
+														</div>
+													</div>
+													<!-- ==== /searchList ==== -->
+												</div>
+											</div>
+											<!-- /noticeList -->
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<div class="d-flex justify-content-center" style="margin: auto auto;">
+								<div class="pr-5">
+									<a href="javascript:;" class="btn btn-icon btn-google btn_search_width" @click="fnModalCancel">
+										<span class="text">취소</span>
+									</a>
+								</div>
+								<div class="pl-5">
+									<a href="javascript:;" class="btn btn-icon btn-primary btn_search_width"  @click="fnModalSave" id="btnModalSave">
+										<span class="text">확인</span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- ===== /lctreCopyModal ====== -->
+			<!-- ===== user search Modal ====== -->
+			<div class="modal fade" id="userSearchModal" tabindex="-2" role="dialog" aria-labelledby="userSearchModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-grid" role="document">
+					<div class="modal-content modal-s-size" id="userSearchModalContent" style="height:100%;">
+						<div class="modal-header">
+							<h5 class="modal-title font-weight-bolder" id="userSearchDetailModalLabel" style="margin:auto auto;">회원 검색</h5>
+							<button class="close" type="button" data-dismiss="modal" aria-label="Close" style="margin: 0px !important;">
+								<span aria-hidden="true" id="userSearchCloseModal">×</span>
+							</button>
+						</div>
+						<div id="userSearchModalBody">
+							<div class="d-flex flex-column">
+								<div class="container-fluid">
+									<div class="row justify-content-center">
+										<div class="col">
+											<!-- ==== search ==== -->
+											<div class="card shadow">
+												<div class="card-body">
+													<div class="d-flex">
+														<input type="text" id="userSearchInput" v-model="searchData.searchText" class="form-control inp_search" @keyup.enter="userSearch()" placeholder="검색어를 입력하세요.">
+														<img src="/image/btn_search_icon.svg" id="userSearchBtn" alt="" style="height: 2.6rem; margin-left: 1rem;" class="link-style">
+													</div>
+												</div>
+											</div>
+											<!-- ==== /search ==== -->
+											<div class="row mb-4" style="padding-top: 20px;">
+												<div class="col">
+													<div class="card shadow">
+														<div class="card-body">
+															<div class="row">
+																<div class="table-responsive">
+																	<div class="radio-group"></div>
+																	<table class="table table-bordered text-center text-dark table-hover">
+																		<colgroup></colgroup>
+																		<thead>
+																		<tr>
+																			<th>선택</th>
+																			<th>교수명</th>
+																			<th>이메일</th>
+																		</tr>
+																		</thead>
+																		<tbody>
+																		<tr v-for="(obj, idx) in userList" v-if="userList.length">
+																			<div class="radio-group">
+																				<td>
+																					<input type="radio" name="userNum" :value="obj.userSeq">
+																				</td>
+																			</div>
+																			<!-- 교수명 -->
+																			<td>{{obj.userNm}}</td>
+																			<td>{{obj.userEmail}}</td>
+																		</tr>
+																		<tr v-else>
+																			<td colspan="3">조회된 데이터가 없습니다.</td>
+																		</tr>
+																		</tbody>
+																	</table>
+																	<ul class="pagination justify-content-center" style="margin-bottom: 1.5rem;"></ul>
+																	<div></div>
+																</div>
+															</div>
+															<div class="border-top m-4"></div>
+														</div>
+													</div>
+												</div><!-- ==== /searchList ==== --></div>
+											</div>
+										</div>
+									</div>
+								</div>
+						</div>
+						<div class="modal-footer">
+							<div class="d-flex justify-content-center" style="margin: auto auto;">
+								<div class="pr-5">
+									<a href="javascript:;" class="btn btn-icon btn-google btn_search_width" @click="fnUserModalCancel">
+										<span class="text">취소</span>
+									</a>
+								</div>
+								<div class="pl-5">
+									<a href="javascript:;" class="btn btn-icon btn-primary btn_search_width" id="btnUserSearchModalSave">
+										<span class="text">확인</span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- ===== /user search Modal ====== -->
+		</div>
+	</div>
+</div>
+</body>
+</html>

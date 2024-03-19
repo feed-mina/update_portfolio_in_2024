@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"
+		/>
+		<meta name="format-detection" content="telephone=no" />
+		<meta name="format-detection" content="email=no" />
+		<title>HUSS 일반 가입하기</title>
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+
+		<link href="/css/style.css" rel="stylesheet" />
+
+		<script src="/js/allVendors.js"></script>
+		<script src="/js/common.js"></script>
+		
+<!--	<script src="/sch/js/huss/login/register.js"></script>-->
+
+		<script>
+			$(function () {
+				// $("#termBasic").modal();
+			});
+		</script>
+	</head>
+
+	<body style="overflow: scroll">
+		<!-- ===== app ====== -->
+		<div class="container" id="content">
+			<div class="card o-hidden border-0 shadow-lg my-5">
+				<div class="card-body p-0">
+					<!-- Nested Row within Card Body -->
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="p-5">
+								<div class="text-center">
+									<h1 class="h4 text-gray-900 mb-4">회원가입</h1>
+								</div>
+								<form class="user">
+									<div class="form-group">
+										<span class="ml-2"> 이메일</span><span class="required">*</span>
+									<!--
+											<input type="text" name="str_email01" id="str_email01" style="width:100px">@
+										<input type="text" name="str_email02" id="str_email02" style="width:100px" disabled value="naver.com" >
+										<select style="width:100px;margin-right:10px" name="selectEmail" id="selectEmail">
+											<option value="1">직접입력</option>
+											<option value="naver.com" selected>naver.com</option>
+											<option value="hanmail.net">hanmail.net</option>
+											<option value="hotmail.com">hotmail.com</option>
+											<option value="nate.com">nate.com</option>
+											<option value="yahoo.co.kr">yahoo.co.kr</option>
+											<option value="empas.com">empas.com</option>
+											<option value="dreamwiz.com">dreamwiz.com</option>
+											<option value="freechal.com">freechal.com</option>
+											<option value="lycos.co.kr">lycos.co.kr</option>
+											<option value="korea.com">korea.com</option>
+											<option value="gmail.com">gmail.com</option>
+											<option value="hanmir.com">hanmir.com</option>
+											<option value="paran.com">paran.com</option>
+									 </select>
+									-->
+											<input
+											id="userEmail"
+											type="email"
+											class="form-control form-control-user"
+											placeholder=""
+										/>
+									</div>
+									<div class="form-group">
+										<span class="ml-2"> 비밀번호</span><span class="required">*</span>
+										<input
+											id="userPassword"
+											type="password"
+											class="form-control form-control-user"
+											placeholder="비밀번호를 입력해 주세요."/>
+									</div>
+									<small class="text-danger ml-2">* 비밀번호는 영어, 숫자, 특수문자를 포함하여 8 자리 이상으로 설정해 주세요.</small>
+									<div class="form-group">
+										<span class="ml-2"> 비밀번호 확인</span><span class="required">*</span>
+										<input
+											id="userPasswordCheck"
+											type="password"
+											class="form-control form-control-user"
+											placeholder="비밀번호를 한 번 더 입력해 주세요."/>
+									</div>
+									
+									<div class="form-group">
+										<span class="ml-2"> 이름</span><span class="required">*</span>
+										<input
+											id="userNm"
+											class="form-control form-control-user"
+											placeholder="이름을 입력해 주세요."/>
+									</div>
+
+									<div class="form-group">
+										<span class="ml-2"> 휴대폰</span><span class="required">*</span>
+										<input
+											id="mbtlnum"
+											class="form-control form-control-user"
+											placeholder="숫자만입력해주세요."
+										/>
+									</div>
+									<div class="form-group">
+										<span class="ml-2"> 본인확인 질문 선택</span><span class="required">*</span>
+										<!--<select
+											style="font-size: 0.8rem"
+											id="qestnCode"
+											class="rounded-pill custom-select custom-select-lg mb-3"
+										> 
+										<option value="가장 좋아하는 색은?">가장 좋아하는 색은?</option>
+												<option
+												v-for="(item, idx) in qestnCodeList"
+												:key="idx"
+												:value="item.cmmnCode"
+											>
+												{{item.cmmnCodeNm}}
+											</option>
+										</select>-->
+										<input
+											id="qestCode"
+											class="form-control form-control-user"
+											placeholder="본인확인 질문 "
+										/>
+									</div>
+									<div class="form-group">
+										<span class="ml-2"> 답변</span><span class="required">*</span>
+										<input
+											id="qestnRspns"
+											class="form-control form-control-user"
+											placeholder="답변을 입력해 주세요."
+										/>
+										<small class="text-danger ml-2">* 해당 답변은 아이디/비밀번호 찾기 시 사용됩니다. 띄어쓰기 없는 단어로 등록해 주세요.
+										</small>
+									</div>
+
+									<hr />
+								</form>
+								<hr />
+							</div>
+						</div>
+					</div>
+					<button
+						id="btn-save"
+						class="btn btn-primary btn-user"
+					>
+					가입하기
+					</button>
+				</div>
+			</div> 
+			  <!-- footer -->
+			  <footer id="footer_wrap"></footer>
+			  <!-- // footer -->
+		</div>
+		<!-- ===== /app ====== -->
+		<!--샘플데이터-->
+	<script>
+		let data = {
+      userEmail : "sample@email.com",
+      userPassword : "glasowk!@",
+      mbtlnum :"01012345678", // 핸드폰번호
+      userNm : "tester", //유저 이름 
+      qestnCode : "가장좋아하는색은?", // 질문 
+      qestnRspns : "빨강색" //답변  
+		}
+		console.log("JSON http body데이터"+JSON.stringify(data))
+		
+    $("#btn-save").on("click", () => { // this를 바인딩하기 위해서 , 만약 function을 사용하면 this값은 window 객체값을 가리킨다.
+      console.log('가입하기버튼클릭');
+       save();
+    })
+   
+  function save() {
+    alert('user의 save함수 호출됨');
+    let data = {
+      userEmail: $("#userEmail").val(),
+      userPassword: $("#userPassword").val(),
+      userPasswordCheck: $("#userPasswordCheck").val(),
+      mbtlnum: $("#mbtlnum").val(), // 핸드폰번호
+      userNm: $("#userNm").val(), //유저 이름 
+      qestCode: $("#qestCode").val(), // 질문 
+      qestnRspns: $("#qestnRspns").val() //답변      
+    };
+
+    $.ajax({
+      type: "POST",
+      url: "/login/userRegist.api",
+      data: JSON.stringify(data), // http body  데이터
+      contentType: "application/json; charset=utf-8", // body데이터가 어떤타입인지 (MIME)
+      dataType: "json" // 요청을 서버로 해서 응답이 왔을때 기본적으로 모든것이 문자열 (생긴게json이라면 javascript오브젝트로 변경)
+    }).done(function (resp) {
+      alert("회원가입이 완료되었습니다.");
+      location.href = "/sch/huss/login/registerEmail.html";
+    }).fail(function (error) {
+      alert(JSON.stringify(error));
+    });
+
+  }
+	</script>
+	</body>
+</html>

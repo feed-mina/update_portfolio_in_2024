@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description"/>
+  <meta name="author" content="">
+  <title>공자루 관리</title>
+  <link rel="stylesheet" href="/css/pc/style.css">
+  <link rel="stylesheet" href="/css/pc/aos.css">
+  <link rel="stylesheet" href="/css/pc/jquery-ui.css">
+  <link rel="stylesheet" href="/css/pc/swiper-bundle.min.css">
+  <link rel="stylesheet" href="/css/custom.css" />
+  <script src="/js/swiper-bundle.min.js"></script> 
+  <script src="/js/allVendors.js"></script>
+  <script src="/js/common.js"></script>
+  <script src="/js/aos.js"></script>
+  <script src="/sch/js/huss/galleryList.js"></script>
+  <style>
+    .d-flex > div > .img_layout {
+      border: 5px solid #542E27;
+    }
+    label {
+      padding: 0 4px 0 0;
+      color: #000000;
+      cursor: pointer;
+      background-color: #FFFFFF;
+      margin-bottom: 8px;
+    }
+
+    .img_layout > img {
+      width: 100%;
+      height: 100%;
+    }
+
+    #layout_1 > .d-flex, #layout_2 > .d-flex, #layout_3 > .d-flex, #layout_4 > .d-flex {
+      margin-top: 80px;
+    }
+
+    #layout_1 {
+      width: 100%;
+      height: 400px;
+      background-image: url("/image/wall_front_back.png");
+      background-size: 100% 100%;
+    }
+
+    #layout_2 {
+      width: 100%;
+      height: 400px;
+      background-image: url("/image/wall_left_right.png");
+      background-size: 100% 100%;
+    }
+
+    #layout_3 {
+      width: 100%;
+      height: 400px;
+      background-image: url("/image/wall_front_back.png");
+      background-size: 100% 100%;
+    }
+
+    #layout_4 {
+      width: 100%;
+      height: 400px;
+      background-image: url("/image/wall_left_right.png");
+      background-size: 100% 100%;
+    }
+
+    .contents {
+      display: block;
+      width: 59px;
+      padding: 0;
+      background-color: #FFFFFF;
+      margin-bottom: 8px;
+    }
+
+    .none-click {
+      cursor: default !important;
+      display: block;
+      width: 59px;
+      padding: 0;
+      background-color: #FFFFFF;
+    }
+
+    .square {
+      width: 120px;
+      height: 120px;
+    }
+
+    .sixToOne {
+      width: 720px;
+      height: 120px;
+    }
+
+    .sixteenToNine {
+      width: 192px;
+      height: 108px;
+    }
+
+    .nineToSixteen {
+      width: 108px;
+      height: 192px;
+    }
+  </style>
+</head>
+
+<body>
+<!-- ===== header ====== -->
+<header id="header_wrap"></header>
+<div id="wrapper">
+  <!-- sidebar -->
+  <aside id="sidebar-html"></aside>
+  <!-- /sidebar -->
+  <div id="content-wrapper" class="d-flex flex-column">
+    <div id="content" class="pt-0">
+      <!-- ===== app ====== -->
+      <div id="app">
+        <!-- ===== container ====== -->
+        <div id="container" class="d-flex flex-column">
+          <div class="container-fluid">
+            <h1 class="h1 mb-0 text-gray-800">공자루 관리</h1>
+            <p>
+              갤러리 이미지는 각 사진 자리 비율에 맞는 이미지를 첨부해주셔야 합니다.
+            </p>
+            <!-- ===== 1번째 layout ===== -->
+            <div class="mt-5">
+              <div class="col">
+                <div class="card shadow">
+                  <div class="card-body">
+                    <div class="row">
+
+                      <h1 class="h1 mb-3 text-gray-800">벽1(상)</h1>
+
+                      <div class="d-flex justify-content-between" id="layout_1">
+                        <div class="d-flex align-items-center pl-5" id="layout_1_left">
+                          <div id="spotkey-0" class="img_layout square" data-spotkey="0">
+                            <label for="fnAddFile-0" class="">사진등록</label>
+                            <input type="file" id="fnAddFile-0" class="custom-file-input form-control" accept="image/*"
+                                   hidden/>
+                            <input class="contents" type="button" value="설명등록">
+                            <input class="none-click" type="button" value="1:1">
+                          </div>
+                          <div class="d-flex flex-column justify-content-center pl-3" id="layout_1_1_right"
+                               style="width: 384px; height: 100%;">
+                            <div id="spotkey-1" class="img_layout mb-2 sixteenToNine" data-spotkey="1">
+                              <label for="fnAddFile-1" class="">사진등록</label>
+                              <input type="file" id="fnAddFile-1" class="custom-file-input form-control"
+                                     accept="image/*" hidden/>
+                              <input class="contents" type="button" value="설명등록">
+                              <input class="none-click" type="button" value="16:9">
+                            </div>
+                            <div id="spotkey-2" class="img_layout sixteenToNine" data-spotkey="2">
+                              <label for="fnAddFile-2" class="">사진등록</label>
+                              <input type="file" id="fnAddFile-2" class="custom-file-input form-control"
+                                     accept="image/*" hidden/>
+                              <input class="contents" type="button" value="설명등록">
+                              <input class="none-click" type="button" value="16:9">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="d-flex align-items-center pr-5" id="layout_1_right">
+                          <div id="spotkey-3" class="img_layout mr-3 nineToSixteen" data-spotkey="3">
+                            <label for="fnAddFile-3" class="">사진등록</label>
+                            <input type="file" id="fnAddFile-3" class="custom-file-input form-control" accept="image/*"
+                                   hidden/>
+                            <input class="contents" type="button" value="설명등록">
+                            <input class="none-click" type="button" value="16:9">
+                          </div>
+                          <div id="spotkey-4" class="img_layout square" data-spotkey="4">
+                            <label for="fnAddFile-4" class="">사진등록</label>
+                            <input type="file" id="fnAddFile-4" class="custom-file-input form-control" accept="image/*"
+                                   hidden/>
+                            <input class="contents" type="button" value="설명등록">
+                            <input class="none-click" type="button" value="1:1">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ===== 1번째 layout end ===== -->
+
+                    <!-- 2번째 layout -->
+                    <div class="mt-5">
+                      <h1 class="h1 mb-3 text-gray-800">벽2(우)</h1>
+
+                      <div class="d-flex justify-content-center" id="layout_2">
+                        <div class="d-flex align-items-center pl-5" id="layout_2_left">
+                          <div id="spotkey-5" class="img_layout mr-3 square" data-spotkey="5">
+                            <label for="fnAddFile-5" class="">사진등록</label>
+                            <input type="file" id="fnAddFile-5" class="custom-file-input form-control" accept="image/*"
+                                   hidden/>
+                            <input class="contents" type="button" value="설명등록">
+                            <input class="none-click" type="button" value="1:1">
+                          </div>
+                          <div id="spotkey-6" class="img_layout mr-3 sixteenToNine" data-spotkey="6">
+                            <label for="fnAddFile-6" class="">사진등록</label>
+                            <input type="file" id="fnAddFile-6" class="custom-file-input form-control" accept="image/*"
+                                   hidden/>
+                            <input class="contents" type="button" value="설명등록">
+                            <input class="none-click" type="button" value="16:9">
+                          </div>
+                          <div id="spotkey-7" class="img_layout nineToSixteen" data-spotkey="7">
+                            <label for="fnAddFile-7" class="">사진등록</label>
+                            <input type="file" id="fnAddFile-7" class="custom-file-input form-control" accept="image/*"
+                                   hidden/>
+                            <input class="contents" type="button" value="설명등록">
+                            <input class="none-click" type="button" value="9:16">
+                          </div>
+                          <div class="d-flex flex-column justify-content-center pl-3" id="layout_2_1_right"
+                               style="height: 400px;">
+                            <div id="spotkey-8" class="img_layout mb-2 sixToOne" data-spotkey="8">
+                              <label for="fnAddFile-8" class="">사진등록</label>
+                              <input type="file" id="fnAddFile-8" class="custom-file-input form-control"
+                                     accept="image/*" hidden/>
+                              <input class="contents" type="button" value="설명등록">
+                              <input class="none-click" type="button" value="6:1">
+                            </div>
+                            <div id="spotkey-9" class="img_layout sixToOne" data-spotkey="9">
+                              <label for="fnAddFile-9" class="">사진등록</label>
+                              <input type="file" id="fnAddFile-9" class="custom-file-input form-control"
+                                     accept="image/*" hidden/>
+                              <input class="contents" type="button" value="설명등록">
+                              <input class="none-click" type="button" value="6:1">
+                            </div>
+                          </div>
+                          <div id="spotkey-10" class="img_layout ml-2 nineToSixteen" data-spotkey="10">
+                            <label for="fnAddFile-10" class="">사진등록</label>
+                            <input type="file" id="fnAddFile-10" class="custom-file-input form-control" accept="image/*"
+                                   hidden/>
+                            <input class="contents" type="button" value="설명등록">
+                            <input class="none-click" type="button" value="9:16">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- 4번째 layout end-->
+
+                    <!-- 3번째 layout -->
+                    <div class="mt-5">
+                      <h1 class="h1 mb-3 text-gray-800">벽3(하)</h1>
+
+                      <div class="d-flex justify-content-between" id="layout_3">
+                        <div class="d-flex align-items-center pl-5" id="layout_3_left">
+                          <div id="spotkey-11" class="img_layout mr-3 sixteenToNine" data-spotkey="11">
+                            <label for="fnAddFile-11" class="">사진등록</label>
+                            <input type="file" id="fnAddFile-11" class="custom-file-input form-control" accept="image/*"
+                                   hidden/>
+                            <input class="contents" type="button" value="설명등록">
+                            <input class="none-click" type="button" value="16:9">
+                          </div>
+                          <div id="spotkey-12" class="img_layout sixteenToNine" data-spotkey="12">
+                            <label for="fnAddFile-12" class="">사진등록</label>
+                            <input type="file" id="fnAddFile-12" class="custom-file-input form-control" accept="image/*"
+                                   hidden/>
+                            <input class="contents" type="button" value="설명등록">
+                            <input class="none-click" type="button" value="16:9">
+                          </div>
+                        </div>
+                        <div class="d-flex align-items-center pr-5" id="layout_3_right">
+                          <div id="spotkey-13" class="img_layout mr-3 nineToSixteen" data-spotkey="13">
+                            <label for="fnAddFile-13" class="">사진등록</label>
+                            <input type="file" id="fnAddFile-13" class="custom-file-input form-control" accept="image/*"
+                                   hidden/>
+                            <input class="contents" type="button" value="설명등록">
+                            <input class="none-click" type="button" value="9:16">
+                          </div>
+                          <div id="spotkey-14" class="img_layout mr-3 square" data-spotkey="14">
+                            <label for="fnAddFile-14" class="">사진등록</label>
+                            <input type="file" id="fnAddFile-14" class="custom-file-input form-control" accept="image/*"
+                                   hidden/>
+                            <input class="contents" type="button" value="설명등록">
+                            <input class="none-click" type="button" value="1:1">
+                          </div>
+                          <div id="spotkey-15" class="img_layout nineToSixteen" data-spotkey="15">
+                            <label for="fnAddFile-15" class="">사진등록</label>
+                            <input type="file" id="fnAddFile-15" class="custom-file-input form-control" accept="image/*"
+                                   hidden/>
+                            <input class="contents" type="button" value="설명등록">
+                            <input class="none-click" type="button" value="16:9">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- 3번째 layout end-->
+
+                    <!-- ===== 4번째 layout ===== -->
+                    <div class="mt-5">
+                      <h1 class="h1 mb-3 text-gray-800">벽4(좌)</h1>
+
+                      <div class="d-flex justify-content-center" id="layout_4">
+                        <div class="d-flex align-items-center pl-5 " id="layout_4_left">
+                          <div id="spotkey-16" class="img_layout square" data-spotkey="16">
+                            <label for="fnAddFile-16" class="">사진등록</label>
+                            <input type="file" id="fnAddFile-16" class="custom-file-input form-control" accept="image/*"
+                                   hidden/>
+                            <input class="contents" type="button" value="설명등록">
+                            <input class="none-click" type="button" value="1:1">
+                          </div>
+                          <div class="d-flex align-items-center pl-3" id="layout_4_1_right">
+                            <div id="spotkey-17" class="img_layout nineToSixteen" data-spotkey="17">
+                              <label for="fnAddFile-17" class="">사진등록</label>
+                              <input type="file" id="fnAddFile-17" class="custom-file-input form-control"
+                                     accept="image/*" hidden/>
+                              <input class="contents" type="button" value="설명등록">
+                              <input class="none-click" type="button" value="9:16">
+                            </div>
+                            <div id="spotkey-18" class="img_layout ml-2 nineToSixteen" data-spotkey="18">
+                              <label for="fnAddFile-18" class="">사진등록</label>
+                              <input type="file" id="fnAddFile-18" class="custom-file-input form-control"
+                                     accept="image/*" hidden/>
+                              <input class="contents" type="button" value="설명등록">
+                              <input class="none-click" type="button" value="9:16">
+                            </div>
+                            <div id="spotkey-19" class="img_layout ml-2 nineToSixteen" data-spotkey="19">
+                              <label for="fnAddFile-19" class="">사진등록</label>
+                              <input type="file" id="fnAddFile-19" class="custom-file-input form-control"
+                                     accept="image/*" hidden/>
+                              <input class="contents" type="button" value="설명등록">
+                              <input class="none-click" type="button" value="9:16">
+                            </div>
+                          </div>
+
+                        </div>
+                        <div class="d-flex flex-column justify-content-center align-items-center ml-2"
+                             id="layout_4_right">
+                          <!-- Top layout -->
+                          <div class="d-flex">
+                            <div id="spotkey-20" class="img_layout sixteenToNine" data-spotkey="20">
+                              <label for="fnAddFile-20" class="">사진등록</label>
+                              <input type="file" id="fnAddFile-20" class="custom-file-input form-control"
+                                     accept="image/*" hidden/>
+                              <input class="contents" type="button" value="설명등록">
+                              <input class="none-click" type="button" value="16:9">
+                            </div>
+                            <div id="spotkey-21" class="img_layout ml-2 sixteenToNine" data-spotkey="21">
+                              <label for="fnAddFile-21" class="">사진등록</label>
+                              <input type="file" id="fnAddFile-21" class="custom-file-input form-control"
+                                     accept="image/*" hidden/>
+                              <input class="contents" type="button" value="설명등록">
+                              <input class="none-click" type="button" value="16:9">
+                            </div>
+                            <div id="spotkey-22" class="img_layout ml-2 sixteenToNine" data-spotkey="22">
+                              <label for="fnAddFile-22" class="">사진등록</label>
+                              <input type="file" id="fnAddFile-22" class="custom-file-input form-control"
+                                     accept="image/*" hidden/>
+                              <input class="contents" type="button" value="설명등록">
+                              <input class="none-click" type="button" value="16:9">
+                            </div>
+                          </div>
+                          <!-- Bottom layout -->
+                          <div id="spotkey-23" class="img_layout mt-2 sixToOne" data-spotkey="23">
+                            <label for="fnAddFile-23" class="">사진등록</label>
+                            <input type="file" id="fnAddFile-23" class="custom-file-input form-control" accept="image/*"
+                                   hidden/>
+                            <input class="contents" type="button" value="설명등록">
+                            <input class="none-click" type="button" value="6:1">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ===== 4번째 layout end ===== -->
+                  </div>
+                  <div class="d-flex justify-content-center mb-5">
+                    <div class="pl-5">
+                      <a href="javascript:;" class="btn btn-google btn-icon btn_search_width" @click="fnCancel()">
+                        <span class="text">취소</span>
+                      </a>
+                    </div>
+                    <div class="pl-5">
+                      <a href="javascript:;" class="btn btn-primary btn-icon btn_search_width" id="btnGetdate" @click="fnSave()">
+                        <span class="text">반영</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================= -->
+<div class="modal fade" id="contentsModal" tabindex="-2" role="dialog" aria-labelledby="contentsModal"
+     aria-hidden="true">
+  <div class="modal-dialog modal-grid" role="document">
+    <div class="modal-content modal-s-size" id="contentsModalContent" style="height:100%;">
+      <div class="modal-header">
+        <h5 class="modal-title font-weight-bolder" id="contentsModalLabel" style="margin:auto auto;">설명 등록</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close" style="margin: 0px !important;">
+          <span aria-hidden="true" id="contentsCloseModal">×</span>
+
+        </button>
+      </div>
+      <div id="userSearchModalBody">
+        <div class="d-flex flex-column">
+          <div class="container-fluid">
+            <div class="row justify-content-center">
+              <div class="col">
+                <!-- ==== search ==== -->
+                <div class="card shadow">
+                  <div class="card-body">
+                    <div class="d-flex">
+                      <table class="tableForm">
+                        <tbody>
+                        <tr>
+                          <th>사진 제목</th>
+                          <td class="input-group">
+                            <input type="text" value="" id="spotkey" hidden>
+                            <input class="form-control" id="sj" type="text" placeholder="제목을 입력해 주세요.">
+                          </td>
+                        </tr>
+                        <tr>
+                          <th>사진 설명</th>
+                          <td class="input-group">
+                            <textArea class="form-control" id="cn" type="text" placeholder="설명을 입력해 주세요." style="height: 220px"></textArea>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <!-- ==== /search ==== -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="d-flex justify-content-center" style="margin: auto auto;">
+          <div class="pr-5">
+            <a href="javascript:;" class="btn btn-icon btn-google btn_search_width" id="contentsModalCancel">
+              <span class="text">취소</span>
+            </a>
+          </div>
+          <div class="pl-5">
+            <a href="javascript:;" class="btn btn-icon btn-primary btn_search_width" id="contentsModalSave">
+              <span class="text">등록</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ===== /user search Modal ====== -->
+</body>
+</html>
+<script setup>
+</script>

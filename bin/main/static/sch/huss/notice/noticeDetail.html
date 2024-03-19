@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta
+	content="A fully featured admin theme which can be used to build CRM, CMS, etc."
+	name="description" />
+<meta name="author" content="">
+<title> 개설</title>
+<link href="/css/style.css" rel="stylesheet" />
+<script src="/js/allVendors.js"></script>
+<script src="/js/common.js"></script>
+<script src="/sch/js/admin/noticeExprn/noticeDetail.js"></script>
+</head>
+
+<body>
+
+	<!-- ===== header ====== -->
+	<header id="header_wrap"></header>
+	<!-- ===== /header ====== -->
+	<div id="wrapper">
+		<!-- sidebar -->
+		<aside id="sidebar-html"></aside>
+		<!-- /sidebar -->
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content" class="pt-0">
+				<!-- ===== app ====== -->
+				<div id="app">
+					<!-- ===== container ====== -->
+					<div id="container" class="d-flex flex-column">
+						<div class="container-fluid">
+							<!-- ===== container-fluid ====== -->
+							<div
+								class="d-sm-flex align-items-center justify-content-between mb-4">
+								<h1 class="h1 mb-0 text-gray-800"> 개설 상세</h1>
+							</div>
+							<div class="col">
+								<!-- <div class="row mb-4" v-show="step == 'master'"> -->
+								<div class="row mb-4">
+
+									<div class="card shadow col">
+										<div class="card-body">
+											<div class="row justify-content-center">
+												<div class="col">
+													<form class="d-flex justify-content-center col">
+														<div>
+															<table class="tableForm">
+														<tbody> 
+																<tr>
+																	<!-- ===== 교수명   ====== -->
+																	<th  colspan="1">교수명<span class="required">*</span>:</th> 
+																	<td class="input-group">
+																		<div class="form-control" id="profsrUserSeqText">
+																	{{noticeDetail.userNm}}
+																		</div>
+																	</td> 
+																	
+																	
+																	<th  colspan="6">상담 형태&nbsp;&nbsp;<span class="required">*</span>:</th>
+																	
+																	<td> 
+																			<div id="noticeSe" > 
+																		{{noticeDetail.noticeSeStr}}
+																			</div> 
+																	</td>
+																
+																</tr>
+
+ 
+																<tr></tr>
+																<!-- ===== / 상담형태 : 드롭박스 ====== -->
+																<tr>
+																	<th>상담장소 <span class="required">*</span>:
+																	</th>
+																	<td colspan="2"><div class="form-control"  id="noticePlaceNm">  
+																		{{noticeDetail.noticePlaceNm}}</div></td>
+
+																	<th>상담생수<span class="required">*</span>:
+																	</th>
+																	<td colspan="6">
+																		<div>
+																			<div id="noticeCo" > {{noticeDetail.noticeCo}}명
+																			</div>
+																		</div>
+																	</td>
+																</tr>
+																<!-- ===== 상담기간 ====== -->
+																<tr>
+																	<th>상담 기간<span class="required">*</span>:
+																	</th>
+																
+																<td colspan="2" class="col-4">
+																	
+																	<div class="input-group flex-nowrap bx_calendar">
+																		<div class="side-by-side div-input">{{noticeDetail.noticeBeginDate}}</div>
+																		<span class="d-block mx-3" style="line-height: 38px">~</span>
+																		<div class="side-by-side div-input">{{noticeDetail.noticeEndDate}}</div>
+																	</div>
+																</td>
+																	<!-- ===== / 상담기간 ====== -->
+														<th class="col-2">
+																	상담요일&nbsp;&nbsp;<span class="required">*</span>:
+																</th>
+																	<!-- ===== 상담요일 ====== -->
+																	<td colspan="6"> 
+																	<div>
+																		<input type="checkbox"  disabled block class="noticeDayArray" name="noticeDayArray" id="monday" v-model="noticeDetail.noticeWeekArray" value="1"/>
+																		<label for="monday" class="form-check-label">월</label>&nbsp;&nbsp;&nbsp;
+																		<input type="checkbox"  disabled block class="noticeDayArray" name="noticeDayArray" id="tuesday" v-model="noticeDetail.noticeWeekArray" value="2"/>
+																		<label for="tuesday" class="form-check-label">화</label>&nbsp;&nbsp;&nbsp;
+																		<input type="checkbox"  disabled block class="noticeDayArray" name="noticeDayArray" id="wednesday" v-model="noticeDetail.noticeWeekArray" value="3"/>
+																		<label for="wednesday" class="form-check-label">수</label>&nbsp;&nbsp;&nbsp;
+																		<input type="checkbox"  disabled block class="noticeDayArray" name="noticeDayArray" id="thursday" v-model="noticeDetail.noticeWeekArray" value="4"/>
+																		<label for="thursday" class="form-check-label">목</label>&nbsp;&nbsp;&nbsp;
+																		<input type="checkbox"  disabled block class="noticeDayArray" name="noticeDayArray" id="friday" v-model="noticeDetail.noticeWeekArray" value="5"/>
+																		<label for="friday" class="form-check-label">금</label>&nbsp;&nbsp;&nbsp;
+																		<input type="checkbox"  disabled block class="noticeDayArray" name="noticeDayArray" id="saturday" v-model="noticeDetail.noticeWeekArray" value="6"/> 
+																		<label for="saturday" class="form-check-label">토</label>
+																</div>
+																	</td>
+																</tr>
+																<!-- ===== / 상담요일 ====== -->
+																<!-- ===== 상담시간 ====== -->
+																<tr>
+																	<th class="col-sm-2">상담시간 <span class="required">*</span>
+																		:
+																	</th>
+																	<td colspan="3">
+																		<div class="input-group flex-nowrap">
+																			 {{noticeDetail.noticeBeginTimeHour}}:{{noticeDetail.noticeBeginTimeMinutes}}
+																			 ~{{noticeDetail.noticeEndTimeHour}}:{{noticeDetail.noticeEndTimeMinutes}}
+																		</div>
+																	</td> 
+																</tr>
+
+																<!-- ===== / 상담시간 ====== -->
+																<!-- ===== 모집기간 ====== -->
+																<tr>
+																	<th>모집 기간<span class="required">*</span>:
+																	</th>
+																	<td colspan="4">
+																		<div class="input-group calendar">
+																			<div>
+																		</div>
+																			<span class="d-block" style="line-height: 38px">{{noticeDetail.rcritBeginDt}} &nbsp;&nbsp;&nbsp;&nbsp;~ &nbsp;&nbsp;&nbsp;&nbsp;{{noticeDetail.rcritEndDt}} </span>
+																			<div>
+																		</div>
+
+																		</div>
+																	</td>
+
+																</tr>
+																<!-- ===== / 모집기간 ====== -->
+
+														</tbody>
+															</table>
+														</div>
+													</form>
+													<div class="border-top m-4"></div>
+													<div class="d-flex justify-content-center">
+														<div class="d-flex justify-content-center">
+														<div class="pr-5">
+															<a href="/sch/admin/noticeExprn/noticeList.html"
+																class="btn btn-primary btn-icon btn_search_width" > 
+																<span class="text">목록</span>
+															</a>
+														</div>
+														<div class="pr-5">
+															<a href="#" id="btnUpdateNotice"
+																class="btn btn-primary btn-icon btn_search_width"> 
+																<span class="text">수정</span>
+															</a>
+														</div>
+														<div class="pr-5">
+															<a href="#" class="btn btn-primary btn-icon btn_search_width"
+																id="btnDeleteNotice" > <span class="text">삭제</span>
+															</a>
+														</div> 
+													 
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- ===== /container-fluid ====== --> 
+					 
+							<!-- ==== /search ==== -->
+						 
+							<!-- ==== /searchList ==== -->
+ 
+						</div>
+					</div>
+				</div>
+
+				<!-- /detail Modal-->
+
+				<!-- ===== /container ====== -->
+			</div>
+			<!-- ===== /app ====== -->
+		</div>
+	</div>
+
+
+</body>
+</html>

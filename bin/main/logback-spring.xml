@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="10 seconds">
+
+	<conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+
+	<!-- Appenders -->
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(%-40.40logger{39}){cyan} | %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/data/husslog/huss.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>/data/schlog/sch-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- or whenever the file size reaches 10MB -->
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN:-%5p} %-40.40logger{39} | %msg%n</pattern>
+        </encoder>
+    </appender>
+
+	<!-- Logger -->
+	<logger name="com" level="DEBUG" appender-ref="console" />
+	<logger name="com.sch" level="DEBUG" appender-ref="console" />
+	<logger name="jdbc" level="WARN" appender-ref="console" />
+	<logger name="jdbc.sqlonly" level="INFO" appender-ref="console" />
+	<logger name="jdbc.resultsettable" level="INFO" appender-ref="console" />
+
+	<!-- Root Logger -->
+	<root level="WARN">
+		<appender-ref ref="console" />
+		<appender-ref ref="ROLLING" />
+	</root>
+</configuration>

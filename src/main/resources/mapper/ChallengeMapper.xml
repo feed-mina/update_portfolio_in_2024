@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="challenge">
+	<select id="test" parameterType="map" resultType="camelHashMap">
+		select 1 as test
+	</select>
+
+	<select id="selectTestLogin" parameterType="map" resultType="camelHashMap">
+		select *
+		  from test_login
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(loginId)'>
+		 where login_id = #{loginId}
+		</if>
+	</select>
+
+	<select id="seq" parameterType="map" resultType="camelHashMap">
+		select nextval('TEST') as test_id
+	</select>
+
+	<insert id="challengeInsert" parameterType="map" >
+		INSERT INTO svg.tb_chlng
+		            (chlng_id,
+		             chlng_sj,
+		             ctgry_code,
+		             crtfc_fq_co,
+		             dail_crtfc_co,
+		             crtfc_begin_time,
+		             crtfc_end_time,
+		             chlng_begin_de,
+		             chlng_end_de,
+		             chlng_reqre_daycnt,
+		             mumm_partcpt_amount,
+		             mxmm_partcpt_amount,
+		             mxmm_partcpt_co,
+		             crtfc_mn_code,
+		             file_id,
+		             good_image_cn,
+		             badn_image_cn,
+		             crtfc_suffcn_time,
+		             image_id,
+		             chlng_dc,
+		             dc_image_cn,
+		             crtfc_mth_dc,
+		             atpn_dc,
+		             use_at,
+		             regist_id,
+		             regist_dt,
+		             updt_id,
+		             updt_dt)
+		VALUES     ('',
+		            '',
+		            '',
+		            0,
+		            0,
+		            '',
+		            '',
+		            '',
+		            '',
+		            0,
+		            0,
+		            0,
+		            0,
+		            '',
+		            '',
+		            '',
+		            '',
+		            '',
+		            '',
+		            '',
+		            '',
+		            '',
+		            '',
+		            'Y',
+		            '',
+		            now(),
+		            '',
+		            now())
+	</insert>
+
+
+
+</mapper>

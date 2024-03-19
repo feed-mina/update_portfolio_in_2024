@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="image">
+	
+	<insert id="insertImageMastr" parameterType="map">
+		<selectKey resultType="String" keyProperty="imageId" order="BEFORE">
+	        SELECT nextval('IMAGE')
+	    </selectKey>
+		insert into tb_image_mastr
+			   (image_id)
+		values (#{imageId})
+	</insert>
+
+	<insert id="insertImageDetail" parameterType="map">
+		insert into tb_image_detail
+			   (image_id, image_detail_sn, image_cn)
+		select #{imageId}
+		      ,(select ifnull(max(image_detail_sn), 0) + 1
+				  from tb_image_detail
+				 where image_id = #{imageId})
+			  ,#{imageCn}
+	</insert>
+	
+	<delete id="deleteImageDetail" parameterType="map">
+		delete from tb_image_detail
+		 where image_id = #{imageId}
+	</delete>
+	
+	<select id="selectImageDetail" parameterType="map" resultType="camelHashMap">
+		select image_cn
+		  from tb_image_detail se
+		      ,tb_image_mastr ma
+		 where ma.image_id = se.image_id
+		   and ma.image_id = #{imageId}
+		   and ma.use_at = 'Y'
+		 order by image_detail_sn
+	</select>
+	
+</mapper>

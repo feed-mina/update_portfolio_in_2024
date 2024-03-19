@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="test">
+	<select id="test" parameterType="map" resultType="camelHashMap">
+		select 1 as test
+	</select>
+	
+	<select id="selectTestLogin" parameterType="map" resultType="camelHashMap">
+		select *
+		  from tb_user
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(userSeq)'>
+		 where user_seq = #{userSeq}
+		</if>
+	</select>
+	
+	<select id="seq" parameterType="map" resultType="camelHashMap">
+		select nextval('TEST') as test_id
+	</select>
+
+	<insert id="testTransaction" parameterType="map" >
+		INSERT INTO tb_user
+				(login_id, login_nm, login_pw)
+		VALUES (#{loginId}, #{loginNm}, #{loginPw})
+	</insert>
+	
+	
+</mapper>

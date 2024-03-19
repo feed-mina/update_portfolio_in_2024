@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>HUSS</title>
+    <link rel="stylesheet" href="/css/pc/style.css">
+    <link rel="stylesheet" href="/css/pc/aos.css">
+    <link rel="stylesheet" href="/css/pc/jquery-ui.css">
+    <script src="/js/allVendors.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/sch/js/huss/community/communityList.js"></script>
+</head>
+<body>
+    <!-- skip -->
+    <div class="skip">
+        <a href="#container">본문 바로가기</a>
+    </div>
+    <!-- // skip -->
+    <div class="wrapper">
+        <!-- background -->
+       
+        
+        <!-- header --> 
+    <header id="header_wrap"></header>
+        <!-- // header -->
+        <!-- container -->
+        <div class="container " id="container">
+            <div id="content">
+                <div class="contents_full sub_top_banner_wrap">
+                    <div class="sub_top_banner02">
+                        <h2>COMMUNITY</h2>
+                    </div>
+                </div>
+                <div class="contents_02 mt60">
+                    <div id="tabs" class="program_tabs">
+                        <ul class="tabsContainer">
+                            <div class="active_back"></div>
+                            <li id="freeNtce" class="tabs_left"><a href="#tabs-2">자유 게시</a></li>
+                            <li id="prizeNtce" class="tabs_right"><a href="#tabs-1">수상작</a></li>
+                        </ul>
+                        <!-- 수상 -->
+                        <div id="tabs-1" style="padding-bottom: 100px;">
+                            <div class="community_wrap">
+                                <div class="search_wrap mt24">
+                                    <div class="input_wrap bx_flex ai_center gap10 fw100">
+                                        <div class="bx_inp ty2  ">
+                                            <div class="sel_typ3 sel_wid206 "><!-- 선택 시 .on class -->
+                                                <!-- 23.08.31 select 수정 -->
+                                                <select id="langPrize" name="total" v-model="searchData.searchKnd">
+                                                    <option value="" selected="" >전체</option>
+                                                    <option value="communitySj">제목</option>
+                                                    <option value="registNm">작성자</option>
+                                                </select>
+                                                <label for="langPrize" class="icoArrow"></label>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="inp_text_48 w400" placeholder="검색어를 입력해 주세요" v-model="searchData.searchText" maxlength="20">
+                                        <button @click="fnSearch()" class="btn_type06">검색</button>
+                                    </div>
+                                </div>
+                                <div class="total_area bx_flex jc_sb mt24">
+                                    <div class="total_wrqp bx_flex ai_center">
+                                        <h2>Total</h2>
+                                        <p class="ml10">
+                                            {{pagination.totalData}}
+                                        </p>
+                                    </div>
+                                    <div class="board_category_area ">
+                                        <ul class="board_category bx_flex gap16">
+                                            <li class="liTag">
+                                                <a @click="setTag('video')" class="video tag" href="#"> Video</a>
+                                            </li>
+                                            <div class="line04">
+                                                <img src="/images/pc/Line03.png" alt="">
+                                            </div>
+                                            <li>
+                                                <a @click="setTag('poster')" class="poster tag" href="#"> Poster</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card_board_wrap mt16">
+                                    <!-- 리스트 -->
+                                    <ul class="card_board_area">
+                                        <li v-for="(obj, idx) in communityList">
+                                            <a href="javascript:;" class="card">
+                                                <div class="card_head">
+                                                    <div v-if="obj.tag === 'video'" class="card_head_img video01"><img :src="obj.thumbnailFileCours" alt="비디오태그썸네일이미지"></div>
+                                                    <div v-if="obj.tag === 'poster'"><img :src="obj.fileCours" alt="포스터태그이미지"></div>
+                                                </div>
+                                                <div class="card_body">
+                                                    <div class="card_content">
+                                                        <h2>
+                                                         {{obj.communitySj}}
+                                                            {{ellipsisText(obj.communitySj)}}
+                                                        </h2>
+                                                        <p class="mt16">
+                                                            {{ellipsisText(obj.communityCn)}}
+                                                        </p>
+                                                        <span class="mt22">
+                                                            {{obj.registDt}}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <!-- 페이징 -->
+                                    <div class="paging02 mt40">
+                                        <a v-if="pagination.first > 1" @click="fnPaging(pagination.first - 1)" class="first" href="#"><span class="blind">처음</span></a>
+                                        <a v-if="pagination.totalData > 0 && pagination.pageNo == '1'" class="prev" style="pointer-events: none;" href="#"><span class="blind">이전</span></a>
+                                        <a v-else-if="pagination.totalData > 0" class="prev" @click="fnPaging(pagination.pageNo*1 -1)" href="#"><span class="blind">이전</span></a>
+                                        <ul class="paging02_num">
+                                            <li v-for="(obj, index) in pagingList" :value="obj" :key="obj">
+                                                <a v-if="pagination.pageNo == obj" @click="fnPaging(obj)" class="on" href="#">{{obj}}</a>
+                                                <a v-else @click="fnPaging(obj)" href="#">{{obj}}</a>
+                                            </li><!-- 해당페이지 .on class -->
+                                        </ul>
+                                        <a v-if="pagination.totalData > 0 && pagination.pageNo == pagination.last" class="next" style="pointer-events: none;" href="#"><span class="blind">다음</span></a>
+                                        <a v-else-if="pagination.totalData > 0" class="next" @click="fnPaging(pagination.pageNo*1 +1)" href="#"><span class="blind">다음</span></a>
+                                        <a v-if="pagination.last < pagination.totalPage" @click="fnPaging(pagination.last + 1)" class="last" href="#"><span class="blind">마지막</span></a>
+                                    </div>
+                                    <div class="btn_box tr">
+                                        <button class="btn_type06" style="transform: translateY(-90%);">글쓰기</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 자유 -->
+                        <div id="tabs-2" style="padding-bottom: 60px;">
+                            <div class="community_wrap">
+                                <div class="search_wrap mt24">
+                                    <div class="input_wrap bx_flex ai_center gap10 fw100">
+                                        <div class="bx_inp ty2  ">
+                                            <div class="sel_typ3 sel_wid206 "><!-- 선택 시 .on class -->
+                                                <!-- 23.08.31 select 수정 -->
+                                                <select id="lang" name="total" v-model="searchData.searchKnd">
+                                                    <option value="" selected="">전체</option>
+                                                    <option value="communitySj">제목</option>
+                                                    <option value="registNm">작성자</option>
+                                                </select>
+                                                <label for="lang" class="icoArrow"></label>
+                                            </div>
+                                        </div>
+                                        <input type="email" class="inp_text_48 w400" placeholder="검색어를 입력해 주세요" v-model="searchData.searchText">
+                                        <button @click="fnSearch()" class="btn_type06">검색</button>
+                                    </div>
+                                </div>
+                                <div class="total_area bx_flex jc_sb mt24">
+                                    <div class="total_wrqp bx_flex ai_center">
+                                        <h2>Total</h2>
+                                        <p class="ml10">
+                                            {{pagination.totalData}}
+                                        </p>
+                                    </div>
+                                    <div class="board_category_area ">
+                                        <ul class="board_category bx_flex gap16">
+                                            <li class="liTag">
+                                                <a @click="setTag('video')" class="video tag" href="#"> Video</a>
+                                            </li>
+                                            <div class="line04">
+                                                <img src="/images/pc/Line03.png" alt="">
+                                            </div>
+                                            <li>
+                                                <a @click="setTag('poster')" class="poster tag" href="#"> Poster</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card_board_wrap mt16">
+                                    <!-- 리스트 -->
+                                    <ul class="card_board_area">
+                                        <li v-for="(obj, idx) in communityList">
+                                            <a href="javascript:;" class="card">
+                                                <div class="card_head">
+                                                    <div v-if="obj.tag === 'video'" class="card_head_img video01"><img :src="obj.thumbnailFileCours" alt="비디오태그썸네일이미지"></div>
+                                                    <div v-if="obj.tag === 'poster'"><img :src="obj.fileCours" alt="포스터태그이미지"></div>
+                                                </div>
+                                                <div class="card_body">
+                                                    <div class="card_content">
+                                                        <h2>
+                                                            {{ellipsisText(obj.communitySj)}}
+                                                        </h2>
+                                                        <p class="mt16">
+                                                            {{ellipsisText(obj.communityCn)}}
+                                                        </p>
+                                                        <span class="mt22">
+                                                            {{obj.registDt}}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <!-- 페이징 -->
+                                    <div class="paging02 mt40">
+                                        <a v-if="pagination.first > 1" @click="fnPaging(pagination.first - 1)" class="first" href="#"><span class="blind">처음</span></a>
+                                        <a v-if="pagination.totalData > 0 && pagination.pageNo == '1'" class="prev" style="pointer-events: none;" href="#"><span class="blind">이전</span></a>
+                                        <a v-else-if="pagination.totalData > 0" class="prev" @click="fnPaging(pagination.pageNo*1 -1)" href="#"><span class="blind">이전</span></a>
+                                        <ul class="paging02_num">
+                                            <li v-for="(obj, index) in pagingList" :value="obj" :key="obj">
+                                                <a v-if="pagination.pageNo == obj" @click="fnPaging(obj)" class="on" href="#">{{obj}}</a>
+                                                <a v-else @click="fnPaging(obj)" href="#">{{obj}}</a>
+                                            </li><!-- 해당페이지 .on class -->
+                                        </ul>
+                                        <a v-if="pagination.totalData > 0 && pagination.pageNo == pagination.last" class="next" style="pointer-events: none;" href="#"><span class="blind">다음</span></a>
+                                        <a v-else-if="pagination.totalData > 0" class="next" @click="fnPaging(pagination.pageNo*1 +1)"><span class="blind" href="#">다음</span></a>
+                                        <a v-if="pagination.last < pagination.totalPage" @click="fnPaging(pagination.last + 1)" class="last"><span class="blind" href="#">마지막</span></a>
+                                    </div> 
+                                    <div class="btn_box tr">
+										<a href="/sch/huss/community/editorRegist.html"><button class="btn_type06"
+											style="transform: translateY(-90%);">글쓰기1</button></a>
+									</div>
+                                    <div class="btn_box tr">
+										<a href="/sch/huss/community/editorRegist2.html"><button class="btn_type06"
+											style="transform: translateY(-90%);">글쓰기2</button></a>
+									</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- // container -->
+     <!-- footer -->
+        <footer id="footer_wrap"></footer>
+        <!-- // footer -->
+    </div>
+    <script>
+        $( function() {
+            $( "#tabs" ).tabs();
+        });
+
+        // 탭 배경
+        $(document).ready(function(){
+            const tabs = $('.program_tabs li');
+            tabs.click(function(){
+                if (this.classList.contains('tabs_right')) {
+                    $('.active_back').css('left', '115px');
+                } else if (this.classList.contains('tabs_left')) {
+                    $('.active_back').css('left', '0px');
+                }
+                //  탭 배경 끝
+            });
+        });
+    </script>
+</body>
+</html>

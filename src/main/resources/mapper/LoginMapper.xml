@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="login">
+	
+	<!--카카오 회원정보 조회-->
+	<select id="kakaoUserFind" parameterType="map" resultType="camelHashMap">
+  SELECT user_seq, user_password, user_email FROM tb_user 
+		WHERE user_email = #{email}
+		AND join_type = 'K' 
+	</select>
+	<!--카카오 회원이 있는지 체크-->
+	
+	<select id="selectKakaoCheckExist" parameterType="map" resultType="camelHashMap">
+		SELECT * FROM tb_user 
+		WHERE (1=1)
+			AND CASE
+				WHEN #{checkEntity} = 'email' THEN user_email = #{email}
+				ELSE true
+			END
+			<if test='@com.sch.util.CommonUtil@isNotEmpty(exceptMe)'>
+				AND user_seq != #{exceptMe}
+			</if>
+	</select> 
+ 	<!-- 카카오회원이 있는지 체크2-->
+	
+	<select id="selectKakaoPwCheckExist" parameterType="map" resultType="camelHashMap">
+		SELECT user_password FROM tb_user 
+		WHERE (1=1)
+			AND CASE
+				WHEN #{checkPwEntity} = 'id' THEN user_password = #{id}
+				ELSE true
+			END
+			<if test='@com.sch.util.CommonUtil@isNotEmpty(exceptMe)'>
+				AND user_seq != #{exceptMe}
+			</if>
+	</select> 
+	<!--회원이 있는지 체크-->
+	
+	<select id="selectCheckExist" parameterType="map" resultType="camelHashMap">
+		SELECT * FROM  tb_user 
+		WHERE (1=1)
+			AND CASE
+				WHEN #{checkEntity} = 'userEmail' THEN user_email = #{userEmail}
+				ELSE true
+			END
+			<if test='@com.sch.util.CommonUtil@isNotEmpty(exceptMe)'>
+				AND user_seq != #{exceptMe}
+			</if>
+			AND join_type = 'U'
+	</select> 
+ 	<!-- 사용하는 비밀번호가 맞는지 회원인증  체크-->
+	
+	<select id="selectCheckPw" parameterType="map" resultType="camelHashMap">
+		SELECT user_password FROM tb_user 
+		WHERE (1=1)
+			AND CASE
+				WHEN #{checkEntity} = 'userPassword' THEN user_password = #{userPassword}
+				ELSE true
+			END
+			<if test='@com.sch.util.CommonUtil@isNotEmpty(exceptMe)'>
+				AND user_seq != #{exceptMe}
+			</if>
+	</select> 
+ 
+<!--login.kakaoUserRegist 카카오회원가입-->
+		<insert id="kakaoUserRegist" parameterType="map">
+		<selectKey resultType="String" keyProperty="userSeq" order="BEFORE">
+			select fn_nextval('USER')
+		</selectKey>
+
+		INSERT INTO tb_user
+			(
+				user_seq
+				,user_email
+				,user_nm
+				,user_password
+				,qestn_code
+				,qestn_rspns
+				,mbtlnum
+				,user_author
+				,join_type
+				,regist_id
+				,regist_dt
+				,updt_id
+				,updt_dt
+				,use_at
+				<if test='@com.sch.util.CommonUtil@isNotEmpty(policyMarkt)'>
+				, policy_markt
+				</if>
+				<if test='@com.sch.util.CommonUtil@isNotEmpty(policyMber)'>
+				, policy_mber
+				</if>
+			)
+		VALUES      
+			(
+				#{userSeq}
+				,#{email}
+				,#{name}
+				,#{id}
+				,'KAKAO_SIGN'
+				,'KAKAO_SIGN'
+				,#{phone_number}
+				,'G'
+				,'K'
+				,NULL
+				,CURRENT_TIMESTAMP()
+				,NULL
+				,CURRENT_TIMESTAMP()
+				,'Y' <!--카카오인증은 로그인과 동시에 회원가입이므로 use_at 파람을 Y로 default한다.-->  
+				<if test='@com.sch.util.CommonUtil@isNotEmpty(policyMarkt)'>
+				, 'Y'
+				</if>
+				<if test='@com.sch.util.CommonUtil@isNotEmpty(policyMber)'>
+				, 'Y'
+				</if>
+			)
+	</insert>
+
+
+	<!-- login.userRegist 일반회원가입-->
+	<insert id="userRegist" parameterType="map">
+		
+		INSERT INTO ad.tb_user
+			(
+				user_email
+				,user_nm
+				,user_password
+				,qestn_code
+				,qestn_rspns
+				,mbtlnum
+				,user_author
+				,join_type
+				,regist_id
+				,regist_dt
+				,updt_id
+				,updt_dt
+				,use_at  <!--일반 회원가입은 use_at flag을 N로 default한다 인증할때 flag를 y로 바꾼다..-->  
+				<if test='@com.sch.util.CommonUtil@isNotEmpty(policyMarktFlag)'>
+				,policy_markt
+				</if>
+				<if test='@com.sch.util.CommonUtil@isNotEmpty(policyMberFlag)'>
+				,policy_mber
+				</if>
+			)
+		VALUES      
+			(
+				#{userEmail}
+				,#{userNm}
+				,#{userPasswordEnc}
+				,#{qestnCode}
+				,#{qestnRspns}
+				,#{mbtlnum}
+				,'G'
+				,'U'
+				,NULL
+				,CURRENT_TIMESTAMP()
+				,NULL
+				,CURRENT_TIMESTAMP()
+				,'N'   
+				<if test='@com.sch.util.CommonUtil@isNotEmpty(policyMarktFlag)'>
+				, #{policyMarktFlag}
+				</if>
+				<if test='@com.sch.util.CommonUtil@isNotEmpty(policyMberFlag)'>
+				, #{policyMberFlag}
+				</if>
+			)
+	</insert>
+
+	<!-- login.userUpdate 비밀번호수정 -->
+	<update id="userUpdate" parameterType="map">
+		UPDATE tb_user
+		SET
+			updt_id = #{userSeq}
+			,updt_dt = CURRENT_TIMESTAMP() 
+			<if test='@com.sch.util.CommonUtil@isNotEmpty(userNewPassword)'>
+				,user_password = #{userNewPassword}
+			</if>
+		WHERE user_seq = #{userSeq}
+	</update>
+
+	<!-- login.userDelete 회원탈퇴 -->
+	<update id="userDelete" parameterType="map">
+		UPDATE tb_user
+		SET
+			use_at = 'D'
+		WHERE user_seq = #{user.userSeq}
+	</update>
+ 
+<!--왠지 안쓰는 sql문같음
+	<update id="userPasswordUpdate" parameterType="map">
+		UPDATE ad.tb_user
+		SET user_password = #{userPassword}
+		WHERE user_seq = #{userSeq}
+	</update>
+-->
+<!--회원동의
+	<insert id="userStplat" parameterType="map">
+		INSERT INTO ad.tb_user_stplat
+			(
+				user_seq
+				,stplat_code
+				,agre_at
+				,regist_dt
+				,updt_dt
+			)
+		VALUES  
+			(
+				#{userSeq}
+				,#{stplatCode}
+				,#{agreAt}
+				,CURRENT_TIMESTAMP()
+				,CURRENT_TIMESTAMP()
+			)
+	</insert>  -->
+	<!--login.userIdFind 이메일찾기-->
+	<select id="userIdFind" parameterType="map" resultType="camelHashMap">
+		SELECT * from tb_user
+		WHERE 
+			user_nm = #{userNm} 
+			AND qestn_code = #{qestnCode} 
+			AND qestn_rspns = #{qestnRspns}
+	</select>
+
+	<!--login.userPwFind 비밀번호찾기-->
+	<select id="userPwFind" parameterType="map" resultType="camelHashMap">
+		SELECT * from tb_user
+		WHERE 
+			user_seq  = #{user_seq} 
+			AND qestn_code = #{qestnCode} 
+			AND qestn_rspns = #{qestnRspns}
+	</select>
+
+	<!--login.policyList 정책조회하기-->
+	<select id="policyList" parameterType="map" resultType="camelHashMap">
+		SELECT * FROM tb_cmmn_code WHERE upper_cmmn_code = 'POLICY' ORDER BY sort_sn ASC
+	</select>
+
+	<!--login.useAtUpdate 회원가입시 이메일 링크 클릭 useAt N - 'Y'변경 -->
+	<update id="useAtUpdate" parameterType="map">
+		UPDATE tb_user
+		SET
+			use_at = #{useAt}
+		WHERE
+			user_seq = #{user.userSeq}
+	</update>
+
+	<!-- 탈퇴유저 미포함 -->
+	<select id="selectLoginMap" parameterType="map" resultType="camelHashMap">
+		<!-- login.selectLoginMap -->
+		SELECT * FROM tb_user 
+		WHERE user_seq = #{userSeq}
+			AND use_at = 'Y'
+		 
+
+	</select>
+	
+	<!-- 탈퇴유저 포함하며 로그인할때 사용 -->
+	<select id="selectLogin" parameterType="map" resultType="camelHashMap">
+		SELECT * FROM  tb_user 
+		WHERE user_email = #{userEmail}
+			<!-- AND use_at = 'Y' -->
+			<if test='@com.sch.util.CommonUtil@isNotEmpty(user)'>
+				<if test='userType = "user"'>
+					AND user_author IN ('SA','G')
+				</if> 
+			</if>
+
+	</select>
+
+
+	<!--login.questionList 회원가입 비밀번호 찾기 질문조회  -->
+	<select id="questionList" parameterType="map" resultType="camelHashMap">
+		SELECT * FROM tb_cmmn_code WHERE upper_cmmn_code = 'QUESTION' ORDER by sort_sn ASC
+	</select>
+
+ 
+
+	
+</mapper>

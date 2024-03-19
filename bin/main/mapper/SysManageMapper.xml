@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+	시스템 관리 xml
+-->
+
+<mapper namespace="sysManage">
+    <!-- 회원관리 -->
+    <sql id="sql_SysUserList">
+        SELECT
+        tu.user_seq
+        , user_author
+        , fn_codenm(user_author) as user_author_nm
+        , user_nm
+        , user_email
+        , use_at
+        , mbtlnum
+        , brthdy
+        , DATE_FORMAT(regist_dt, '%Y-%m-%d') as regist_dt
+        FROM tb_user tu
+        WHERE 1=1
+        <if test='useCert'>
+            AND tu.use_at = 'Y'
+        </if>
+        <if test='!useAt'>
+            AND NOT tu.use_at IN ('D', 'S')
+        </if>
+        <if test='@com.sch.util.CommonUtil@isNotEmpty(searchText)'>
+            AND (tu.user_nm LIKE concat('%', #{searchText}, '%')
+            OR tu.user_email LIKE concat('%', #{searchText}, '%')
+            OR tu.mbtlnum LIKE concat('%', #{searchText}, '%')
+            OR tu.brthdy LIKE concat('%', #{searchText}, '%'))
+        </if>
+        ORDER BY tu.regist_dt DESC
+    </sql>
+
+    <select id="selectSysUserListPaging" parameterType="map" resultType="camelHashMap">
+        /* sysManage.selectSysUserListPaging */
+        <include refid="sql_SysUserList"/>
+        <include refid="common.PAGING"/>
+    </select>
+
+    <select id="selectSysUserListPagingCount" parameterType="map" resultType="camelHashMap">
+        /* sysManage.selectSysUserListPagingCount */
+        <include refid="common.COUNT_HEAD"/>
+        <include refid="sql_SysUserList"/>
+        <include refid="common.COUNT_FOOT"/>
+    </select>
+
+    <!-- 사용자접속이력 -->
+    <sql id="sql_ConectHistList">
+        SELECT
+        tu.user_seq
+        , tu.user_nm
+        , tu.user_email
+        , tu.use_at
+        , tu.brthdy
+        , DATE_FORMAT(tul.login_dt, '%Y-%m-%d') AS login_date
+				, TIME_FORMAT(tul.login_dt, '%H:%i') AS login_tm
+				, TIME_FORMAT(tul.end_dt, '%H:%i') AS end_tm
+				, TIMESTAMPDIFF(minute, login_dt, end_dt) AS login_time_diff
+				, (
+						SELECT
+							SUM(IFNULL(TIMESTAMPDIFF(minute, login_dt, end_dt), 0))
+						FROM tb_user_login tul
+						WHERE tu.user_seq = tul.user_seq
+							AND DATE_FORMAT(login_dt, '%Y-%m-%d') = DATE_FORMAT(login_date, '%Y-%m-%d')
+							AND DATE_FORMAT(end_dt, '%Y-%m-%d') = DATE_FORMAT(login_date, '%Y-%m-%d')
+					) AS date_time_diff		-- 일일 총 접속시간
+			FROM tb_user_login tul
+			INNER JOIN tb_user tu ON tu.user_seq = tul.user_seq
+			WHERE 1=1
+				<if test='@com.sch.util.CommonUtil@isNotEmpty(searchText)'>
+            AND (tu.user_nm LIKE concat('%', #{searchText}, '%')
+            OR tu.user_email LIKE concat('%', #{searchText}, '%')
+            OR tu.mbtlnum LIKE concat('%', #{searchText}, '%')
+            OR tu.brthdy LIKE concat('%', #{searchText}, '%'))
+        </if>
+			
+			ORDER BY login_date DESC, login_tm DESC
+    </sql>
+
+    <select id="selectConectHistListPaging" parameterType="map" resultType="camelHashMap">
+        /* sysManage.selectConectHistListPaging */
+        <include refid="sql_ConectHistList"/>
+        <include refid="common.PAGING"/>
+    </select>
+
+    <select id="selectConectHistListPagingCount" parameterType="map" resultType="camelHashMap">
+        /* sysManage.selectConectHistListPagingCount */
+        <include refid="common.COUNT_HEAD"/>
+        <include refid="sql_ConectHistList"/>
+        <include refid="common.COUNT_FOOT"/>
+    </select>
+
+    <select id="selectMberOneDetail" parameterType="map" resultType="camelHashMap">
+        /* sysManage.selectMberOneDetail */
+        SELECT
+            tu.user_seq
+             , tu.user_nm
+             , tu.mbtlnum
+             , tu.user_email
+             , tus_mber.agre_at as tus_mber
+             , DATE_FORMAT(tus_mber.regist_dt, '%Y-%m-%d') as tus_mber_agre_dt
+             , tus_advrts.agre_at as tus_advrts
+             , tus_markt.agre_at as tus_markt
+        FROM tb_user tu
+             LEFT JOIN tb_user_stplat tus_mber ON tu.user_seq = tus_mber.user_seq AND tus_mber.stplat_code = 'POLICY_MBER'
+             LEFT JOIN tb_user_stplat tus_advrts ON tu.user_seq = tus_advrts.user_seq AND tus_advrts.stplat_code = 'POLICY_TERM'
+             LEFT JOIN tb_user_stplat tus_markt ON tu.user_seq = tus_markt.user_seq AND tus_markt.stplat_code = 'POLICY_MARKT'
+        WHERE tu.user_seq = #{userSeq}
+    </select>
+
+
+
+
+</mapper>

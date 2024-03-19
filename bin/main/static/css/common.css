@@ -1,0 +1,89 @@
+.table-vertical th {
+  width: 15%;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+table.table {
+  white-space: nowrap;
+}
+
+button.btn[type="button"] {
+  padding-left: 3em;
+  padding-right: 3em;
+}
+
+.display-5 {
+  font-size: 2.5rem;
+  font-weight: 300;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.modal-popup {
+  max-width: 1000px;
+}
+
+#loadingSpinner {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  border: 0;
+  background: red;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+table th,
+table td {
+  vertical-align: middle !important;
+  /* text-align: center; */
+  /* vertical-align: center; */
+}
+table input {
+  max-width: 300px;
+}
+
+#ui-datepicker-div {
+  z-index: 9000 !important;
+}
+
+th[required]:after {
+  content: " *";
+  color: red;
+  font-weight: 100;
+}
+
+.w-300px {
+  max-width: 300px;
+}
+
+.login_auto_check_wrap{display: flex; padding: 50px 0; justify-content: center;}
+.login_auto_check_wrap label{cursor: pointer;}
+.login_id_check{margin:0 20px;}
+
+
+.modal_in{ position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0,0,0,.5); z-index: 99; display: none;}
+.modal-dialog_in{ position: relative; width: auto; margin: 0.5rem; pointer-events: none; max-width: 500px; margin: 0 auto;}
+.modal-content_in{ border-radius: 1.6rem 1.6rem 1.8rem 1.8rem; border: none; position: relative; display: flex; flex-direction: column; width: 100%; pointer-events: auto; background-color: #fff;    background-clip: padding-box; outline: 0;}
+
+.modal_close{position: absolute; top: 2rem; right: 2rem; cursor: pointer;}
+.modal_close img {width: 16px; height: 16px;}
+.modal-dialog-centered_in{ display: flex; align-items: center; min-height: calc(100% - 1rem);}
+.modal-sm_in{ max-width: 120rem;}
+.modal-sm_in .modal-header_in{ padding:4rem 0 0 0;border-bottom: none;margin-bottom: 2rem;}
+.modal-sm_in .modal-header_in .modal-title_in{ font-size: 1.6rem; font-weight: 600; line-height: 1; color:#111}
+.modal-sm_in .modal-body_in{ margin: 2rem 4rem 2rem 4rem; color: #777; font-size: 1.4rem; height: 70vh;}
+.modal-sm_in .modal-footer_in{ padding: 0; display: flex; border-radius: 0 0 1.6rem 1.6rem; border-top: none; overflow: hidden;}
+.modal-sm_in .modal-footer_in .bt{ flex: 1; line-height: 5.6rem; font-size: 1.4rem; color: #80838E; margin: 0; padding: 0; background-color: rgba(169, 172, 187, 0.1); border: none;}
+.modal-sm_in .modal-footer_in .bt + .bt{ border-left: #EAF2F4 .1rem solid;}
+.modal-sm_in .modal-footer_in .bt.mint{ background-color: #77A1E3; color: #fff;}
+.modal-sm_in .modal-footer_in .bt.dark{ color: #fff; background-color: #A9ACBB; font-weight: 600;}
+.modal-agreement_in{padding: 1rem; background-color: #FAFAFB;}
+.modal_ckbx{text-align: right;}
+.modal_ckbx input[type="checkbox"]{border-radius: 0px;}

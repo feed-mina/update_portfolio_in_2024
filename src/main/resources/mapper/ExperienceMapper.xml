@@ -1,0 +1,1262 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- ExprnAndExprn > 공통 insert, update, delete -->
+
+<mapper namespace="Experience">
+	<insert id="insertExprn" parameterType="map">
+		/* Experience.insertExprn */
+		 
+		INSERT INTO tb_exprn
+		(
+		exprn_seq
+		,exprn_nm
+		,exprn_knd_code
+		,exprn_place_nm
+		,exprn_co
+		,exprn_begin_de
+		,exprn_end_de
+		,exprn_week_array
+		,rcrit_begin_dt
+		,rcrit_end_dt
+		,regist_id
+		,regist_dt
+		)
+		VALUES
+		(
+		#{exprnSeq}
+		, #{exprnNm}
+		, #{exprnKndCode}
+		, #{exprnPlaceNm}
+		, #{exprnCo}
+		, #{exprnBeginDe}
+		, #{exprnEndDe}
+		, #{exprnWeekArray}
+		, DATE_FORMAT(#{rcritBeginDt}, '%Y-%m-%d %H:%i:%S')
+		, DATE_FORMAT(#{rcritEndDt}, '%Y-%m-%d %H:%i:%s')
+		, #{user.userSeq}
+		, now()
+		)
+	</insert>
+
+	<update id="updateExprn" parameterType="map">
+		/* Experience.updateExprn */
+		UPDATE tb_exprn
+		SET
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(exprnNm)'>
+			exprn_nm = #{exprnNm},
+		</if>
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(exprnKndCode)'>
+			exprn_knd_code = #{exprnKndCode},
+		</if>
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(exprnPlaceNm)'>
+			exprn_place_nm = #{exprnPlaceNm},
+		</if>
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(exprnCo)'>
+			exprn_co = #{exprnCo},
+		</if>
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(exprnBeginDe)'>
+			exprn_begin_de = #{exprnBeginDe},
+		</if>
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(exprnEndDe)'>
+			exprn_end_de = #{exprnEndDe},
+		</if>
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(exprnWeekArray)'>
+			exprn_week_array = #{exprnWeekArray},
+		</if>
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(rcritBeginDt)'>
+			rcrit_begin_dt = DATE_FORMAT(#{rcritBeginDt}, '%Y-%m-%d
+			%H:%i:%S'),
+		</if>
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(rcritEndDt)'>
+			rcrit_end_dt = DATE_FORMAT(#{rcritEndDt}, '%Y-%m-%d
+			%H:%i:%s'),
+		</if>
+		updt_id = #{user.userSeq},
+		updt_dt = NOW()
+		WHERE exprn_seq = #{exprnSeq}
+	</update>
+
+	<insert id="insertExprnFx" parameterType="map">
+
+		/*
+		Experience.insertExprnFx */
+
+		INSERT INTO tb_exprn_fx
+		(
+		exprn_seq
+		, exprn_sn
+		, exprn_dt
+		, exprn_begin_time
+		, exprn_end_time
+		, regist_id
+		, regist_dt
+		)
+		select
+		#{exprnSeq}
+		, (select ifnull(max(exprn_sn), 0) + 1
+		from
+		tb_exprn_fx
+		where exprn_seq = #{exprnSeq}
+		)
+		, #{exprnDt}
+		, #{exprnBeginTime}
+		, #{exprnEndTime}
+		, #{user.userSeq}
+		,
+		now()
+	</insert>
+
+	<sql id="sql_ExprnList">
+		SELECT
+			ex.exprn_seq
+			, ex.exprn_knd_code 
+			, ex.exprn_place_nm
+			, ex.exprn_nm
+			, ex.exprn_co
+			, DATE_FORMAT(ex.exprn_begin_de, '%Y-%m-%d') AS exprn_begin_de
+			, DATE_FORMAT(ex.exprn_end_de, '%Y-%m-%d') AS exprn_end_de
+			, ex.exprn_week_array
+			, COUNT(DISTINCT fx.exprn_begin_time) AS time_cnt
+			, DATE_FORMAT(ex.rcrit_begin_dt, '%Y-%m-%d%H%i') AS rcrit_begin_dt
+			, DATE_FORMAT(ex.rcrit_begin_dt, '%Y-%m-%d%H%i') AS rcrit_end_dt
+			, CASE
+			    WHEN NOW() BETWEEN ex.rcrit_begin_dt AND ex.rcrit_end_dt THEN '신청중'
+			    WHEN ex.rcrit_begin_dt <![CDATA[>=]]> NOW() THEN '신청 예정'
+				WHEN ex.rcrit_end_dt  <![CDATA[<]]> NOW() THEN '신청 마감'
+			  END AS exprn_status
+		FROM tb_exprn ex
+		LEFT JOIN tb_exprn_fx fx ON ex.exprn_seq = fx.exprn_seq
+		WHERE 1=1
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(exprnKndCode)'>
+			AND ex.exprn_knd_code = #{exprnKndCode}
+		</if>
+		GROUP BY ex.exprn_seq
+		ORDER BY ex.regist_dt DESC
+		LIMIT 1
+	</sql>
+
+<!-- 	<select id="selectExprnListPaging" parameterType="map"
+		resultType="camelHashMap">
+		/* Experience.selectExprnListPaging */
+		<include refid="sql_ExprnList" />
+		<include refid="common.PAGING" />
+	</select>
+ -->
+ 
+ <select id="selectExprnListPaging" parameterType="map" resultType="camelHashMap">
+		/* Experience.selectExprnListPaging */
+		 
+		SELECT
+			ex.exprn_seq
+			, ex.exprn_knd_code 
+			, ex.exprn_place_nm
+			, ex.exprn_nm
+			, ex.exprn_co
+			, DATE_FORMAT(ex.exprn_begin_de, '%Y-%m-%d') AS exprn_begin_de
+			, DATE_FORMAT(ex.exprn_end_de, '%Y-%m-%d') AS exprn_end_de
+			, ex.exprn_week_array
+			, COUNT(DISTINCT fx.exprn_begin_time) AS time_cnt
+			, DATE_FORMAT(ex.rcrit_begin_dt, '%Y-%m-%d%H%i') AS rcrit_begin_dt
+			, DATE_FORMAT(ex.rcrit_begin_dt, '%Y-%m-%d%H%i') AS rcrit_end_dt
+			, CASE
+			    WHEN NOW() BETWEEN ex.rcrit_begin_dt AND ex.rcrit_end_dt THEN '신청중'
+			    WHEN ex.rcrit_begin_dt <![CDATA[>=]]> NOW() THEN '신청 예정'
+				WHEN ex.rcrit_end_dt  <![CDATA[<]]> NOW() THEN '신청 마감'
+			  END AS exprn_status
+		FROM tb_exprn ex
+		LEFT JOIN tb_exprn_fx fx ON ex.exprn_seq = fx.exprn_seq
+		WHERE 1=1
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(exprnKndCode)'>
+			AND ex.exprn_knd_code = #{exprnKndCode}
+		</if>
+		GROUP BY ex.exprn_seq
+		ORDER BY ex.regist_dt DESC
+        LIMIT 1
+        OFFSET 2
+	</select>
+ 
+	<select id="selectExprnListPagingCount" parameterType="map"
+		resultType="camelHashMap">
+		/* Experience.selectExprnListPagingCount */
+		<include refid="common.COUNT_HEAD" />
+		<include refid="sql_ExprnList" />
+		<include refid="common.COUNT_FOOT" />
+	</select>
+
+	<sql id="sql_ExprnFxList">
+		SELECT
+			fx.exprn_seq
+			, fx.exprn_sn
+			, ex.exprn_knd_code
+			, ex.exprn_nm
+			, exprn_knd_code
+			, ex.exprn_co
+			, DATE_FORMAT(fx.exprn_dt, '%Y-%m-%d') AS exprn_dt
+			, fx.exprn_begin_time
+			, fx.exprn_end_time
+			, COUNT(req.exprn_user_seq) AS reqst_cnt
+			, CASE WHEN NOW() BETWEEN ex.rcrit_begin_dt AND
+				ex.rcrit_end_dt THEN '신청중'
+				WHEN ex.rcrit_begin_dt <![CDATA[>=]]>
+				NOW() THEN '신청 예정'
+				WHEN ex.rcrit_end_dt  <![CDATA[<]]>
+				NOW() THEN '신청 마감'
+				END AS exprn_status
+		FROM tb_exprn_fx fx
+		LEFT JOIN tb_exprn ex ON ex.exprn_seq = fx.exprn_seq
+		LEFT JOIN tb_exprn_reqst req ON req.exprn_seq = fx.exprn_seq AND
+		req.exprn_sn = fx.exprn_sn
+		WHERE 1=1 
+		GROUP BY fx.exprn_seq, fx.exprn_sn
+		ORDER BY fx.exprn_dt, fx.exprn_sn
+	</sql>
+
+	<select id="selectExprnFxListPaging" parameterType="map"
+		resultType="camelHashMap">
+		/* Experience.selectExprnFxListPaging */
+		<include refid="sql_ExprnFxList" />
+		<include refid="common.PAGING" />
+	</select>
+
+	<select id="selectExprnFxListPagingCount" parameterType="map"
+		resultType="camelHashMap">
+		/* Experience.selectExprnFxListPagingCount */
+		<include refid="common.COUNT_HEAD" />
+		<include refid="sql_ExprnFxList" />
+		<include refid="common.COUNT_FOOT" />
+	</select>
+
+	<select id="selectExprnTimeList" parameterType="map"
+		resultType="camelHashMap">
+		/* Experience.selectExprnTimeList */
+		SELECT
+		fx.exprn_begin_time
+		, fx.exprn_end_time
+		FROM tb_exprn_fx fx
+		WHERE
+		fx.exprn_seq = #{exprnSeq}
+		GROUP BY fx.exprn_begin_time
+		ORDER BY
+		fx.exprn_begin_time
+	</select>
+
+	<select id="selectExprnDetail" parameterType="map"
+		resultType="camelHashMap">
+		/* Experience.selectExprnDetail */
+		SELECT
+		ex.exprn_seq
+		, exprn_knd_code
+		, exprn_knd_code
+		, exprn_place_nm
+		, exprn_nm
+		, exprn_co
+		, DATE_FORMAT(exprn_begin_de, '%Y-%m-%d') AS exprn_begin_de
+		, DATE_FORMAT(exprn_end_de, '%Y-%m-%d') AS exprn_end_de
+		, exprn_week_array
+		, COUNT(
+		DISTINCT fx.exprn_begin_time
+		) AS time_cnt
+		, COUNT(
+		DISTINCT er.exprn_seq
+		) AS req_cnt
+		, DATE_FORMAT(rcrit_begin_dt, '%Y-%m-%d%H%i') AS rcrit_begin_dt
+		, DATE_FORMAT(rcrit_end_dt, '%Y-%m-%d%H%i') AS rcrit_end_dt
+		, ex.regist_id
+		FROM tb_exprn ex
+		LEFT JOIN tb_exprn_fx fx ON ex.exprn_seq
+		= fx.exprn_seq
+		LEFT JOIN tb_exprn_reqst er ON ex.exprn_seq =
+		er.exprn_seq
+		WHERE 1=1 AND ex.exprn_seq =
+		#{exprnSeq}
+	</select>
+
+	<delete id="deleteExprnOne" parameterType="map">
+		/*
+		Experience.deleteExprn */
+		DELETE FROM tb_exprn
+		WHERE exprn_seq =
+		#{exprnSeq}
+	</delete>
+	
+	<select id="selectExprnFxDetail" parameterType="map"
+		resultType="camelHashMap">
+		/* Experience.selectExprnFxDetail */
+		SELECT
+			fx.exprn_seq
+			, fx.exprn_sn
+			, ex.exprn_knd_code
+		    , ex.exprn_nm
+			, exprn_knd_code
+			, ex.exprn_co
+			, ex.exprn_place_nm
+			, DATE_FORMAT(fx.exprn_dt, '%Y-%m-%d') AS exprn_dt
+			, fx.exprn_begin_time
+			, fx.exprn_end_time
+			, DATE_FORMAT(fx.exprn_dt+fx.exprn_end_time, '%Y%m%d%H%i') AS end_date
+			, (
+					SELECT 
+						COUNT(1)
+					FROM tb_exprn_reqst req
+					WHERE fx.exprn_seq = #{exprnSeq}
+				) AS total_req_cnt
+			, COUNT(req.exprn_user_seq) AS reqst_cnt
+			, (
+					SELECT 
+						COUNT(1)
+					FROM tb_exprn_reqst req
+					WHERE req.exprn_sttus_se = "A"
+						AND fx.exprn_seq = #{exprnSeq} AND fx.exprn_sn = #{exprnSn}
+				) AS atd_cnt
+			, DATE_FORMAT(rcrit_begin_dt, '%Y-%m-%d%H%i') AS rcrit_begin_dt
+			, DATE_FORMAT(rcrit_end_dt, '%Y-%m-%d%H%i') AS rcrit_end_dt
+			, fx.regist_id
+		FROM tb_exprn_fx fx
+		LEFT JOIN tb_exprn ex ON ex.exprn_seq = fx.exprn_seq
+		LEFT JOIN tb_exprn_reqst req ON req.exprn_seq = fx.exprn_seq
+			AND req.exprn_sn = fx.exprn_sn
+		WHERE fx.exprn_seq = #{exprnSeq} AND fx.exprn_sn = #{exprnSn}
+	</select>
+	
+	<select id="selectExprnAtdList" parameterType="map"
+		resultType="camelHashMap">
+		/* Experience.selectExprnAtdList */
+		SELECT 
+			er.exprn_user_seq
+			, tu.user_nm
+			, exprn_knd_code
+			, tu.psitn_nm
+			, DATE_FORMAT(er.reqst_dt, '%Y.%m.%d %H:%i') AS reqst_dt
+			, er.exprn_sttus_se
+		FROM tb_exprn_reqst er
+		LEFT JOIN tb_user tu ON tu.user_seq = er.exprn_user_seq
+		WHERE exprn_seq = #{exprnSeq}
+			<if test='@com.sch.util.CommonUtil@isNotEmpty(exprnSn)'>
+				AND exprn_sn = #{exprnSn}
+			</if>
+	</select>
+	
+	<delete id="deleteExprnFxReq" parameterType="map">
+		/* Experience.deleteExprnFxReq */
+		DELETE FROM tb_exprn_reqst
+		WHERE exprn_seq =
+		#{exprnSeq}
+	</delete>
+	
+	<delete id="deleteExprnOneFx" parameterType="map">
+		/* Experience.deleteExprn */
+		DELETE FROM tb_exprn_fx
+		WHERE exprn_seq =
+		#{exprnSeq}
+	</delete>
+	
+	<update id="cnclExprnFxOne" parameterType="map">
+		/* Experience.cnclExprnFxOne */
+		UPDATE tb_exprn_fx
+		SET
+			use_at = 'N'
+			, cancl_code = #{canclCode}
+			, cancl_dc = #{canclDc}
+			, cancl_ntcn_array = #{canclNtcnArr}
+			, updt_id = #{user.userSeq}
+			, updt_dt = NOW()
+		WHERE exprn_seq = #{exprnSeq} AND exprn_sn = #{exprnSn}
+	</update>
+	
+	<update id="exprnFxOneUserSttus" parameterType="map">
+		UPDATE tb_exprn_reqst
+		SET
+			exprn_sttus_se = #{exprnSttusSe}
+		WHERE exprn_seq = #{exprnSeq} AND exprn_sn = #{exprnSn}
+			AND  
+				<foreach collection="exprnUserList" item="exprnUserSeq" open="(" close=")" separator="OR">
+   				exprn_user_seq = #{exprnUserSeq}
+   			</foreach>
+	</update>
+
+	<!-- 이하 사용여부 확인 -->
+
+	<select id="excrtPosbleList" parameterType="map"
+		resultType="camelHashMap">
+		SELECT
+		te.exprn_seq
+		,te.exprn_nm
+		,te.exprn_begin_de
+		,te.exprn_knd_code
+		,exprn_knd_code
+		,tef.exprn_sn
+		,tef.exprn_dt
+		,tef.exprn_begin_time
+		,tef.exprn_end_time
+		FROM tb_exprn te
+		LEFT JOIN tb_exprn_fx tef ON te.exprn_seq = tef.exprn_seq
+		WHERE (1=1)
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(exprnKndCode)'>
+			AND te.exprn_knd_code = #{exprnKndCode}
+		</if>
+		ORDER BY exprn_begin_de DESC, exprn_seq DESC, exprn_sn
+	</select>
+
+	<sql id="sql_excrtList">
+		SELECT
+		excrt_seq
+		, exprn_knd_code
+		, exprn_knd_code
+		, image_file_seq
+		, sj
+		, exprn_dt
+		, exprn_tme_nm
+		, regist_id 
+		, regist_dt
+		, updt_id
+		, updt_dt
+		FROM tb_exprn_crtfc tec
+		WHERE (1=1)
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(exprnKndCode)'>
+			AND exprn_knd_code = #{exprnKndCode}
+		</if> 
+		ORDER BY updt_dt DESC, regist_dt DESC
+	</sql>
+
+	<select id="extfcListPaging" parameterType="map"
+		resultType="camelHashMap">
+		<include refid="sql_excrtList" />
+		<include refid="common.PAGING" />
+	</select>
+
+
+	<select id="extfcListPagingCount" parameterType="map"
+		resultType="camelHashMap">
+		<include refid="common.COUNT_HEAD" />
+		<include refid="sql_excrtList" />
+		<include refid="common.COUNT_FOOT" />
+	</select>
+
+	<select id="selectExtfcDetail" parameterType="map"
+		resultType="camelHashMap">
+		SELECT
+		excrt_seq
+		, exprn_knd_code 
+		, image_file_seq
+		, sj
+		, exprn_dt
+		, exprn_tme_nm
+		, regist_id 
+		, regist_dt
+		, updt_id
+		, updt_dt
+		FROM tb_exprn_crtfc tec
+		WHERE excrt_seq = #{excrtSeq}
+	</select>
+
+	<insert id="insertExcrt"> 
+		INSERT INTO tb_exprn_crtfc
+		(excrt_seq
+		, exprn_knd_code
+		, exprn_dt
+		,
+		exprn_tme_nm
+		, sj
+		, image_file_seq
+		, regist_id
+		, regist_dt
+		, updt_id
+		,
+		updt_dt
+		)
+		VALUES(#{excrtSeq}
+		, #{exprnKndCode}
+		, #{exprnDt}
+		, #{exprnTmeNm}
+		, #{sj}
+		, #{fileSeq}
+		, #{user.userSeq}
+		, current_timestamp()
+		,
+		#{user.userSeq}
+		, current_timestamp()
+		);
+	</insert>
+	<update id="updateExcrt">
+		UPDATE tb_exprn_crtfc
+		SET exprn_knd_code=#{exprnKndCode}
+		,
+		exprn_dt=#{exprnDt}
+		, exprn_tme_nm=#{exprnTmeNm}
+		, sj=#{sj}
+		<if test="@com.sch.util.CommonUtil@isNotEmpty(fileSeq)">
+			, image_file_seq=#{fileSeq}
+		</if>
+		, updt_id=#{user.userSeq}
+		, updt_dt=current_timestamp()
+		WHERE
+		excrt_seq=#{excrtSeq};
+	</update>
+	<delete id="deleteExcrt">
+		DELETE FROM tb_exprn_crtfc
+		WHERE
+		excrt_seq=#{excrtSeq};
+	</delete>
+
+	<select id="selectExperienceUserList" parameterType="map"
+		resultType="camelHashMap">
+		SELECT
+		ter.exprn_seq
+		, ter.exprn_sn
+		, ter.exprn_user_seq
+		,
+		DATE_FORMAT(ter.reqst_dt, '%Y-%m-%d') AS reqst_dt
+		, ter.exprn_sttus_se
+		, tu.user_nm
+		, tu.user_author /*
+		이용자권한(G:guest,SA:관리자,PR:교수,ST:재학생,TJ:텐진,FF:교직원,ETA:중고생,ETB:초등학생,ETC:지역주민,AP:알파)
+		*/
+		, tu.psitn_nm
+		, tu.user_innb
+		,CASE WHEN ter.exprn_sttus_se = 'A' THEN
+		'출석'
+		WHEN ter.exprn_sttus_se = 'R'
+		THEN '신청'
+		WHEN ter.exprn_sttus_se =
+		'N' THEN ' 결석'
+		END AS exprn_sttus_se_str
+		, CASE WHEN tu.user_author ='G'
+		THEN '게스트'
+		WHEN tu.user_author ='SA' THEN '관리자'
+		WHEN tu.user_author
+		='PR' THEN '교수'
+		WHEN tu.user_author = 'ST' THEN '재학생'
+		WHEN
+		tu.user_author ='TJ' THEN '텐진'
+		WHEN tu.user_author ='FF' THEN '교직원'
+		WHEN tu.user_author ='ETA' THEN '중고생'
+		WHEN tu.user_author ='ETC' THEN
+		'지역주민'
+		WHEN tu.user_author ='AP' THEN '알파'
+		END AS user_author_str
+		from
+		tb_exprn_reqst ter
+		INNER JOIN tb_user tu ON ter.exprn_user_seq =
+		tu.user_seq
+		WHERE ter.exprn_seq = #{exprnSeq} AND ter.exprn_sn =
+		#{exprnSn}
+		AND ( ter.exprn_sttus_se = 'R' OR ter.exprn_sttus_se = 'A'OR
+		ter.exprn_sttus_se = 'N' )
+
+
+	</select>
+
+	<select id="getExprnProposalList" parameterType="map"
+		resultType="camelHashMap">
+		SELECT
+		tb.bbs_code AS exprn_proposal_code
+		, tb.bbs_seq
+		,
+		tb.bbs_sj AS exprn_proposal_sj
+		, tb.bbs_cn AS exprn_proposal_cn
+		,
+		tb.use_at
+		, tb.bbs_se AS exprn_proposal_se 
+		, DATE_FORMAT(tb.regist_dt, '%Y-%m-%d') AS regist_dt
+		,CASE WHEN
+		tcc.cmmn_code_etc = tb.bbs_se AND tb.bbs_se = 'O' THEN '기존체험'
+		WHEN
+		tcc.cmmn_code_etc = tb.bbs_se AND tb.bbs_se = 'F' THEN '신규체험'
+		END AS
+		otherProposalStr
+		,CASE WHEN tcc.cmmn_code_etc = tb.bbs_se AND tb.bbs_se
+		= 'F' THEN 'fresh' END AS fresh
+		,CASE WHEN tcc.cmmn_code_etc =
+		tb.bbs_se AND tb.bbs_se = 'O' THEN 'old' END AS old
+		FROM tb_cmmn_code
+		tcc ,tb_bbs tb
+		WHERE tcc.cmmn_code_etc = tb.bbs_se AND tb.bbs_code =
+		'EXPRN'AND tb.bbs_seq = #{bbsSeq}
+		ORDER BY tb.regist_dt DESC
+	</select>
+
+
+
+	<sql id="sql_selectExprn">
+		select
+		te.exprn_seq /* 순번 */
+		,te.exprn_knd_code /* 형태 */
+		,te.exprn_place_nm /* 장소 */
+		,te.exprn_co /**/
+		,te.exprn_end_de
+		,te.exprn_begin_de
+		,tef.cancl_ntcn_array
+		,DATE_FORMAT(te.exprn_begin_de, '%Y-%m-%d') AS exprn_begin_date /*상담
+		시작하는 기간 */
+		,DATE_FORMAT(te.exprn_end_de, '%Y-%m-%d') AS exprn_end_date
+		/*상담
+		끝나는기간*/
+		,DATE_FORMAT(tef.exprn_dt, '%Y-%m-%d') AS exprn_date
+		,te.exprn_week_array
+		,LEFT(tef.exprn_begin_time,2) AS
+		exprn_begin_time_hour /* 시작시간 */
+		,RIGHT(tef.exprn_begin_time, 2) AS
+		exprn_begin_time_minutes /* 종료시간 */
+		,LEFT(tef.exprn_end_time, 2) AS
+		exprn_end_time_hour
+		,RIGHT(tef.exprn_end_time, 2) AS
+		exprn_end_time_minutes
+		,tef.exprn_begin_time
+		,tef.exprn_end_time
+		,te.rcrit_begin_dt /* 모집기간 */
+		,te.rcrit_end_dt /* 모집기간 */
+		,tef.use_at /*
+		신청중 /신청미정 */
+		,tef.exprn_sn
+		,tef.exprn_dt
+		, (SELECT COUNT(exprn_seq)
+		FROM
+		tb_exprn_reqst ter
+		WHERE ter.exprn_seq = #{exprnSeq}
+		AND
+		ter.exprn_sttus_se = 'R' OR ter.exprn_sttus_se = 'A' OR
+		ter.exprn_sttus_se = 'N' ) AS exprn_register_cnt /* 체험 신청자 */
+		,(SELECT
+		COUNT(DISTINCT ter.exprn_seq, ter.exprn_user_seq)
+		FROM tb_exprn_reqst
+		ter
+		WHERE ter.exprn_sttus_se = 'A' AND ter.exprn_seq = #{exprnSeq}) AS
+		exprn_participants_cnt /* 체험 참석자 */
+		,COUNT(tef.exprn_seq) AS
+		exprn_seq_cnt
+		,CASE WHEN NOW() BETWEEN te.rcrit_begin_dt AND
+		te.rcrit_end_dt THEN '신청중'
+		WHEN te.rcrit_begin_dt <![CDATA[>=]]>
+		NOW() THEN '신청 예정'
+		WHEN te.rcrit_end_dt  <![CDATA[<]]>
+		NOW() THEN '신청 마감'
+		END AS exprn_status
+		,CASE WHEN te.exprn_knd_code =
+		'EXPRN_KND_CODE_1' THEN
+		'차 체험'
+		WHEN te.exprn_knd_code =
+		'EXPRN_KND_CODE_2' THEN '서예 체험'
+		WHEN
+		te.exprn_knd_code =
+		'EXPRN_KND_CODE_3' THEN '도장 체험'
+		WHEN
+		te.exprn_knd_code =
+		'EXPRN_KND_CODE_4' THEN '향 체험'
+		END AS
+		exprn_knd_code_str
+		from tb_exprn te
+		LEFT JOIN tb_exprn_fx tef ON tef.exprn_seq = te.exprn_seq
+		WHERE 1=1
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(searchText)'>
+			AND (
+			CASE
+			WHEN te.exprn_knd_code = 'EXPRN_KND_CODE_1' THEN '차 체험'
+			WHEN
+			te.exprn_knd_code = 'EXPRN_KND_CODE_2' THEN '서예 체험'
+			WHEN
+			te.exprn_knd_code = 'EXPRN_KND_CODE_3' THEN '도장 체험'
+			WHEN
+			te.exprn_knd_code = 'EXPRN_KND_CODE_4' THEN '향 체험'
+			END
+			) LIKE
+			concat('%', #{searchText} , '%')
+			OR (
+			CASE
+			WHEN NOW() BETWEEN
+			te.rcrit_begin_dt AND te.rcrit_end_dt THEN '신청중'
+			WHEN
+			te.rcrit_begin_dt <![CDATA[>=]]>
+			NOW() THEN '신청 예정'
+			WHEN te.rcrit_end_dt  <![CDATA[<]]>
+			NOW() THEN '신청 마감'
+			END
+			) LIKE concat('%', #{searchText} , '%')
+		</if>
+
+		GROUP BY exprn_seq
+		ORDER BY te.exprn_begin_de DESC
+	</sql>
+
+
+	<select id="selectExperienceListPaging" parameterType="map"
+		resultType="camelHashMap">
+		/* Experience.selectExperienceListPaging*/
+		<include refid="sql_selectExprn" />
+		<include refid="common.PAGING" />
+	</select>
+
+
+	<select id="selectExperienceListPagingCount" parameterType="map"
+		resultType="camelHashMap">
+		<include refid="common.COUNT_HEAD" />
+		<include refid="sql_selectExprn" />
+		<include refid="common.COUNT_FOOT" />
+	</select>
+
+
+
+
+	<sql id="sql_exprnOperateList">
+		select
+		te.exprn_seq /* 체험일련 */
+		,te.exprn_knd_code /*체험종류코드*/
+		,te.exprn_place_nm /*체험장소명*/
+		,te.exprn_co /*체험수*/
+		,tef.exprn_sn
+		,DATE_FORMAT(te.exprn_begin_de, '%Y-%m-%d') AS exprn_begin_date /*
+		시작하는 기간 */
+		,DATE_FORMAT(te.exprn_end_de, '%Y-%m-%d') AS exprn_end_date
+		/* 끝나는기간 */
+		,te.exprn_week_array
+		,LEFT(tef.exprn_begin_time, 2) AS
+		exprn_begin_time_hour /* 시작시간 */
+		,RIGHT(tef.exprn_begin_time, 2) AS
+		exprn_begin_time_minutes /* 종료시간 */
+		,LEFT(tef.exprn_end_time, 2) AS
+		exprn_end_time_hour
+		,RIGHT(tef.exprn_end_time, 2) AS
+		exprn_end_time_minutes
+		,te.rcrit_begin_dt
+		,te.rcrit_end_dt
+		,tef.use_at
+		,tef.exprn_dt
+		,DATE_FORMAT(tef.exprn_dt, '%Y-%m-%d') AS exprn_date
+		,CASE DAYOFWEEK(tef.exprn_dt )
+		WHEN '1' THEN '일요일'
+		WHEN '2' THEN '월요일'
+		WHEN '3' THEN '화요일'
+		WHEN '4' THEN
+		'수요일'
+		WHEN '5' THEN '목요일'
+		WHEN '6' THEN
+		'금요일'
+		WHEN '7' THEN '토요일'
+		END AS
+		exprn_day
+		,(SELECT COUNT(ter.exprn_seq)
+		FROM tb_exprn_reqst ter
+		WHERE ter.exprn_seq = tef.exprn_seq AND
+		ter.exprn_sn = tef.exprn_sn
+		AND ter.exprn_sttus_se = 'R' ) AS
+		exprn_register_cnt /* 현신청자 */
+		,(SELECT COUNT(ter.exprn_seq)
+		FROM
+		tb_exprn_reqst ter
+		WHERE ter.exprn_seq = tef.exprn_seq AND ter.exprn_sn
+		= tef.exprn_sn
+		AND ter.exprn_sttus_se = 'A' ) AS experience_user_cnt/*
+		체험 신청자 */
+		,
+		tef.cancl_code
+		, tef.cancl_dc
+		, tef.cancl_ntcn_array
+		,CASE
+		WHEN
+		NOW() BETWEEN te.rcrit_begin_dt AND
+		te.rcrit_end_dt THEN '신청중'
+		WHEN
+		te.rcrit_begin_dt <![CDATA[>=]]>
+		NOW() THEN '신청 예정'
+		WHEN te.rcrit_end_dt  <![CDATA[<]]>
+		NOW() THEN '신청 마감'
+		END AS exprn_status
+		,CASE WHEN te.exprn_knd_code =
+		'EXPRN_KND_CODE_1' THEN '차 체험'
+		WHEN te.exprn_knd_code =
+		'EXPRN_KND_CODE_2' THEN '서예 체험'
+		WHEN te.exprn_knd_code =
+		'EXPRN_KND_CODE_3' THEN '도장 체험'
+		WHEN te.exprn_knd_code =
+		'EXPRN_KND_CODE_4' THEN '향 체험'
+		END AS exprn_knd_code_str
+		from
+		tb_exprn_fx tef LEFT JOIN tb_exprn te ON tef.exprn_seq = te.exprn_seq
+		WHERE 1=1
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(searchText)'>
+			AND (
+			CASE
+			WHEN te.exprn_knd_code = 'EXPRN_KND_CODE_1' THEN '차 체험'
+			WHEN
+			te.exprn_knd_code = 'EXPRN_KND_CODE_2' THEN '서예 체험'
+			WHEN
+			te.exprn_knd_code = 'EXPRN_KND_CODE_3' THEN '도장 체험'
+			WHEN
+			te.exprn_knd_code = 'EXPRN_KND_CODE_4' THEN '향 체험'
+			END
+			) LIKE
+			concat('%', #{searchText} , '%')
+			OR (
+			CASE
+			WHEN NOW() BETWEEN
+			te.rcrit_begin_dt AND te.rcrit_end_dt THEN '신청중'
+			WHEN
+			te.rcrit_begin_dt <![CDATA[>=]]>
+			NOW() THEN '신청 예정'
+			WHEN te.rcrit_end_dt  <![CDATA[<]]>
+			NOW() THEN '신청 마감'
+			END
+			) LIKE concat('%', #{searchText} , '%')
+		</if>
+		AND (
+		tef.use_at = 'Y'
+		<if test='canceldExprnInclude'>
+			OR tef.use_at = 'N'
+		</if>
+		)
+		ORDER BY te.exprn_begin_de DESC ,te.exprn_seq ,tef.exprn_sn ASC
+	</sql>
+
+
+	<select id="selectExprnOperateListPagingCount"
+		parameterType="map" resultType="camelHashMap">
+		/* Experience.selectExprnOperateListPagingCount */
+		<include refid="common.COUNT_HEAD" />
+		<include refid="sql_exprnOperateList" />
+		<include refid="common.COUNT_FOOT" />
+	</select>
+
+	<select id="selectExprnOperateListPaging" parameterType="map"
+		resultType="camelHashMap">
+		/* Experience.selectExprnOperateListPaging */
+		<include refid="sql_exprnOperateList" />
+		<include refid="common.PAGING" />
+	</select>
+
+
+
+	<insert id="insertOtherProposal" parameterType="map">
+		/* bbsQna.upsertUserQna */
+	 
+		INSERT INTO tb_bbs
+		(
+		bbs_code
+		, bbs_seq
+		, bbs_sj
+		, bbs_cn
+		, use_at
+		, bbs_se
+		,
+		regist_id
+		, regist_dt
+		)
+		VALUES
+		(
+		'EXPRN'
+		, #{bbsSeq}
+		, #{bbsSj}
+		, #{bbsCn}
+		,
+		#{useAt}
+		, #{bbsSe}
+		, #{user.userSeq}
+		, NOW()
+		)
+	</insert>
+
+
+
+	<update id="updateExprnAttender" parameterType="map">
+		UPDATE tb_exprn_reqst
+		SET
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(exprnSttusSe)'>
+			exprn_sttus_se = 'A',
+		</if>
+
+		atend_dt = NOW()
+		WHERE exprn_seq = #{exprnSeq} AND exprn_sn =
+		#{exprnSn} AND exprn_user_seq
+		= #{exprnUserSeq}
+	</update>
+
+	<update id="updateExperienceCancl" parameterType="map">
+		UPDATE tb_exprn_fx
+		SET
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(useAt)'>
+			use_at = #{useAt},
+		</if>
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(canclCode)'>
+			cancl_code = #{canclCode},
+		</if>
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(canclDc)'>
+			cancl_dc = #{canclDc},
+		</if>
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(canclNtcnArray)'>
+			cancl_ntcn_array = #{canclNtcnArray},
+		</if>
+		updt_dt = NOW()
+		WHERE exprn_seq = #{exprnSeq} AND exprn_sn = #{exprnSn}
+	</update>
+
+	<select id="selectExprn" parameterType="map"
+		resultType="camelHashMap">
+		select
+		te.exprn_seq /* 순번 */
+		,te.exprn_nm /* 제목 */
+		,te.exprn_knd_code
+		/*체험 형태 */
+		,te.exprn_place_nm /* 체험장소 */
+		,te.exprn_co /*체험생수*/
+		,te.exprn_end_de
+		,te.exprn_begin_de
+		,tef.exprn_sn
+		,tef.exprn_dt
+		,te.exprn_week_array
+		,te.rcrit_begin_dt /* 모집기간 */
+		,te.rcrit_end_dt /*
+		모집기간 */
+		, DATE_FORMAT(te.rcrit_begin_dt, '%H')AS rcrit_begin_hour
+		,
+		DATE_FORMAT(te.rcrit_begin_dt, '%i')AS rcrit_begin_minutes
+		,
+		DATE_FORMAT(te.rcrit_begin_dt, '%Y-%m-%d')AS rcrit_begin_date
+		,
+		DATE_FORMAT(te.rcrit_end_dt, '%H')AS rcrit_end_hour
+		,
+		DATE_FORMAT(te.rcrit_end_dt, '%i')AS rcrit_end_minutes
+		,
+		DATE_FORMAT(te.rcrit_end_dt, '%Y-%m-%d')AS rcrit_end_date
+		,tef.use_at
+		/* 신청중 /신청미정 */
+		,DATE_FORMAT(te.exprn_begin_de, '%Y-%m-%d') AS
+		exprn_begin_date /*체험 시작하는 기간 */
+		,DATE_FORMAT(te.exprn_end_de,
+		'%Y-%m-%d') AS exprn_end_date /*체험 끝나는기간*/
+		,LEFT(tef.exprn_begin_time,2) AS exprn_begin_time_hour /* 시작시간 */
+		,RIGHT(tef.exprn_begin_time, 2) AS exprn_begin_time_minutes /* 종료시간 */
+		,LEFT(tef.exprn_end_time, 2) AS exprn_end_time_hour
+		,RIGHT(tef.exprn_end_time, 2) AS exprn_end_time_minutes
+		,COUNT(tef.exprn_seq) AS exprn_seq_cnt
+		,CASE WHEN NOW() BETWEEN
+		te.rcrit_begin_dt AND te.rcrit_end_dt THEN '신청중'
+		WHEN te.rcrit_begin_dt <![CDATA[>=]]>
+		NOW() THEN '신청 예정'
+		WHEN te.rcrit_end_dt  <![CDATA[<]]>
+		NOW() THEN '신청 마감'
+		END AS exprn_status
+		,CASE WHEN te.exprn_knd_code =
+		'EXPRN_KND_CODE_1' THEN '차 체험'
+		WHEN te.exprn_knd_code =
+		'EXPRN_KND_CODE_2' THEN '서예 체험'
+		WHEN te.exprn_knd_code =
+		'EXPRN_KND_CODE_3' THEN '도장 체험'
+		WHEN te.exprn_knd_code =
+		'EXPRN_KND_CODE_4' THEN '향 체험'
+		END AS exprn_knd_code_str
+		from tb_exprn
+		te LEFT JOIN
+		tb_exprn_fx tef ON tef.exprn_seq = te.exprn_seq
+		WHERE
+		tef.exprn_seq = #{exprnSeq}
+	</select>
+
+	<select id="selectExperienceDetail" parameterType="map"
+		resultType="camelHashMap">
+		/* experiencte.selectExperienceDetail */
+		SELECT
+		te.exprn_seq
+		,te.exprn_knd_code
+		,te.exprn_place_nm
+		,te.exprn_co
+		,te.exprn_nm
+		,DATE_FORMAT(tef.exprn_dt, '%Y-%m-%d') AS exprn_date
+		,DATE_FORMAT(te.exprn_begin_de, '%Y-%m-%d') AS exprn_begin_date
+		,DATE_FORMAT(te.exprn_end_de, '%Y-%m-%d') AS exprn_end_date
+		,
+		te.exprn_week_array
+		, LEFT(tef.exprn_begin_time, 2) AS
+		exprn_begin_time_hour
+		, RIGHT(tef.exprn_begin_time, 2) AS
+		exprn_begin_time_minutes
+		, LEFT(tef.exprn_end_time, 2) AS
+		exprn_end_time_hour
+		, RIGHT(tef.exprn_end_time,2) AS
+		exprn_end_time_minutes
+		, DATE_FORMAT(te.rcrit_begin_dt, '%H')AS
+		rcrit_begin_hour
+		, DATE_FORMAT(te.rcrit_begin_dt, '%i')AS
+		rcrit_begin_minutes
+		, DATE_FORMAT(te.rcrit_begin_dt, '%Y-%m-%d')AS
+		rcrit_begin_date
+		, DATE_FORMAT(te.rcrit_end_dt, '%H')AS rcrit_end_hour
+		, DATE_FORMAT(te.rcrit_end_dt, '%i')AS rcrit_end_minutes
+		,
+		DATE_FORMAT(te.rcrit_end_dt, '%Y-%m-%d')AS rcrit_end_date
+		,CASE WHEN
+		te.exprn_knd_code = 'EXPRN_KND_CODE_1' THEN '차 체험'
+		WHEN
+		te.exprn_knd_code = 'EXPRN_KND_CODE_2' THEN '서예 체험'
+		WHEN
+		te.exprn_knd_code = 'EXPRN_KND_CODE_3' THEN '도장 체험'
+		WHEN
+		te.exprn_knd_code = 'EXPRN_KND_CODE_4' THEN '향 체험'
+		END AS
+		exprn_knd_code_str
+		, te.rcrit_begin_dt
+		, te.rcrit_end_dt
+		,
+		tef.cancl_ntcn_array
+		FROM tb_exprn te LEFT JOIN tb_exprn_fx tef ON
+		tef.exprn_seq = te.exprn_seq
+		WHERE te.exprn_seq = #{exprnSeq}
+	</select>
+
+	<select id="selectExperienceRegistranter" parameterType="map"
+		resultType="camelHashMap">
+		SELECT
+		(SELECT COUNT(ter.exprn_seq)) AS
+		experience_user_count
+		FROM tb_exprn_reqst ter
+		/* 테이블 */
+		INNER JOIN
+		tb_user tu ON ter.exprn_user_seq = tu.user_seq
+		WHERE
+		ter.exprn_seq =
+		#{exprnSeq} AND (ter.exprn_sttus_se = 'R' OR
+		ter.exprn_sttus_se = 'A' )
+	</select>
+
+	<sql id="sql_selectExperienceRegistranterList">
+		SELECT
+		ter.exprn_user_seq
+		, tu.user_nm
+		, tu.user_author /*
+		이용자권한(G:guest,SA:관리자,PR:교수,ST:재학생,TJ:텐진,FF:교직원,ETA:중고생,ETB:초등학생,ETC:지역주민,AP:알파)
+		*/
+		, tu.psitn_nm /* 소속명(학교명, 소속명 / 학과, 부서, 학년-반) */
+		, tu.user_innb /*
+		이용자고유번호(학번, 사번) */
+		FROM tb_exprn_reqst ter /* 테이블 */
+		INNER JOIN tb_user
+		tu ON ter.exprn_user_seq = tu.user_seq
+		WHERE
+		ter.exprn_sttus_se = 'R'
+		AND ter.exprn_seq = #{exprnSeq} AND
+		ter.exprn_sn = #{exprnSn}
+	</sql>
+	<select id="selectExperienceRegistranterListPaging"
+		parameterType="map" resultType="camelHashMap">
+		/* Experience.selectExperienceRegistranterListPaging*/
+		<include refid="sql_selectExperienceRegistranterList" />
+		<include refid="common.PAGING" />
+	</select>
+
+
+	<select id="selectExperienceRegistranterListPagingCount"
+		parameterType="map" resultType="camelHashMap">
+		<include refid="common.COUNT_HEAD" />
+		<include refid="sql_selectExperienceRegistranterList" />
+		<include refid="common.COUNT_FOOT" />
+	</select>
+
+	<select id="selectExperienceParticipantsList"
+		parameterType="map" resultType="camelHashMap">
+		SELECT
+		(SELECT
+		COUNT(ter.exprn_user_seq)) AS experience_user_count
+		FROM
+		tb_exprn_reqst
+		ter /* 테이블 */
+		INNER JOIN tb_user tu ON ter.exprn_user_seq = tu.user_seq
+		WHERE
+		ter.exprn_seq = #{exprnSeq} AND (ter.exprn_sttus_se = 'R' OR
+		ter.exprn_sttus_se = 'A' )
+	</select>
+
+	<select id="selectExperienceOperate" parameterType="map"
+		resultType="camelHashMap">
+		SELECT
+		tef.exprn_sn
+		, ter.exprn_user_seq
+		, ter.exprn_sttus_se
+		,
+		DATE_FORMAT(ter.reqst_dt, '%Y-%m-%d') AS reqst_dt
+		, ter.atend_dt
+		,
+		tef.cancl_code
+		, tef.cancl_dc
+		, tef.cancl_ntcn_array
+		, te.exprn_seq
+		,
+		te.exprn_nm
+		, te.exprn_knd_code
+		, te.exprn_place_nm
+		, te.exprn_co
+		,
+		te.rcrit_begin_dt
+		, te.rcrit_end_dt
+		, te.exprn_week_array
+		,
+		ter.exprn_sttus_se
+		, ter.exprn_user_seq
+		, DATE_FORMAT(ter.reqst_dt,
+		'%H')AS reqst_dt
+		, DATE_FORMAT(tef.exprn_dt, '%Y-%m-%d') AS exprn_date
+		, LEFT(tef.exprn_begin_time,2) AS exprn_begin_time_hour /* 시작시간 */
+		,
+		RIGHT(tef.exprn_begin_time, 2) AS exprn_begin_time_minutes /* 종료시간 */
+		, LEFT(tef.exprn_end_time, 2) AS exprn_end_time_hour
+		,
+		RIGHT(tef.exprn_end_time, 2) AS exprn_end_time_minutes
+		,
+		DATE_FORMAT(te.rcrit_begin_dt, '%H')AS rcrit_begin_hour
+		,
+		DATE_FORMAT(te.rcrit_begin_dt, '%i')AS rcrit_begin_minutes
+		,
+		DATE_FORMAT(te.rcrit_begin_dt, '%Y-%m-%d')AS rcrit_begin_date
+		,
+		DATE_FORMAT(te.rcrit_end_dt, '%H')AS rcrit_end_hour
+		,
+		DATE_FORMAT(te.rcrit_end_dt, '%i')AS rcrit_end_minutes
+		,
+		DATE_FORMAT(te.rcrit_end_dt, '%Y-%m-%d')AS rcrit_end_date
+		,
+		DATE_FORMAT(te.exprn_begin_de, '%Y-%m-%d') AS exprn_begin_date /*체험예약
+		시작하는 기간 */
+		, DATE_FORMAT(te.exprn_end_de, '%Y-%m-%d') AS exprn_end_date
+		/*체험예약 끝나는기간*/
+		,(SELECT COUNT(DISTINCT ter.exprn_seq,
+		ter.exprn_user_seq)
+		FROM tb_exprn_reqst ter
+		WHERE ter.exprn_seq =
+		tef.exprn_seq AND ter.exprn_sn = tef.exprn_sn AND
+		ter.exprn_sttus_se =
+		'A' ) AS exprn_participants_cnt
+		,(SELECT COUNT(DISTINCT ter.exprn_seq,
+		ter.exprn_user_seq)
+		FROM tb_exprn_reqst ter
+		WHERE ter.exprn_seq =
+		tef.exprn_seq AND ter.exprn_sn = tef.exprn_sn AND
+		ter.exprn_sttus_se =
+		'R') AS exprn_register_cnt
+		,CASE WHEN te.exprn_knd_code =
+		'EXPRN_KND_CODE_1' THEN '차 체험'
+		WHEN
+		te.exprn_knd_code =
+		'EXPRN_KND_CODE_2' THEN '서예 체험'
+		WHEN
+		te.exprn_knd_code =
+		'EXPRN_KND_CODE_3' THEN '도장 체험'
+		WHEN
+		te.exprn_knd_code =
+		'EXPRN_KND_CODE_4' THEN '향 체험'
+		END AS
+		exprn_knd_code_str
+		, CASE WHEN
+		tef.cancl_code = 'EXPRN_CANCEL_REASON1'
+		THEN '일정 변경'
+		WHEN tef.cancl_code
+		='EXPRN_CANCEL_REASON2' THEN '지원자 부족'
+		END AS exprn_code_list
+		,CASE WHEN
+		NOW() BETWEEN te.rcrit_begin_dt AND te.rcrit_end_dt THEN '신청중'
+		WHEN
+		te.rcrit_begin_dt <![CDATA[>=]]>
+		NOW() THEN '신청 예정'
+		WHEN te.rcrit_end_dt  <![CDATA[<]]>
+		NOW() THEN '신청 마감'
+		END AS exprn_status
+		FROM tb_exprn_fx tef
+		LEFT JOIN
+		tb_exprn te ON tef.exprn_seq = te.exprn_seq
+		LEFT JOIN tb_exprn_reqst
+		ter ON tef.exprn_seq = ter.exprn_seq
+		WHERE
+		tef.exprn_seq = #{exprnSeq}
+		AND tef.exprn_sn = #{exprnSn}
+	</select>
+
+	<update id="updateExprnFx" parameterType="map">
+		UPDATE tb_exprn_fx
+		SET
+		<if
+			test='@com.sch.util.CommonUtil@isNotEmpty(exprnBeginTime) &amp;&amp; @com.sch.util.CommonUtil@isNotEmpty(currentBeginMinute)'>
+			exprn_begin_time = concat(#{exprnBeginTimeHour},
+			#{exprnBeginTimeMinutes}),
+		</if>
+		<if
+			test='@com.sch.util.CommonUtil@isNotEmpty(exprnEndTime) &amp;&amp; @com.sch.util.CommonUtil@isNotEmpty(currentEndMinute)'>
+			exprn_end_time = concat(#{exprnEndTimeHour},
+			#{exprnEndTimeMinutes}),
+		</if>
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(useAt)'>
+			use_at = #{useAt},
+		</if>
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(canclCode)'>
+			cancl_code = #{canclCode},
+		</if>
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(canclDc)'>
+			cancl_dc = #{canclDc},
+		</if>
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(canclNtcnArray)'>
+			cancl_ntcn_array = #{canclNtcnArray},
+		</if>
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(userEmail)'>
+			updt_id = #{user.userSeq},
+		</if>
+		updt_dt = NOW()
+		WHERE exprn_seq = #{exprnSeq}
+	</update>
+
+	<select id="sql_exprnOperateListForPlan" parameterType="map"
+		resultType="camelHashMap">
+		/* Experience.sql_exprnOperateListForPlan */
+		select
+		te.exprn_seq /* 체험일련
+		*/
+		, tef.exprn_sn
+		, te.exprn_knd_code
+		, concat(te.exprn_nm, '(',
+		tef.exprn_sn , ')') as title
+		, concat(DATE_FORMAT(tef.exprn_dt,
+		'%Y-%m-%d'), 'T',
+		LEFT(tef.exprn_begin_time, 2), ':',
+		RIGHT(tef.exprn_begin_time, 2),
+		':00') as start
+		from tb_exprn_fx tef
+		LEFT JOIN tb_exprn te ON
+		tef.exprn_seq = te.exprn_seq
+		WHERE tef.use_at =
+		'Y'
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(kndCode)'>
+			AND te.exprn_knd_code = #{kndCode}
+		</if>
+		ORDER BY te.exprn_begin_de DESC ,te.exprn_seq ,tef.exprn_sn ASC
+	</select>
+
+
+	<sql id="sql_exprnProposalList">
+		/* Experience.sql_exprnProposalList */
+		select
+		tb.bbs_code
+		, tb.bbs_se
+		, tb.bbs_seq
+		, tu.user_nm        -- 작성자명
+		, tb.bbs_sj
+		, tb.bbs_cn
+		, tb.use_at
+		, DATE_FORMAT(tb.regist_dt, '%Y-%m-%d') as regist_dt
+		FROM tb_bbs tb
+		LEFT JOIN tb_user tu ON tu.user_seq <![CDATA[=]]> tb.regist_id
+		WHERE (tb.bbs_se <![CDATA[=]]> 'F' OR tb.bbs_se <![CDATA[=]]> 'O')
+		AND tb.bbs_code <![CDATA[=]]> 'EXPRN'
+		AND tb.use_at <![CDATA[=]]> 'Y'
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(searchText)'>
+			AND (tb.bbs_sj LIKE concat('%', #{searchText} , '%') OR tb.bbs_cn LIKE concat('%', #{searchText} , '%'))
+		</if>
+		ORDER BY tb.regist_dt DESC
+	</sql>
+
+	<select id="selectExperienceProposalListPagingCount" parameterType="map" resultType="camelHashMap">
+		/* sysLctre.selectLctreListPagingCount */
+		<include refid="common.COUNT_HEAD"/>
+		<include refid="sql_exprnProposalList"/>
+		<include refid="common.COUNT_FOOT"/>
+	</select>
+
+	<select id="selectExperienceProposalListPaging" parameterType="map" resultType="camelHashMap">
+		/* sysLctre.sql_LctreListListPaging */
+		<include refid="sql_exprnProposalList"/>
+		<include refid="common.PAGING"/>
+	</select>
+</mapper>

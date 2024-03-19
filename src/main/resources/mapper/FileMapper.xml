@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="file">
+
+	<insert id="insertFileMastr" parameterType="map">
+	 
+		insert into tb_file_mastr
+			   (file_seq)
+		values (#{fileSeq})
+	</insert>
+
+	<insert id="insertFileDetail" parameterType="map">
+		insert into tb_file_detail
+			   (file_seq, file_detail_sn
+			   ,file_cours
+			   ,orignl_file_nm
+			   ,file_mg
+				<if test='@com.sch.util.CommonUtil@isNotEmpty(playTimeStr)'>
+				, play_hms
+				</if>
+			   )
+		select #{fileSeq}
+		      ,(select ifnull(max(file_detail_sn), 0) + 1
+				  from tb_file_detail
+				 where file_seq = #{fileSeq})
+			  ,#{fileCours}
+			  ,#{orignlFileNm}
+			  ,#{fileMg}
+				<if test='@com.sch.util.CommonUtil@isNotEmpty(playTimeStr)'>
+				,#{playTimeStr}
+				</if>
+	</insert>
+
+	<delete id="deleteFileDetail" parameterType="map">
+		delete from tb_file_detail
+		 where file_seq = #{fileSeq}
+		   <if test='@com.sch.util.CommonUtil@isNotEmpty(fileDetailSn)'>
+		   and file_detail_sn = #{fileDetailSn}
+		   </if>
+	</delete>
+	
+	<delete id="deleteFileMastr" parameterType="map">
+		delete from tb_file_mastr
+		 where file_seq = #{delFileSeq}
+	</delete>
+
+	<select id="selectFileDetail" parameterType="map" resultType="camelHashMap">
+		select de.file_seq
+		      ,de.file_detail_sn
+		      ,de.file_cours
+		      ,de.orignl_file_nm
+		      ,de.file_mg
+			  ,de.play_hms
+		  from tb_file_detail de
+		      ,tb_file_mastr ma
+		 where ma.file_seq = de.file_seq
+		   and ma.file_seq = #{fileSeq}
+		   <if test='@com.sch.util.CommonUtil@isNotEmpty(fileDetailSn)'>
+		   and de.file_detail_sn = #{fileDetailSn}
+		   </if>
+		   and ma.use_at = 'Y'
+		 order by file_detail_sn
+	</select>
+
+</mapper>

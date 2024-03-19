@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>HUSS</title>
+  <link href="/css/custom.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/pc/style.css">
+  <link rel="stylesheet" href="/css/pc/aos.css">
+  <link rel="stylesheet" href="/css/pc/jquery-ui.css">
+  <script src="/js/jqery-3.6.0.js"></script>
+  <script src="/js/jquery-ui.js"></script>
+  <script src="/js/allVendors.js"></script>
+  <script src="/js/common.js"></script>
+
+  <script src="/js/aos.js"></script>
+
+</head>
+
+<body>
+
+  <!-- skip -->
+  <div class="skip">
+    <a href="#container">본문 바로가기</a>
+  </div>
+  <!-- // skip -->
+  <div class="wrapper">
+    <!-- background -->
+
+    <!-- header -->
+    <header id="header_wrap"></header>
+    <!-- // header -->
+    <!-- container -->
+    <div class="container " id="container">
+      <div class="contents_03" style="padding-bottom: 80px;">
+        <h2 class="login_tilte mt90">
+          회원가입
+        </h2>
+        <form id="formTag">
+          <div class="join_input_wrap mt60">
+            <div class="bx_flex ai_center">
+              <div class="input_title type01 required_text">
+                <h2>이메일</h2>
+              </div>
+              <div class="input_wrap bx_flex ai_center gap10 fw100">
+                <input id="userEmail01" type="email" class="inp_text sel_wid158" placeholder="이메일을 입력해주세요" required>
+                <span class="text01">@</span>
+                <input id="userEmail02-txt" type="email" class="inp_text sel_wid149" placeholder="직접입력">
+                <div class="bx_inp ty2 sel_wid100">
+                  <div class="sel_typ2 "><!-- 선택 시 .on class -->
+                    <!-- 23.08.31 select 수정 -->
+                    <select id="userEmail02-box" id="lang" name="total">
+                      <option value="type" selected="" disabled="">선택</option>
+                      <option value="gmail.com">gmail.com</option>
+                      <option value="naver.com">naver.com</option>
+                      <option value="hanmail.net">hanmail.net</option>
+                    </select>
+                    <label for="total" class="icoArrow"></label>
+                    <small>Error message</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="bx_flex ai_center mt12">
+              <div class="input_title type01 required_text">
+                <h2>비밀번호</h2>
+              </div>
+              <div class="input_wrap bx_flex  ai_center gap10 fw100 pr">
+                <input id="newpassword" type="password" class="inp_text fw100 " placeholder="비밀번호를 입력해주세요"
+                  autocomplete="newpassword" required>
+                <span class="required_text Notice">
+                  비밀번호는 영어, 숫자, 특수문자를 포함하여 8 자리 이상으로 설정해 주세요.
+                </span>
+                <small>Error message</small>
+              </div>
+            </div>
+            <div class="bx_flex ai_center mt45">
+              <div class="input_title type01 required_text">
+                <h2>비밀번호 확인</h2>
+              </div>
+              <div class="input_wrap bx_flex ai_center gap10 fw100">
+                <input id="newpasswordCheck" type="password" class="inp_text fw100" placeholder="다시한번 비밀번호를 입력해주세요"
+                  autocomplete="newpassword" required>
+                <small>Error message</small>
+              </div>
+            </div>
+            <div class="bx_flex ai_center mt12">
+              <div class="input_title type01 required_text">
+                <h2>이름</h2>
+              </div>
+              <div class="input_wrap bx_flex ai_center gap10 fw100">
+                <input id="userNm" type="text" class="inp_text fw100" placeholder="이름을 입력해 주세요." required>
+                <small>Error message</small>
+              </div>
+            </div>
+            <div class="bx_flex ai_center mt12">
+              <div class="input_title type01 required_text">
+                <h2>휴대폰</h2>
+              </div>
+              <div class="input_wrap bx_flex ai_center gap10 fw100">
+                <input id="mbtlnum" type="tel" class="inp_text fw100" placeholder="숫자만 입력해 주세요." required>
+                <small>Error message</small>
+              </div>
+            </div>
+            <div class="bx_flex ai_center mt12">
+              <div class="input_title type01 required_text">
+                <h2>본인확인 질문선택</h2>
+              </div>
+              <div class="input_wrap bx_flex ai_center gap10 fw100">
+                <div class="bx_inp ty2 fw100">
+                  <div class="sel_typ2 "><!-- 선택 시 .on class -->
+                    <!-- 23.08.31 select 수정 -->
+                    <select id="qestCode" name="total">
+                      <option value="" selected="" disabled="">질문을 선택해 주세요.</option>
+                      <option value="QUESTION_1">제일 좋아하는 색상은?
+                      </option>
+                      <option value="QUESTION_2">제일 좋아하는 음식은?
+                      </option>
+                      <option value="QUESTION_3">가장 기억나는 이름은?
+                      </option>
+
+                    </select>
+                    <label for="total" class="icoArrow"></label>
+                    <p id="questnlevel"></p>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="bx_flex ai_center mt12">
+              <div class="input_title type01 required_text">
+                <h2>답변</h2>
+              </div>
+              <div class="input_wrap bx_flex  ai_center gap10 fw100 pr">
+                <input id="qestnRspns" type="text" class="inp_text fw100 " placeholder="답변을 입력해 주세요.
+                    " required>
+                <span class="required_text Notice" style="bottom: -52px;">
+                  해당 답변은 아이디/비밀번호 찾기 시 사용됩니다. 띄어쓰기 없는 단어로 등록해 주세요
+                </span>
+                <small>Error message</small>
+              </div>
+            </div>
+
+          </div>
+        </form>
+        <div class="btn_box mt80">
+
+          <button id="btn-save" onclick="regaxCheck()" type="submit" class="btn_type04">동의하기</button>
+
+        </div>
+
+      </div>
+
+    </div>
+    <!-- // container -->
+    <!-- footer -->
+    <footer class="footer">
+      <div class="footer_text_wrap">
+        <div class="footer_text_contents_01">
+          <a href="">개인정보처리방침</a>
+          <img src="/images/pc/Line02.png" alt="">
+          <a href="">이메일무단수집거부</a>
+        </div>
+        <div class="footer_text_contents_02 mt40">
+          <p>[31538] 순천향로 22 유니토피아관 1112호</p>
+          <img src="/images/pc/Line02.png" alt="">
+          <p>TEL : 041-530-1134</p>
+          <img src="/images/pc/Line02.png" alt="">
+          <p>Email : spacecraft@sch.ac.kr</p>
+        </div>
+        <p class="footer_copyright mt12">
+          COPYRIGHT(C)2021 SOONCHUNHYANG UNIVERSITY. ALL RIGHTS RESERVED.
+        </p>
+
+      </div>
+    </footer>
+    <!-- // footer -->
+  </div>
+
+  <script>
+
+    const form = document.querySelector("#formTag");
+    const inputList = document.querySelectorAll("input");
+    const passwordInput = document.querySelector("#newpassword");
+    const nameInput = document.querySelector("#userNm");
+    const passwordCheckInput = document.querySelector("#newpasswordCheck");
+    const qestCode = document.querySelector("#qestCode");
+    const qestnRspnsInput = document.querySelector("#qestnRspns");
+    const mbtlnumInput = document.querySelector("#mbtlnum");
+    // const emailValue = 
+    // 도메인 직접 입력 or domain option 선택
+    const emailstrInput = document.querySelector('#userEmail01');
+    const domainBox = document.querySelector('#userEmail02-box');
+    const domainInput = document.querySelector('#userEmail02-txt');
+
+    // 셀렉트박스가 아니라면 인풋 값을 emailstrInput에 더한다.
+    // 셀렉트박스라면 셀렉트 박스 값을 emailstrInput값과 더한다.
+    //$("#userEmail01").val()+ $('#userEmail02-txt').val()
+    // 	console.log(userEmail)
+    // select 옵션 변경 시
+    
+domainBox.addEventListener('change', (event) => {
+console.log(event.target.value)
+ if (domainBox.value != 'type') {
+	  domainInput.value = event.target.value
+		//domainBox.value = domainInput.value
+         
+      }
+      
+})
+
+    // select 박스 값이 type일때 
+
+    // option에 있는 도메인 선택 시
+
+    function regaxCheck() {
+
+      // 정규식
+      // id, pw
+      var regIdPw = /^[a-zA-Z0-9]{4,12}$/;
+      // 이름
+      var regName = /^[가-힣a-zA-Z]{2,15}$/;
+      // 이메일
+      var regMail = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
+      // 비밀번호
+      var regPW = /^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{6,15}$/;
+
+      let pw = passwordInput.value;
+      var num = pw.search(/[0-9]/g);
+      var eng = pw.search(/[a-z]/ig);
+      var spe = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
+
+      //아이디 확인
+      if (emailstrInput.value == "") {
+        alert("아이디를 입력하세요.")
+        emailstrInput.focus();
+        return false;
+      }
+      //아이디 영어 대소문자 확인
+      else if (!regIdPw.test(emailstrInput.value)) {
+        alert("이메일 아이디는 4~12자 영문 대소문자, 숫자만 입력하세요.")
+        emailstrInput.focus();
+        return false;
+      }
+
+      //메일주소 확인
+      if (domainBox.value.length == 0) {
+        alert("메일주소를 입력하세요.")
+        domainBox.focus();
+        return false;
+      }
+
+
+      // mbtlnumInput 핸드폰
+
+      //이름 확인 = 한글과 영어만 가능하도록
+      if (!regName.test(nameInput.value)) {
+        alert("이름은 최소 2글자 이상, 한글과 영어만 입력하세요.")
+        nameInput.focus();
+        return false;
+      }
+      //비밀번호 확인
+      if (passwordCheckInput.value !== passwordInput.value) {
+        alert("비밀번호와 동일하지 않습니다.")
+        passwordCheckInput.focus();
+        return false;
+      }
+      if (pw.length < 8 || pw.length > 20) {
+
+        alert("비밀번호는 8자리 ~ 20자리 이내로 입력해주세요.");
+        return false;
+      } else if (pw.search(/\s/) != -1) {
+        alert("비밀번호는 공백 없이 입력해주세요.");
+        return false;
+      } else if (num < 0 || eng < 0 || spe < 0) {
+        alert("비밀번호는 영문,숫자, 특수문자를 혼합하여 입력해주세요.");
+        return false;
+      }
+      //비밀번호 
+      /*
+        else if(!regPW.test(passwordInput.value)){
+            alert(" 비밀번호는 영문/숫자/특수문자 조합 8자이상 15자 이하로 입력하세요.")
+            passwordCheckInput.focus();
+            return false;
+        } 
+      */
+
+
+      //답변 확인 = 한글과 영어만 가능하도록
+      if (!regName.test(qestnRspnsInput.value)) {
+        alert("최소 2글자 이상, 한글과 영어만 입력하세요.")
+        qestnRspnsInput.focus();
+        return false;
+      }
+      save();
+
+    };
+    console.log(passwordInput.value)
+    document.regaxCheck().submit();
+
+    inputList.forEach((input) => {
+      input.addEventListener("keyup", () => {
+        checkInputs(input);
+      });
+      input.addEventListener("blur", () => {
+        checkInputs(input);
+      });
+    });
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      checkInputs();
+    });
+    function checkInputs(input) {
+      // const idValue = id.value.trim();
+      const passwordValue = passwordInput.value.trim();
+      const password2Value = passwordCheckInput.value.trim();
+      const nameValue = nameInput.value.trim();
+      const mbtlnumValue = mbtlnumInput.value.trim();
+      const qestnRspnsValue = qestnRspnsInput.value.trim();
+      const emailValue = emailstrInput.value.trim();
+
+      const regul1 = /^(?=.*[a-zA-Z])(?=.*\d).{8,16}$/;
+      const regul2 = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+      const regul3 = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/;
+      const userEmail01regexr = /^[A-Za-z0-9]{4,10}$/;
+      const phoneregexr = /^01[0-9]{1}-?[0-9]{3,4}-?[0-9]{4}$/;
+
+      if (document.querySelector("#userEmail01") === "") {
+        setErrorFor(emailstrInput, "이메일을 입력하세요.");
+
+      } else {
+        setSuccessFor(emailstrInput);
+      }
+
+      if (passwordValue === "") {
+        setErrorFor(passwordInput, "비밀번호를 입력하세요.");
+
+      } else {
+        setSuccessFor(passwordInput);
+      }
+
+      if (emailValue === "") {
+        setErrorFor(emailstrInput, "휴대폰번호를 입력하세요.");
+
+      } else {
+        setSuccessFor(mbtlnumInput);
+      }
+
+      if (qestnRspnsValue === "") {
+        setErrorFor(qestnRspnsInput, "답변을 입력하세요.");
+      } else {
+        setSuccessFor(qestnRspnsInput);
+      }
+
+      if (nameValue === "") {
+        setErrorFor(nameInput, "이름을 입력해주세요.");
+      } else {
+        setSuccessFor(nameInput);
+      }
+      if ($("#qestnCode").val() !== null) {
+        document.querySelector("#questnlevel").textContent = "";
+      } else {
+        document.querySelector("#questnlevel").textContent = "질문을 입력해주세요";
+      }
+    }
+
+
+    function setErrorFor(input, message) {
+      const inputFormDiv = input.parentElement;
+      const small = inputFormDiv.querySelector("small");
+
+      small.innerText = message;
+      inputFormDiv.classList.remove("success");
+      inputFormDiv.classList.add("error");
+    }
+
+    function setSuccessFor(input) {
+      const inputFormDiv = input.parentElement;
+      inputFormDiv.classList.remove("error");
+      inputFormDiv.classList.add("success");
+    }
+
+    function save() {
+      let form = document.querySelector("#formTag");
+      let inputList = document.querySelectorAll("input");
+      let passwordInput = $("#newpassword").val();
+      let nameInput = $("#userNm").val();
+      let passwordCheckInput = $("#newpasswordCheck").val();
+      let qestCode = $("#qestCode").val();
+      let qestnRspnsInput = $("#qestnRspns").val();
+      let mbtlnumInput = $("#mbtlnum").val();
+      let domainbox = document.querySelector('#userEmail02-box').value;
+      // 도메인 직접 입력 or domain option 선택  
+      if (domainbox == 'type') {
+        if(domainInput.value != undefined){
+        var userEmailValue = emailstrInput.value + '@' + domainInput.value;
+			
+		}
+
+      } else if (domainbox != 'type') {
+		domainbox.value = domainInput.value
+        var userEmailValue = emailstrInput.value + '@' + domainInput.value;
+      }
+      let emailSession = window.sessionStorage.setItem("email", userEmailValue);
+      let nameSession = window.sessionStorage.setItem("userNm", nameInput);
+      console.log(userEmailValue);
+      let data = {
+        userEmail: userEmailValue,
+        userPassword: $("#newpassword").val(),
+        userPasswordCheck: $("#newpasswordCheck").val(),
+        mbtlnum: $("#mbtlnum").val(), // 핸드폰번호
+        userNm: $("#userNm").val(), //유저 이름 
+        qestnCode: $("#qestCode").val(), // 질문 
+        qestnRspns: $("#qestnRspns").val(),
+        //답변      
+      };
+
+      $.ajax({
+        type: "POST",
+        url: "/login/userRegist.api",
+        data: JSON.stringify(data), // http body  데이터
+        contentType: "application/json; charset=utf-8", // body데이터가 어떤타입인지 (MIME)
+        datatype: "json",
+        contentType: "application/json",
+        success: function (res) {
+          console.log(res)
+          alert("회원가입이 완료되었습니다.");
+          location.href = "/sch/huss/auth/registerStep2.html";
+          History.replaceState()
+        },
+        error: function (err) {
+          alert(err.responseJSON.message);
+
+          //alert(JSON.stringify(error.responseJSON.message));
+          checkInputs();
+        },
+      });
+    }
+
+
+  </script>
+
+  <script>
+    AOS.init();
+  </script>
+</body>
+
+
+
+</html>

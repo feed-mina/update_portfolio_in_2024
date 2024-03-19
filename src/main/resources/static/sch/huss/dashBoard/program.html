@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>HUSS</title>
+<link rel="stylesheet" href="/css/pc/style.css">
+<link rel="stylesheet" href="/css/pc/aos.css">
+<link rel="stylesheet" href="/css/pc/jquery-ui.css">
+<link rel="stylesheet" href="/css/pc/swiper-bundle.min.css">
+<link rel="stylesheet" href="/css/custom.css" />
+
+<script src="/js/allVendors.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/aos.js"></script> 
+<!--   
+       -->
+</head>
+
+<body>
+
+	<!-- skip -->
+	<div class="skip">
+		<a href="#container">본문 바로가기</a>
+	</div>
+	<!-- // skip -->
+	<div class="wrapper">
+		<!-- background -->
+
+		<!-- header -->
+		<header id="header_wrap"></header> 
+		<!-- // header -->
+		<!-- container -->
+		<div class="container " id="container">
+			<div class="contents_full sub_top_banner_wrap">
+				<div class="sub_top_banner">
+					<h2>PROGRAM</h2>
+				</div>
+			</div>
+			<div class="contents_02 mt60">
+				<div id="tabs" class="program_tabs">
+					<ul class="tabsContainer">
+						<div class="active_back"></div>
+						<li class="tabs_left"><a href="#tabs-2">포트폴리오1</a></li>
+						<li class="tabs_right"><a href="#tabs-1">포트폴리오2</a></li>
+					</ul>
+
+					<!-- 비교과 -->
+					<div id="tabs-1"></div>
+					<!-- 교과 -->
+					<div id="tabs-2">
+
+						<div class="program_content01 mt60">
+							<h2 class="program_content_title">프로젝트 참여 안내</h2>
+
+							<div class="program_notice">
+								<div class="program_notice_content">
+									<ul>
+										<li>1. 소개</li>
+										<li>2. 소개</li>
+										<li>3. 소개</li>
+									</ul>
+								</div>
+								<div class="program_notice_button_bg">
+									<p>최애배우 포토박스</p>
+									<br>
+									<button class="btn_type03 ml24">참여 신청하기</button>
+								</div>
+							</div>
+
+							<h2 class="program_content_title mt60">타이틀</h2>
+							<div class="program_table_wrap">
+								<h2 class="mt40">민예린</h2>
+
+								<table class="program_table01 mt24">
+									<colgroup>
+										<col wdiht="*">
+										<col wdiht="*">
+										<col wdiht="*">
+									</colgroup>
+									<thead>
+										<tr>
+											<th>1</th>
+											<th>2</th>
+											<th>3</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>내용1</td>
+											<td rowspan="2">내용2</td>
+											<td>내용3</td>
+										</tr>
+										<tr>
+											<td>내용4</td>
+
+											<td>내용5</td>
+										</tr>
+										<tr>
+											<td rowspan="4">내용6</td>
+											<td rowspan="2">내용7</td>
+											<td>내용8</td>
+										</tr>
+										<tr>
+											<td>내용9</td>
+										</tr>
+										<tr>
+											<td rowspan="2">내용10</td>
+											<td>내용11</td>
+
+										</tr>
+										<tr>
+											<td>내용12</td>
+										</tr>
+										<tr>
+											<td rowspan="2">내용13</td>
+											<td rowspan="2">내용14</td>
+											<td>내용15</td>
+										</tr>
+										<tr>
+											<td>내용16</td>
+
+										</tr>
+										<tr>
+											<td>내용17</td>
+											<td>내용18</td>
+											<td>내용19</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+		<!-- // container -->
+		<!-- footer -->
+		<footer id="footer_wrap"></footer>
+		<!-- // footer -->
+	</div>
+	<script>
+		$(function() {
+			$("#tabs").tabs();
+		});
+
+		// 탭 배경
+		$(document).ready(function() {
+			const tabs = $('.program_tabs li');
+			tabs.click(function() {
+				if (this.classList.contains('tabs_right')) {
+					$('.active_back').css('left', '115px');
+				} else if (this.classList.contains('tabs_left')) {
+					$('.active_back').css('left', '0px');
+				}
+				//  탭 배경 끝 
+			})
+
+		})
+	</script>
+	<script>
+		AOS.init();
+	</script>
+</body>
+
+</html>

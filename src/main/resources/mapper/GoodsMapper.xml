@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="goods">
+	<select id="test" parameterType="map" resultType="camelHashMap">
+		select 1 as test
+	</select>
+
+	<select id="selectTestLogin" parameterType="map" resultType="camelHashMap">
+		select *
+		  from test_login
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(loginId)'>
+		 where login_id = #{loginId}
+		</if>
+	</select>
+
+	<select id="seq" parameterType="map" resultType="camelHashMap">
+		select nextval('GOODS') as test_id
+	</select>
+
+	<insert id="goodsInsert" parameterType="map" >
+		<selectKey resultType="String" keyProperty="goodsId" order="BEFORE">
+	        SELECT nextval('GOODS')
+	    </selectKey>
+		INSERT INTO svg.tb_goods
+            (goods_id,
+             goods_nm,
+             goods_amount,
+             image_id,
+             purchs_posbl_co,
+             goods_dc,
+             dc_image_cn,
+             regist_id,
+             regist_dt,
+             updt_id,
+             updt_dt)
+VALUES     (
+			#{goodsId},
+            #{goodsNm},
+            #{goodsAmount},
+            #{imageId},
+            #{purchsPosblCo},
+            #{goodsDc},
+            #{dcImageCn},
+            #{registId},
+            now(),
+            #{updtId},
+            now()
+            )
+	</insert>
+
+
+	<!-- paging 예시 쿼리 -->
+
+	<select id="selectAtendEvent" parameterType="map" resultType="camelHashMap">
+	select * from
+		(
+			select
+			no,
+			fn_ncnm(regist_id) as admin_nm,
+			cnt,
+	   itm_id,
+       itm_nm,
+       itm_level,
+       upper_itm_id,
+       use_at,
+       dflt_at,
+       pair_at,
+       image_id,
+       file_id,
+       itm_ty_code,
+       itm_dc,
+       regist_id,
+       date_format(regist_dt, '%Y.%m.%d') as regist_dt,
+       updt_id,
+       updt_dt,
+       image_cn
+
+		  from (
+		<include refid="sql_selectAtendEvent"/>
+		) A
+	)B WHERE 1=1
+		<include refid="common.PAGING"/>
+	</select>
+
+
+	<select id="selectAtendEventCount" parameterType="map" resultType="camelHashMap">
+		<include refid="common.COUNT_HEAD"/>
+		<include refid="sql_selectAtendEvent"/>
+		<include refid="common.COUNT_FOOT"/>
+	</select>
+
+
+<sql id="sql_selectAtendEvent">
+
+select
+@rownum:=@rownum+1 no,
+	(select count(1) from tb_user_itm where itm_id = a.itm_id ) as cnt,
+	   a.itm_id,
+       a.itm_nm,
+       a.itm_level,
+       a.upper_itm_id,
+       a.use_at,
+       a.dflt_at,
+       a.pair_at,
+       a.image_id,
+       a.file_id,
+       a.itm_ty_code,
+       a.itm_dc,
+       a.regist_id,
+       a.regist_dt,
+       a.updt_id,
+       a.updt_dt,
+       b.image_cn
+       from tb_itm a left join tb_image_detail b on a.image_id = b.image_id
+
+			<if test='itmTyCode != "ITM_CH"'>
+			where a.itm_ty_code like concat('%',#{itmTyCode},'%')
+			</if>
+       		<if test='itmTyCode =="ITM_CH" and part == null'>
+			where a.itm_ty_code like concat('%',#{itmTyCode},'%')
+			</if>
+			<if test='itmTyCode == "ITM_CH" and @com.sch.util.CommonUtil@isNotEmpty(part)'>
+			where a.itm_ty_code like concat('%',#{part},'%')
+			</if>
+
+
+			 <if test='@com.sch.util.CommonUtil@isNotEmpty(itmNm)'>
+				and a.itm_nm like concat('%',#{itmNm},'%')
+			 </if>
+	  		 <if test='@com.sch.util.CommonUtil@isNotEmpty(startDt) and @com.sch.util.CommonUtil@isNotEmpty(endDt)'>
+				and a.regist_dt between concat(#{startDt},'000000') and concat(#{endDt},'235959')
+			 </if>
+ 		 	 <if test='@com.sch.util.CommonUtil@isNotEmpty(registNm)'>
+				and a.regist_id in (select admin_id from tb_admin where admin_nm like concat('%',#{registNm},'%'))
+			 </if>
+			<if test='@com.sch.util.CommonUtil@isNotEmpty(countbefore) and @com.sch.util.CommonUtil@isNotEmpty(countafter)'>
+			    and (select count(1) from tb_user_itm where itm_id = a.itm_id ) <![CDATA[>=]]> #{countbefore} and (select count(1) from tb_user_itm where itm_id = a.itm_id ) <![CDATA[<=]]> #{countafter}
+			</if>
+
+		group by itm_id
+		 order by a.regist_dt desc
+	</sql>
+
+</mapper>

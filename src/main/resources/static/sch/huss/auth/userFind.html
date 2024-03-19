@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>HUSS</title>
+
+    <link href="/css/custom.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/pc/style.css">
+    <link rel="stylesheet" href="/css/pc/aos.css">
+    <link rel="stylesheet" href="/css/pc/jquery-ui.css">
+    <script src="/js/jqery-3.6.0.js"></script>
+    <script src="/js/jquery-ui.js"></script>
+    <script src="/js/allVendors.js"></script>
+    <script src="/js/common.js"></script>
+
+    <script src="/js/aos.js"></script>
+</head>
+
+<body>
+
+    <!-- skip -->
+    <div class="skip">
+        <a href="#container">본문 바로가기</a>
+    </div>
+    <!-- // skip -->
+    <div class="wrapper">
+        <!-- background -->
+
+        <!-- header -->
+        <header id="header_wrap"></header>
+        <!-- // header -->
+        <!-- // header -->
+        <!-- container -->
+        <div class="container " id="container">
+            <div class="contents_03" style="padding-bottom: 210px;">
+                <h2 class="login_tilte mt90">
+                    회원가입
+                </h2>
+                <div class="tab_container">
+                    <div class="tab_area">
+
+                        <ul class="tab_button bx_flex jc_ct mt60">
+                            <li class="on tab_button_style01" id="toggleIdButton"><a href="#;">아이디 찾기</a></li>
+                            <li class="tab_button_style01" id="togglePwButton"><a href="#;">비밀번호 찾기</a></li>
+                        </ul>
+                        <div id="AfterIdForm"></div>
+                        <div id="AfterPwForm"></div>
+                        <!-- 아이디 찾기 document.querySelector("#idFindForm").remove() -->
+                        <div id="IdSection">
+                            <div class="tab_cont02 on" id="idFindForm">
+                                <p class="login_text mt40">
+                                    회원가입 시 입력했던 이름과 본인 확인 질문, 답변을 입력해 주세요. <br>
+
+                                    카카오톡 본인인증으로 가입하셨던 분은 카카오 인증하기 버튼을 눌러 주세요.
+                                </p>
+                                <div class="join_input_wrap mt24">
+                                    <form id="formTag">
+                                        <div>
+                                            <div class="bx_flex ai_center mt12">
+                                                <div class="input_title type01 ">
+                                                    <h2>이름</h2>
+                                                </div>
+                                                <div class="input_wrap bx_flex  ai_center gap10 fw100 pr">
+                                                    <input id="userNm" type="text" class="inp_text fw100 "
+                                                        placeholder="이름을 입력해주세요">
+                                                    <small>Error message</small>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="bx_flex ai_center mt12">
+                                                <div class="input_title type01 ">
+                                                    <h2>본인확인 질문선택</h2>
+                                                </div>
+                                                <div class="input_wrap bx_flex ai_center gap10 fw100">
+                                                    <div class="bx_inp ty2 fw100">
+                                                        <div class="sel_typ2 "><!-- 선택 시 .on class -->
+                                                            <!-- 23.08.31 select 수정 -->
+                                                            <select id="qestnCode" name="total">
+                                                                <option value="" selected="" disabled="">질문을 선택해 주세요.
+                                                                </option>
+                                                                <option value="QUESTION_1">제일 좋아하는 색상은?
+                                                                </option>
+                                                                <option value="QUESTION_2">제일 좋아하는 음식은?
+                                                                </option>
+                                                                <option value="QUESTION_3">가장 기억나는 이름은?
+                                                                </option>
+                                                            </select>
+                                                            <label for="total" class="icoArrow"></label>
+                                                            <p id="questnlevel"></p>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="bx_flex ai_center mt12">
+                                                <div class="input_title type01 ">
+                                                    <h2>답변</h2>
+                                                </div>
+                                                <div class="input_wrap bx_flex  ai_center gap10 fw100 pr">
+                                                    <input id="qestnRspns" type="text" class="inp_text fw100 "
+                                                        placeholder="답변을 입력해 주세요."> <span class="required_text Notice"
+                                                        style="bottom: -52px;">
+                                                        해당 답변은 아이디/비밀번호 찾기 시 사용됩니다. 띄어쓰기 없는 단어로 등록해 주세요
+                                                    </span>
+                                                    <small>Error message</small>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+
+
+                                    <div class="btn_box gap10 bx_flex mt52">
+                                        <a onclick="userIdFind()" id="findId" href="javascript:;" class="btn_type04">아이디 찾기</a>
+                                       
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div id="idFindAfter" class="idFindAfterClassOFF">
+                                <div class="btn_box gap10 bx_flex mt52">
+                                    <a onclick="" id="togglepw" href="" class="btn_type04">비밀번호 찾기</a>
+                                    <a onclick="" id="goLogin" href="/sch/huss/login/login.html"
+                                        class="btn_type04">로그인하기</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 비밀번호 찾기 -->
+                        <div id="PwSection">
+                            <div class="tab_cont02" id="pwFindForm">
+                                <p class="login_text mt40">
+                                    비밀번호를 찾을 아이디를 입력해 주세요. <br>
+                                    카카오톡 본인인증으로 가입하셨던 분은 카카오 인증하기 버튼을 눌러 주세요.
+                                </p>
+                                <div class="join_input_wrap mt24">
+                                    <form id="formTag">
+
+                                        <div>
+                                            <div class="bx_flex ai_center mt12">
+                                                <div class="input_title type01 ">
+                                                    <h2>이메일</h2>
+                                                </div>
+                                                <div class="input_wrap bx_flex  ai_center gap10 fw100 pr">
+                                                    <input id="userEmail" type="email" class="inp_text fw100 "  placeholder="이메일을 입력해주세요" aria-describedby="email-constraints" >
+                                                      <span class="required_text Notice" style="  bottom: -15px; white-space: nowrap;"> 해당 이메일은 아이디/비밀번호 찾기 시 사용됩니다. 띄어쓰기 없이 적어주세요.</span> 
+                                                    <small>Error message</small>
+                                                </div>
+                                            </div>
+                                            <div class="bx_flex ai_center mt12">
+                                                <div class="input_title type01 ">
+                                                    <h2>이름</h2>
+                                                </div>
+                                                <div class="input_wrap bx_flex  ai_center gap10 fw100 pr">
+                                                    <input id="userNm2" type="text" class="inp_text fw100 "
+                                                        placeholder="이름을 입력해주세요">
+                                                    <small>Error message</small>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="bx_flex ai_center mt12">
+                                                <div class="input_title type01 ">
+                                                    <h2>본인확인 질문선택</h2>
+                                                </div>
+                                                <div class="input_wrap bx_flex ai_center gap10 fw100">
+                                                    <div class="bx_inp ty2 fw100">
+                                                        <div class="sel_typ2 "><!-- 선택 시 .on class -->
+                                                            <!-- 23.08.31 select 수정 -->
+                                                            <select id="qestnCode2" name="total">
+                                                                <option value="" selected="" disabled="">질문을 선택해 주세요.
+                                                                </option>
+                                                                <option value="QUESTION_1">제일 좋아하는 색상은?
+                                                                </option>
+                                                                <option value="QUESTION_2">제일 좋아하는 음식은?
+                                                                </option>
+                                                                <option value="QUESTION_3">가장 기억나는 이름은?
+                                                                </option>
+                                                            </select>
+                                                            <label for="total" class="icoArrow"></label>
+                                                            <p id="questnlevel2"></p>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="bx_flex ai_center mt12">
+                                                <div class="input_title type01 ">
+                                                    <h2>답변</h2>
+                                                </div>
+                                                <div class="input_wrap bx_flex  ai_center gap10 fw100 pr"> <span
+                                                        class="required_text Notice" style="bottom: -52px;">
+                                                        해당 답변은 아이디/비밀번호 찾기 시 사용됩니다. 띄어쓰기 없는 단어로 등록해 주세요
+                                                    </span>
+                                                    <input id="qestnRspns2" type="text" class="inp_text fw100 "
+                                                        placeholder="답변을 입력해 주세요.">
+                                                    <small>Error message</small>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    <div class="btn_box gap10 bx_flex mt52">
+
+                                        <a onclick="userPwFind()" id="findPw" href="javascript:;"
+                                            class="btn_type04">비밀번호 찾기</a>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div id="pwFindAfter" class="pwFindAfterClassOFF">
+                                <div class="btn_box gap10 bx_flex mt52">
+
+                                    <a onclick="" id="goMain" href="/sch/huss/dashBoard/main.html" class="btn_type04">
+                                        메인으로 </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- // container -->
+        <!-- footer -->
+        <footer class="footer">
+            <div class="footer_text_wrap">
+                <div class="footer_text_contents_01">
+                    <a href="">개인정보처리방침</a>
+                    <img src="/images/pc/Line02.png" alt="">
+                    <a href="">이메일무단수집거부</a>
+                </div>
+                <div class="footer_text_contents_02 mt40">
+                    <p>[31538] 순천향로 22 유니토피아관 1112호</p>
+                    <img src="/images/pc/Line02.png" alt="">
+                    <p>TEL : 041-530-1134</p>
+                    <img src="/images/pc/Line02.png" alt="">
+                    <p>Email : spacecraft@sch.ac.kr</p>
+                </div>
+                <p class="footer_copyright mt12">
+                    COPYRIGHT(C)2021 SOONCHUNHYANG UNIVERSITY. ALL RIGHTS RESERVED.
+                </p>
+
+            </div>
+        </footer>
+        <!-- // footer -->
+    </div>
+    <script>
+
+        const form = document.querySelector("#formTag");
+        const inputList = document.querySelectorAll("input");
+        const p = document.createElement("p");
+        const nameInput = document.querySelector("#userNm");
+        const qestnCodeOption = document.querySelector("#qestnCode");
+        const qestnRspnsInput = document.querySelector("#qestnRspns");
+        const nameInput2 = document.querySelector("#userNm2");
+        const qestnCodeOption2 = document.querySelector("#qestnCode2");
+        const qestnRspnsInput2 = document.querySelector("#qestnRspns2");
+        const emailstrInput = document.querySelector("#userEmail");
+
+
+        $("#toggleIdButton").click(function () {
+            //	document.querySelector("#pwFindForm").remove();
+            document.querySelector("#PwSection").classList.add("pwFindFormClassON");
+            document.querySelector("#IdSection").classList.remove("idFindFormClassON");
+            document.querySelector("#IdSection").classList.add("ddd");
+        })
+
+        $("#togglePwButton").click(function () {
+            // 토글버튼을 누르면 아이디 찾기가 바꿔야한다. 
+            //	document.querySelector("#idFindForm").remove(); 
+            //	document.querySelector("#idFindForm").classList.remove("idFindFormClass");
+            document.querySelector("#IdSection").classList.add("idFindFormClassON");
+            document.querySelector("#PwSection").classList.remove("pwFindFormClassON");
+            document.querySelector("#PwSection").classList.add("aaa");
+        })
+        // 아이디 찾기 / 비밀번호 찾기  탭 메뉴 변환
+        $(document).ready(function () {
+            $(".tab_button > li").click(function () {
+                var idx = $(this).index();
+
+                $(this).addClass("on").siblings().removeClass("on");
+
+                $(".tab_area .tab_cont02")
+                    .eq(idx)
+                    .addClass("on")
+                    .siblings(".tab_cont02")
+                    .removeClass("on");
+            });
+        });
+
+        $(document).ready(function () {
+            $("#togglepw").click(function () {
+
+                $(".tab_button > li").click(function () {
+                    var idx = $(this).index();
+
+                    $(this).addClass("on").siblings().removeClass("on");
+
+                    $(".tab_area .tab_cont02")
+                        .eq(idx)
+                        .addClass("on")
+                        .siblings(".tab_cont02")
+                        .removeClass("on");
+                });
+            })
+        });
+
+        function userIdFind() {
+            $.ajax({
+                type: "post",
+                url: "/login/userIdFind.api",
+                data: JSON.stringify({
+                    userNm: $("#userNm").val(),
+                    qestnCode: $("#qestnCode").val(),
+                    qestnRspns: $("#qestnRspns").val()
+                    // userType: "user",userPwFind
+                }),
+                datatype: "json",
+                contentType: "application/json",
+                success: function (res) {
+                    console.log(res)
+                    console.log(res.data.userNm)
+                    console.log(res.data.userEmail)
+                    document.querySelector("#AfterIdForm").classList.add("AfterIdFormClassON");
+                    document.querySelector("#AfterIdForm").innerText = res.data.userNm + "님의 아이디는" + res.data.userEmail + "입니다."
+                    document.querySelector("#idFindForm").remove();
+                    document.querySelector("#idFindAfter").classList.remove("idFindAfterClassOFF");
+                    document.querySelector("#idFindAfter").classList.add("idFindAfterClassON");
+                },
+                error: function (err) {
+                    alert(err.responseJSON.message);
+                    checkInputs();
+                },
+            });
+        }
+        function userPwFind() {
+            $.ajax({
+                type: "post",
+                url: "/login/userPwFind.api",
+                data: JSON.stringify({
+                    userNm: $("#userNm2").val(),
+                    userEmail: $("#userEmail").val(),
+                    qestnCode: $("#qestnCode2").val(),
+                    qestnRspns: $("#qestnRspns2").val()
+                    // userType: "user",
+                }),
+                datatype: "json",
+                contentType: "application/json",
+                success: function (res) {
+                    console.log(res)
+                    console.log(res.data.userNm)
+                    console.log(res.data.userEmail)
+                    document.querySelector("#AfterPwForm").classList.add("AfterPwFormClassON");
+
+                    document.querySelector("#AfterPwForm").innerHTML = res.data.userNm + "님, " + res.data.userEmail + "로 비밀번호 재설정 안내 메일이 발송되었습니다." + "<br/>" + "해당 이메일을 확인해 주세요."
+                    document.querySelector("#pwFindForm").remove(); // 로그인탭 	   
+                    document.querySelector("#pwFindAfter").classList.remove("pwFindAfterClassOFF") // 커뮤니티탭 
+                    document.querySelector("#pwFindAfter").classList.add("pwFindAfterClassON");	// 회원가입탭 
+                },
+                error: function (err) {
+                    alert(err.responseJSON.message);
+                    checkInputs();
+                },
+            });
+        }
+
+        inputList.forEach((input) => {
+            input.addEventListener("keyup", () => {
+                checkInputs(input);
+            });
+            input.addEventListener("blur", () => {
+                checkInputs(input);
+            });
+        });
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            checkInputs();
+        });
+
+        function checkInputs(input) {
+            const nameValue = nameInput.value.trim();
+            const qestnCodeOptionValue = qestnCodeOption.value.trim();
+            const qestnRspnsValue = qestnRspnsInput.value.trim();
+            const qestnCodeOptionValue2 = qestnCodeOption2.value.trim();
+            const qestnRspnsValue2 = qestnRspnsInput2.value.trim();
+            const emailValue = emailstrInput.value.trim(); //
+
+            const regul1 = /^(?=.*[a-zA-Z])(?=.*\d).{8,16}$/;
+            const regul2 = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+            const regul3 = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/;
+            const userEmailregexr = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+
+
+            if (emailValue === "") {
+                setErrorFor(emailstrInput, "이메일을 입력하세요.");
+            } else if (!(userEmailregexr.test(emailValue))) {
+                setErrorFor(emailstrInput, "이메일을 올바르게 적어주세요.");
+
+            } else {
+                setSuccessFor(emailstrInput);
+            }
+            // 
+            if (document.querySelector("#userNm").value === "") {
+                setErrorFor(nameInput, "이름을 입력하세요.");
+            } else {
+                setSuccessFor(nameInput);
+            }
+
+            if (document.querySelector("#userNm2").value === "") {
+                setErrorFor(nameInput2, "이름을 입력하세요.");
+            } else {
+                setSuccessFor(nameInput2);
+            }
+
+            if (document.querySelector("#qestnCode").value != null) {
+                document.querySelector("#questnlevel").textContent = "";
+            } else {
+                document.querySelector("#questnlevel").textContent = "질문을 입력해주세요";
+            }
+
+            if (document.querySelector("#qestnCode2").value != null) {
+                document.querySelector("#questnlevel2").textContent = "";
+            } else {
+                document.querySelector("#questnlevel").textContent = "질문을 입력해주세요";
+            }
+
+
+
+            if (qestnRspnsValue === "") {
+                setErrorFor(qestnRspnsInput, "답변을 입력하세요.");
+            } else {
+                setSuccessFor(qestnRspnsInput);
+            }
+
+            if (qestnRspnsValue2 === "") {
+                setErrorFor(qestnRspnsInput2, "답변을 입력하세요.");
+            } else {
+                setSuccessFor(qestnRspnsInput2);
+            }
+        }
+            function setErrorFor(input, message) {
+                const inputFormDiv = input.parentElement;
+                const small = inputFormDiv.querySelector("small");
+
+                small.innerText = message;
+                inputFormDiv.classList.remove("success");
+                inputFormDiv.classList.add("error");
+            }
+
+            function setSuccessFor(input) {
+                const inputFormDiv = input.parentElement;
+                inputFormDiv.classList.remove("error");
+                inputFormDiv.classList.add("success");
+            }
+
+    </script>
+
+
+    <script>
+            AOS.init();
+    </script>
+</body>
+
+</html>

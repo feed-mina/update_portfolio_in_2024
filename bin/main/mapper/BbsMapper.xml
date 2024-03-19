@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	게시판 > 공통 insert, update, delete
+-->
+
+<mapper namespace="commonBbs">
+		
+    <insert id="insertBbs" parameterType="map">
+    		/* commonBbs.insertBbs */
+    	 
+        INSERT INTO tb_bbs
+        (
+        	bbs_code
+        	, bbs_seq
+        	, upper_bbs_seq
+        	, bbs_sj
+        	, bbs_cn
+        	, use_at
+        	, file_seq
+        	, bbs_se
+        	, regist_id
+        	, regist_dt
+        )
+        VALUES
+        (
+        	#{bbsCode}
+        	, #{bbsSeq}
+        	, #{upperBbsSeq}
+        	, #{bbsSj}
+        	, #{bbsCn}
+        	, #{useAt}
+        	, #{fileSeq}
+        	, #{bbsSe}
+        	, #{user.userSeq}
+        	, NOW()
+        )
+    </insert>
+    
+    <update id="inquireUpdt" parameterType="map">
+    <!-- 조회수증가 -->
+    /* commonBbs.inquireUpdt */
+    	UPDATE tb_bbs
+    	SET inquire_co = inquire_co + 1
+    	WHERE bbs_seq = #{bbsSeq}
+    		<!-- AND bbs_code = #{bbsCode} -->
+    </update>
+    
+    <update id="updateBbsOne" parameterType="map">
+    	/* commonBbs.updateBbsOne */
+    	UPDATE tb_bbs
+    	SET <if test='@com.sch.util.CommonUtil@isNotEmpty(bbsSj)'>
+	            bbs_sj = #{bbsSj},
+	        </if>
+	        <if test='@com.sch.util.CommonUtil@isNotEmpty(bbsCn)'>
+	            bbs_cn = #{bbsCn},
+	        </if>
+	        <if test='@com.sch.util.CommonUtil@isNotEmpty(useAt)'>
+	            use_at = #{useAt},
+	        </if>
+	        <if test='@com.sch.util.CommonUtil@isNotEmpty(fileSeq)'>
+	            file_seq = #{fileSeq},
+	        </if>
+	        <if test='@com.sch.util.CommonUtil@isEmpty(fileSeq)'>
+	            file_seq = NULL,
+	        </if>
+	        <if test='@com.sch.util.CommonUtil@isNotEmpty(bbsSe)'>
+	            bbs_se = #{bbsSe},
+	        </if>
+	        updt_id = #{user.userSeq}
+    			, updt_dt = NOW()
+	    WHERE bbs_seq = #{bbsSeq}
+    </update>
+    
+    <delete id="deleteBbsOne" parameterType="map">
+    	/* commonBbs.deleteBbsOne */
+    	DELETE FROM tb_bbs
+    	WHERE bbs_code = #{bbsCode}
+	    		AND bbs_seq = #{bbsSeq}
+    </delete>
+
+</mapper>

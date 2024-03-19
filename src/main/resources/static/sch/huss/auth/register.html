@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>HUSS</title>
+    
+    <link rel="stylesheet" href="/css/pc/style.css">
+    <link href="/css/custom.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/pc/aos.css">
+    <link rel="stylesheet" href="/css/pc/jquery-ui.css">
+    <script src="/js/allVendors.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/swiper-bundle.min.js"></script>
+    <script src="/js/aos.js"></script>
+    
+</head>
+
+<body>
+
+    <!-- skip -->
+    <div class="skip">
+        <a href="#container">본문 바로가기</a>
+    </div>
+    <!-- // skip -->
+    <div class="wrapper">
+        <!-- background --> 
+        <!-- header --> 
+    <header id="header_wrap"></header>
+    <!-- // header -->
+        <!-- container -->
+        <div class="container " id="container">
+          <div class="contents_03" style="padding-bottom: 339px;">
+            <h2 class="login_tilte mt90">
+                회원가입
+            </h2>
+            <p class="login_text mt24">
+                이미지 생성 AI 최애배우 포토박스 페이지에 가입할 방법을 선택해 주세요.
+            </p>
+
+           
+            <div class="btn_box mt40">
+				
+	<!-- 			<a onclick="" href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=142c700061d20152ca151a489428cf6e&redirect_uri=http://localhost:8189/auth/register.api" class="btn btn-block">
+										 <button class="btn_type04 bg_rd2 fc_bk1">카카오톡 인증하기 테스트</button> </a>-->
+
+            <div class="btn_box mt40">
+              <a onclick="util.getKakaoLogin()" href="javascript:;" >
+                <button class="btn_type04 bg_rd2 fc_bk1">카카오톡 인증하기</button></a>
+                
+            </div>
+            <div class="btn_box mt12">
+               <!-- <button class="btn_type04">이메일 인증하기</button>-->
+                
+              <a onclick="" href="/sch/huss/auth/agreePolicy.html">
+                <button class="btn_type04">이메일 인증하기</button></a>
+            </div>
+            
+          </div>
+          
+        </div>
+        <!-- // container -->
+        <!-- footer -->
+        <footer class="footer">
+            <div class="footer_text_wrap">
+                <div class="footer_text_contents_01">
+                  <a href="">개인정보처리방침</a>
+                  <img src="/images/pc/Line02.png" alt="">
+                  <a href="">이메일무단수집거부</a>
+                </div>
+                <div class="footer_text_contents_02 mt40">
+                  <p>[31538] 순천향로 22 유니토피아관 1112호</p>
+                  <img src="/images/pc/Line02.png" alt="">
+                  <p>TEL : 041-530-1134</p>
+                  <img src="/images/pc/Line02.png" alt="">
+                  <p>Email : spacecraft@sch.ac.kr</p>
+                </div>
+                <p class="footer_copyright mt12">
+                  COPYRIGHT(C)2021 SOONCHUNHYANG UNIVERSITY. ALL RIGHTS RESERVED.
+                </p>
+    
+            </div>
+            </footer>
+        <!-- // footer -->
+    </div>
+   
+   
+    <script>
+        AOS.init();
+    </script>
+</body>
+
+</html>

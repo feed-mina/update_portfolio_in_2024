@@ -1,0 +1,68 @@
+<nav class="header_nav">
+	<ul>
+		<div class="header"
+			style="justify-content: space-around; align-items: center;">
+			<h1 class="header_logo">
+				<a href="/sch/huss/dashBoard/main.html"> <img
+					src="/images/pc/logo.png" alt="HUSS 위험사회 컨소시움">
+				</a>
+			</h1>
+			<li class="nav-item" id="business"><a class="nav-link"
+				href="/sch/huss/dashBoard/business.html">BUSINESS</a></li>
+			<li class="nav-item" id="program"><a class="nav-link"
+				href="/sch/huss/dashBoard/program.html">PROGRAM</a></li>
+			<li class="nav-item" id="community"><a class="nav-link"
+				href="/sch/huss/community/communityList.html">COMMUNITY</a></li>
+				
+			<!-- 
+			
+			<li class="nav-item" id="gallery"><a class="nav-link"
+				href="/sch/huss/board/gallery.html">gallery</a></li>
+			<li class="nav-item" id="notice"><a class="nav-link"
+				href="/sch/huss/notice/noticeList.html">NOTICE</a></li>
+			<li class="nav-item" id="board"><a class="nav-link"
+				href="/sch/huss/board/boardList.html">게시판</a></li>
+			 -->
+			<div class="h_information_wrap">
+				<div class="header" >
+					<ul style="display: flex; justify-content: space-around; align-items: center;">
+						<li class="nav-item" id="login"><a
+							href="/sch/huss/login/login.html"> 로그인 </a></li>
+							 |
+						<li class="nav-item" id="join"><a
+							href="/sch/huss/auth/register.html" class="h_infor_logout"> 회원가입</a></li>
+						<li class="nav-item" id="logout"><a onclick="util.logout()"
+							class="h_infor_name"> 로그아웃 </a></li>
+
+					</ul>
+				</div>
+			</div>
+		</div>
+	</ul>
+</nav>
+<script>  
+	//로그아웃 > 로그인 changeStatus 로그아웃할때
+	function changeStatus() {
+		const kakaoAccessToken = document.cookie.split("; ")[0].split("=")[1]
+		if (util.getUserSeq() === null ) { 
+			console.log('header_로그인 안한 상태이다.');
+		//	util.setStorage('loginMode', 'true');
+			util.clearloginMode();
+			logoutmode.remove();
+			document.querySelector("#logout").classList.add("toggleLogout"); // 로그아웃탭 
+			document.querySelector("#community").classList.add("toggleCommunity")  // 커뮤니티탭 
+			// 	document.querySelector("#board").classList.add("toggleBoard") 게시글탭 
+		} else if(util.getUserSeq() !== null) {
+		// 일반 로그인 한 상태	
+		console.log('header_일반 로그인 한 상태')
+	  	document.querySelector("#login").classList.add("toggleLogin"); // 로그인탭 
+		document.querySelector("#join").classList.add("toggleJoin"); // 회원가입탭 
+		}else if (kakaoAccessToken !== null || kakaoAccessToken !== undefined) { 
+			console.log('header_카카오 로그인 한 상태.'); 
+			document.querySelector("#login").classList.add("toggleLogin"); // 로그인탭 
+			document.querySelector("#loginbox").classList.add("toggleLogin"); // 로그인탭 
+			document.querySelector("#join").classList.add("toggleJoin"); // 회원가입탭 
+		} 
+	}
+	changeStatus()
+</script>

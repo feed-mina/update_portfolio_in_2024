@@ -1,0 +1,607 @@
+<!-- 강의*세미나 > 세미나 개설 > 등록 > 세미나 개설 등록 -->
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+    <meta name="author" content="">
+    <title>세미나 개설 등록</title>
+    <link href="/css/style.css" rel="stylesheet"/>
+    <script src="/js/allVendors.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/sch/js/admin/lctreSemina/seminaRegist.js"></script>
+</head>
+<body>
+<!-- ===== header ====== -->
+<header id="header-html"></header>
+<!-- ===== /header ====== -->
+<div id="wrapper">
+    <!-- sidebar -->
+    <aside id="sidebar-html"></aside>
+    <!-- /sidebar -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content" class="pt-0">
+            <!-- ===== app ====== -->
+            <div id="app">
+                <!-- ===== container ====== -->
+                <div id="container" class="d-flex flex-column">
+                    <div class="container-fluid">
+                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                            <h1 class="h1 mb-0 text-gray-800">세미나 개설 등록</h1>
+                        </div>
+
+                        <div class="col">
+                            <div class="row mb-4">
+                                <div class="card shadow col">
+                                    <div class="card-body">
+                                        <div class="row justify-content-center mt25">
+                                            <div class="col">
+                                                <form class="d-flex justify-content-center col mb-3">
+                                                    <div class="col tbl_col_typ1">
+                                                        <table class="tableForm">
+                                                            <tr>
+                                                                <th class="col-2">
+                                                                    세미나 종류 <span class="required">*</span>
+                                                                </th>
+                                                                <td colspan="2" class="col-4">
+                                                                    <div>
+                                                                        <select id="seminaKndCode" class="custom-select" v-model="seminaData.seminaKndCode">
+                                                                            <option value="">세미나 종류 선택</option>
+                                                                            <option :value="obj.cmmnCode" v-for="(obj, idx) in seminaKndCodeList">{{obj.cmmnCodeNm}}</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="col-2">
+                                                                </td>
+                                                                <td class="col-4">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th class="col-2">
+                                                                    세미나명 <span class="required">*</span>
+                                                                </th>
+                                                                <td colspan="4" col="10">
+                                                                    <input class="form-control" id="seminaName" v-model="seminaData.seminaNm" type="text" placeholder="세미나명을 입력하세요." maxlength="100">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th class="col-2">
+                                                                    사용 언어 <span class="required">*</span>
+                                                                </th>
+                                                                <td colspan="2" class="col-4">
+                                                                    <div>
+                                                                        <select class="custom-select" v-model="seminaData.useLangCd">
+                                                                            <option :value="obj.cmmnCode" v-for="(obj, idx) in langCodeList">{{obj.cmmnCodeNm}}</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="col-2">
+                                                                </td>
+                                                                <td class="col-4">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th class="col-2" rowspan="2">
+                                                                    진행자명 <span class="required">*</span>
+                                                                </th>
+                                                                <td class="col-2">
+                                                                    <input class="form-control" id="progrsUser" type="text" placeholder="진행자 선택" data-toggle="modal" data-target="#userSearchModal">
+                                                                </td>
+                                                                <td class="col-2">
+                                                                    <a href="javascript:;" id="progrsUserBtn" class="btn btn-sm-icon btn-google btn_search_sm_width" data-toggle="modal" data-target="#userSearchModal">
+                                                                        <span class="text">찾기</span>
+                                                                    </a>
+                                                                </td>
+                                                                <th class="col-2" rowspan="3">
+                                                                    세미나 스타일 <span class="required">*</span>
+                                                                </th>
+                                                                <td class="col-4" rowspan="3">
+                                                                    <div style="height: 2rem; width: 100%; margin-bottom: 0.6rem;">
+                                                                        <div class="side-by-side" style="width: 10rem; height: 100%; text-align: center;">
+                                                                            <input type="radio" id="GENERAL" value="GENERAL" name="seminaStyle" v-model="seminaData.seminaStyleSe" checked>일반형
+                                                                        </div>
+                                                                        <div class="side-by-side" style="width: 10rem; height: 100%; text-align: center;">
+                                                                            <input type="radio" id="PROFESSIONAL" value="PROFESSIONAL" name="seminaStyle" v-model="seminaData.seminaStyleSe">전문형
+                                                                        </div>
+                                                                    </div>
+                                                                    <div style="height: 8rem; width: 100%;">
+                                                                        <div class="side-by-side" style="width: 10rem; height: 100%;">
+                                                                            <img id="generalStyleImg" width="230" height="130" src="/image/seminar_basic.jpg" alt="세미나 일반형 스타일 이미지입니다."/>
+                                                                        </div>
+                                                                        <div class="side-by-side" style="width: 10rem; height: 100%;">
+                                                                            <img id="professionalStyleImg" width="230" height="130" src="/image/seminar_advanced.jpg" alt="세미나 전문형 스타일 이미지입니다."/>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="2" id="progrsUserContainer">
+
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th class="col-2">
+                                                                    강연자 선택
+                                                                </th>
+                                                                <td class="col-2">
+                                                                    <input class="form-control" id="lctrUser" type="text" placeholder="강연자 선택" data-toggle="modal" data-target="#userSearchModal">
+                                                                </td>
+                                                                <td class="col-2">
+                                                                    <a href="javascript:;" id="lctrUserBtn" class="btn btn-sm-icon btn-google btn_search_sm_width" data-toggle="modal" data-target="#userSearchModal">
+                                                                        <span class="text">찾기</span>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="5" style="height: 6rem;" id="lctrUserContainer">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th class="col-2">
+                                                                    동시통역
+                                                                </th>
+                                                                <td class="col-4">
+                                                                    <input class="form-control" id="smtmIntrpr" type="text" placeholder="회원의 이메일을 입력하세요." data-toggle="modal" data-target="#userSearchModal">
+                                                                </td>
+                                                                <td class="col-2">
+                                                                    <a href="javascript:;" id="smtmIntrprBtn" class="btn btn-sm-icon btn-google btn_search_sm_width" data-toggle="modal" data-target="#userSearchModal">
+                                                                        <span class="text">찾기</span>
+                                                                    </a>
+                                                                </td>
+                                                                <td class="col-4" id="smtmIntrprContainer" colspan="2">
+
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th class="col-2">
+                                                                    세미나 날짜 <span class="required">*</span>
+                                                                </th>
+                                                                <td colspan="2">
+                                                                    <div class="input-group flex-nowrap bx_calendar">
+                                                                        <input id="seminaDt" type="text" class="form-control ui-datepicker-vertical-m-size datepicker inputTextStyle" v-model="seminaData.seminaDe" maxlength="8"/>
+                                                                    </div>
+                                                                </td>
+                                                                <th class="col-2">
+                                                                    세미나 시간 <span class="required">*</span>
+                                                                </th>
+                                                                <td class="col-4">
+                                                                    <div class="input-group flex-nowrap">
+                                                                        <input class="form-control watch" id="startHour" min="0" max="24" maxlength="2" v-model="seminaData.startHour" @input="hourValidation">&nbsp;:&nbsp;&nbsp;&nbsp;
+                                                                        <input class="form-control watch" id="startMinute" min="0" max="60" maxlength="2" v-model="seminaData.startMinute" @input="minuteValidation">&nbsp;&nbsp;&nbsp;~&nbsp;&nbsp;&nbsp;
+                                                                        <input class="form-control watch" id="endHour" min="0" max="24" maxlength="2" v-model="seminaData.endHour" @input="hourValidation">&nbsp;:&nbsp;&nbsp;&nbsp;
+                                                                        <input class="form-control watch" id="endMinute" min="0" max="60" maxlength="2" v-model="seminaData.endMinute" @input="minuteValidation">
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th class="col-2">
+                                                                    세미나 장소
+                                                                </th>
+                                                                <td colspan="2" class="col-4">
+                                                                    <input class="form-control" id="seminaPlaceNm" v-model="seminaData.seminaPlaceNm" type="text" placeholder="세미나 장소를 입력해주세요." maxlength="100"/>
+                                                                </td>
+                                                                <td class="col-2">
+                                                                </td>
+                                                                <td class="col-4">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th class="col-sm-2">
+                                                                    모집 기간 <span class="required">*</span>
+                                                                </th>
+                                                                <td colspan="4" class="flex-side-by-side">
+                                                                    <div class="input-group flex-nowrap col-3 box_order bx_calendar">
+                                                                        <input id="startPeriodDt" type="text" class="form-control ui-datepicker-vertical-m-size datepicker datepicker_from" v-model="seminaData.startPeriodDt"  maxlength="8"/>
+                                                                    </div>
+                                                                    <div class="input-group flex-nowrap col-3">
+                                                                        <input class="form-control watch" id="startPeriodHour" min="0" max="24" maxlength="2" v-model="seminaData.startPeriodHour" @input="hourValidation">&nbsp;:&nbsp;&nbsp;&nbsp;
+                                                                        <input class="form-control watch" id="startPeriodMinute" min="0" max="60" maxlength="2" v-model="seminaData.startPeriodMinute" @input="minuteValidation">&nbsp;&nbsp;&nbsp;~
+                                                                    </div>
+                                                                    <div class="input-group flex-nowrap col-3 bx_calendar">
+                                                                        <input id="endPeriodDt" type="text" class="form-control ui-datepicker-vertical-m-size datepicker datepicker_to" v-model="seminaData.endPeriodDt" maxlength="8"/>
+                                                                    </div>
+                                                                    <div class="input-group flex-nowrap col-3">
+                                                                        <input class="form-control watch" id="endPeriodHour" min="0" max="24" maxlength="2" v-model="seminaData.endPeriodHour" @input="hourValidation">&nbsp;:&nbsp;&nbsp;&nbsp;
+                                                                        <input class="form-control watch" id="endPeriodMinute" min="0" max="60" maxlength="2" v-model="seminaData.endPeriodMinute" @input="minuteValidation">
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th class="col-2">
+                                                                    회원종류 <span class="required">*</span>
+                                                                </th>
+                                                                <td colspan="2" class="row-height-3">
+                                                                    <div v-for="(obj, idx) in authorList" class="side-by-side" :key="obj.cmmnCode">
+                                                                        <input type="checkbox" name="userKndCode" :id="obj.cmmnCode" checked/>
+                                                                        <label :for="obj.cmmnCode" class="form-check-label">{{obj.cmmnCodeNm}}</label>
+                                                                    </div>
+                                                                </td>
+                                                                <th class="col-2">
+                                                                    최대 신청자 수 <span class="required">*</span>
+                                                                </th>
+                                                                <td class="col-4" >
+                                                                    <div>
+                                                                        <select class="custom-select" id="studentCount" v-model="seminaData.atnlcCo">
+                                                                            <option value="">명수 선택</option>
+                                                                            <option v-for="(num, index) in optionsWithStep" :value="num" :key="num">{{num}}</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th class="col-2">
+                                                                    현수막 이미지
+                                                                </th>
+                                                                <td colspan="2" class="row-height-6">
+                                                                    <div class="flex-nowrap image-description">
+                                                                        <div class="form-check col-7 ml-2 dp_center">
+                                                                            <img src="/image/add.svg" @click="fnAddIconClick" class="link-style" style="width:4rem; margin:12px;" alt=""/>
+                                                                            <div style="width:256px; height:144px; text-align:center;">
+                                                                                <img id="previewSmall" :src="preview" style="margin:auto; padding-top:25%;" alt="세미나 현수막 이미지입니다."/>
+                                                                            </div>
+                                                                            <input type="file" hidden id="inputSeminaImgFile" class="custom-file-input form-control" style="display: none;" accept="image/*" multiple/>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="flex-nowrap image-description">
+                                                                        <ul style="margin-left: 20px;">
+                                                                            <li>
+                                                                                16:9 가로 비율의 직사각형 이미지
+                                                                            </li>
+                                                                            <li>
+                                                                                704px X 396px 이 적합함.
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </td>
+                                                                <td colspan="2">
+                                                                    <div class="flex-nowrap image-description">
+                                                                        <div class="form-check col-6 ml-2">
+                                                                            <div style="width:400px; height:230px; text-align:center;">
+                                                                                <img id="preview" :src="preview" style="margin:auto;" alt="세미나 현수막 이미지입니다."/>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th class="col-2">
+                                                                    세미나 개요
+                                                                </th>
+                                                                <td colspan="4" class="row-height-3">
+                                                                    <textarea maxlength="500" v-model="seminaData.seminaDc" placeholder="세미나 참석자를 위한 세미나 개요를 입력해주세요." style="width: 100%;">
+                                                                    </textarea>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th class="col-2">
+                                                                    세미나 상세 설명
+                                                                </th>
+                                                                <td colspan="4">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="5">
+                                                                    <div style="overflow-y: scroll;" class="row-height-6">
+																		<textarea class="col-12" maxlength="2000" v-model="seminaData.seminaCn" placeholder="세미나 상세 설명을 2,000자 이내로 입력해주세요." style="height: 100%;">
+																		</textarea>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th rowspan="2">
+                                                                    검색 키워드 등록
+                                                                </th>
+                                                                <td class="col-2">
+                                                                    <div>
+                                                                        <input class="form-control" id="seminaKwrd" @keyup.enter="createKeyword" type="text" placeholder="# 키워드 등록" maxlength="9">
+                                                                    </div>
+                                                                </td>
+                                                                <td colspan="3" id="keywordContainer" class="keywordContainer">
+
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="4">
+                                                                    <span id="message" class="message">* 키워드는 30개까지 등록이 가능합니다.</span>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </form>
+                                                <div class="d-flex justify-content-center mb-3">
+                                                    <div class="pr-5"  style="margin-left: 22rem;">
+                                                        <a href="javascript:;" class="btn btn-icon btn-google btn_search_width" @click="fnCancel">
+                                                            <span class="text">취소</span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="pl-5">
+                                                        <a href="javascript:;" class="btn btn-icon btn-primary btn_search_width"  @click="fnSave">
+                                                            <span class="text">저장</span>
+                                                        </a>
+                                                    </div>
+                                                    <div style="margin-left: 14rem;">
+                                                        <a href="javascript:;" data-toggle="modal" data-target="#seminaCopyModal" @click="fnCopySemina" class="btn btn-icon btn-orange btn_search_width btn-side" id="btnCopy">
+                                                            <span class="text">복사</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ===== /container ====== -->
+            </div>
+            <!-- ===== /app ====== -->
+            <!-- ===== detail Modal ====== -->
+            <div class="modal fade" id="seminaCopyModal" tabindex="-1" role="dialog" aria-labelledby="seminaCopyModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-grid" role="document">
+                    <div class="modal-content modal-xxl-size" id="modalContent">
+                        <div class="modal-header">
+                            <h5 class="modal-title font-weight-bolder" id="detailModalLabel" style="margin:auto auto;">복사하기</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close" style="margin: 0px !important;">
+                                <span aria-hidden="true" id="closeModal">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" id="modalBody">
+                            <div class="d-flex justify-content-center mt-2">
+                                <div class="x-scroll">
+                                    <div class="d-flex flex-column">
+                                        <div class="container-fluid">
+                                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                                <h1 class="h1 mb-0 text-gray-800">세미나 개설 리스트</h1>
+                                            </div>
+                                            <!-- noticeList -->
+                                            <div class="row justify-content-center">
+                                                <div class="col">
+                                                    <!-- ==== search ==== -->
+                                                    <div class="card shadow">
+                                                        <div class="card-body">
+                                                            <div class="d-flex align-items-center justify-content-center">
+                                                                <div class="input-group dp_center mr-3" style="width:50%">
+                                                                    <input type="text" v-model="searchData.searchText" class="form-control inp_search" @keyup.enter="fnSearch()" placeholder="검색어를 입력해주세요.">
+                                                                </div>
+                                                                <div class="input-group ml-3 dp_center btn_search_width" style="width:120px">
+                                                                    <div>
+                                                                        <button type="button" class="form-control btn btn-info btn_search_width" @click="fnSearch()"> 검색하기 </button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="ml-3 dp_center">
+                                                                    <a class="search_details">
+                                                                        <img src="/image/bottom_icon.svg" alt="">
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div id="subSearch" style="margin-right: -0.75rem; margin-left: -0.75rem;">
+                                                                    <div class="visibil">
+                                                                        <div class="sup_btn_box3">
+                                                                            <div class="form-check">
+                                                                                <input type="checkbox" id="canceledSeminaInclude" v-model="searchData.canceledSeminaInclude"/>
+                                                                                <label for="canceledSeminaInclude" class="form-check-label">취소 처리 포함</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- </div> -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- ==== /search ==== -->
+                                                    <div class="row mb-4" style="padding-top : 40px;">
+                                                        <div class="col">
+                                                            <div class="card shadow">
+                                                                <div class="card-body">
+                                                                    <div class="row">
+                                                                        <div class="col-6 font-weight-bold">
+                                                                            <span v-if="((totalCount - (searchData.pageNo - 1) * 10) - 10) < 0">출력 : 1 ~ {{totalCount - (searchData.pageNo - 1) * 10}}</span>
+                                                                            <span v-else>출력 : {{(totalCount - (searchData.pageNo - 1) * 10) - 10}} ~ {{totalCount - (searchData.pageNo - 1) * 10}}</span>
+                                                                        </div>
+                                                                        <div class="col-6 mb-3 font-weight-bold d-flex justify-content-end">
+                                                                            총건 &nbsp;
+                                                                            <span>{{totalCount}}건</span>
+                                                                        </div>
+                                                                        <div class="table-responsive">
+                                                                            <table class="table table-bordered text-dark table-hover text-center" id="tableList">
+                                                                                <thead>
+                                                                                <tr>
+                                                                                    <th>선택</th>
+                                                                                    <th style="width: 10%;">현수막 이미지</th>
+                                                                                    <th style="width: 10%;">세미나실 스타일</th>
+                                                                                    <th>세미나 종류</th>
+                                                                                    <th>세미나명</th>
+                                                                                    <th>진행자명</th>
+                                                                                    <th>회원 종류</th>
+                                                                                    <th>최대 신청자 수</th>
+                                                                                    <th>세미나 날짜</th>
+                                                                                    <th>세미나 시간</th>
+                                                                                    <th>세미나 장소</th>
+                                                                                    <th>모집 상태</th>
+                                                                                    <th>현 신청자</th>
+                                                                                    <th>진행 상황</th>
+                                                                                </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                <tr v-for="(obj, idx) in seminaList" v-if="seminaList.length">
+                                                                                    <td>
+                                                                                        <input type="radio" :id="obj.seminaSeq" name="seminaNum">
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <img :src="obj.seminaImageCn" class="w-50" alt="세미나 현수막 이미지입니다.">
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <img src="/image/no_img.png" class="w-50" alt="세미나실 스타일 이미지입니다.">
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        {{obj.seminaKndCodeNm}}
+                                                                                    </td>
+                                                                                    <td><a href="javascript:;" class="link-style" @click="fnDetail(obj.seminaSeq)" id="seminaNm">{{ellipsisText(obj.seminaNm)}}</a></td>
+                                                                                    <td>{{obj.userNm}}</td>
+                                                                                    <td>
+                                                                                        {{obj.atnlcAuthorArray}}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        {{obj.atnlcCo}}명
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        {{obj.seminaDe}}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        {{obj.seminaBeginTimeHour}}:{{obj.seminaBeginTimeMinute}}~{{obj.seminaEndTimeHour}}:{{obj.seminaEndTimeMinute}}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        {{obj.seminaPlaceNm}}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        {{obj.seminaRecruitmentStatus}}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <a href="javascript:;" class="link-style">
+                                                                                            {{obj.seminaUserCnt}}명
+                                                                                        </a>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        {{obj.seminaSttusSeStr}}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr v-else>
+                                                                                    <td colspan="14">조회된 데이터가 없습니다.</td>
+                                                                                </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                            <ul id="pagination" class="pagination justify-content-center" style="margin-bottom: 1.5rem;"></ul>
+                                                                            <div class="btn_search_width text-center">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- ==== /searchList ==== -->
+                                                </div>
+                                            </div>
+                                            <!-- /noticeList -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="d-flex justify-content-center" style="margin: auto auto;">
+                                <div class="pr-5">
+                                    <a href="javascript:;" class="btn btn-icon btn-google btn_search_width" @click="fnModalCancel">
+                                        <span class="text">취소</span>
+                                    </a>
+                                </div>
+                                <div class="pl-5">
+                                    <a href="javascript:;" class="btn btn-icon btn-primary btn_search_width"  @click="fnModalSave" id="btnModalSave">
+                                        <span class="text">확인</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ===== /detail Modal ====== -->
+            <!-- ===== user search Modal ====== -->
+            <div class="modal fade" id="userSearchModal" tabindex="-2" role="dialog" aria-labelledby="userSearchModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-grid" role="document">
+                    <div class="modal-content modal-s-size" id="userSearchModalContent" style="height:100%;">
+                        <div class="modal-header">
+                            <h5 class="modal-title font-weight-bolder" id="userSearchDetailModalLabel" style="margin:auto auto;">회원 검색</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close" style="margin: 0px !important;">
+                                <span aria-hidden="true" id="userSearchCloseModal">×</span>
+                            </button>
+                        </div>
+                        <div id="userSearchModalBody">
+                            <div class="d-flex flex-column">
+                                <div class="container-fluid">
+                                    <div class="row justify-content-center">
+                                        <div class="col">
+                                            <!-- ==== search ==== -->
+                                            <div class="card shadow">
+                                                <div class="card-body">
+                                                    <div class="d-flex">
+                                                        <input type="text" id="userSearchInput" v-model="searchData.searchText" class="form-control inp_search" @keyup.enter="userSearch()" placeholder="검색어를 입력하세요.">
+                                                        <img src="/image/btn_search_icon.svg" id="userSearchBtn" alt="" style="height: 2.6rem; margin-left: 1rem;" class="link-style">
+                                                    </div>
+                                                </div>
+                                                <div id="lctrUserRegistMessage" class="card-body" style="color: red; padding-top: 0px;">* 강연자는 10명 까지 선택이 가능합니다.</div>
+                                            </div>
+                                            <!-- ==== /search ==== -->
+                                            <div class="row mb-4" style="padding-top: 20px;">
+                                                <div class="col">
+                                                    <div class="card shadow">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="table-responsive">
+                                                                    <div class="radio-group"></div>
+                                                                    <table class="table table-bordered text-center text-dark table-hover">
+                                                                        <colgroup></colgroup>
+                                                                        <thead>
+                                                                        <tr>
+                                                                            <th>선택</th>
+                                                                            <th>교수명</th>
+                                                                            <th>이메일</th>
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                        <tr v-for="(obj, idx) in userList" v-if="userList.length">
+                                                                            <div class="radio-group">
+                                                                                <td>
+                                                                                    <input type="checkbox" name="userNum" :id="obj.userSeq">
+                                                                                </td>
+                                                                            </div>
+                                                                            <!-- 교수명 -->
+                                                                            <td>{{obj.userNm}}</td>
+                                                                            <td>{{obj.userEmail}}</td>
+                                                                        </tr>
+                                                                        <tr v-else>
+                                                                            <td colspan="3">조회된 데이터가 없습니다.</td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    <ul class="pagination justify-content-center" style="margin-bottom: 1.5rem;"></ul>
+                                                                    <div></div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="border-top m-4"></div>
+                                                        </div>
+                                                    </div>
+                                                </div><!-- ==== /searchList ==== --></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="d-flex justify-content-center" style="margin: auto auto;">
+                                <div class="pr-5">
+                                    <a href="javascript:;" class="btn btn-icon btn-google btn_search_width" @click="fnUserModalCancel">
+                                        <span class="text">취소</span>
+                                    </a>
+                                </div>
+                                <div class="pl-5">
+                                    <a href="javascript:;" class="btn btn-icon btn-primary btn_search_width" id="btnUserSearchModalSave">
+                                        <span class="text">확인</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ===== /user search Modal ====== -->
+        </div>
+    </div>
+</div>
+</body>
+</html>

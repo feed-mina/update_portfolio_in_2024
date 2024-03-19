@@ -1,0 +1,762 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="user">
+	<!-- 강의 신청가능 리스트 -->
+	<select id="selectLctreAtnlcPosblList" parameterType="map" resultType="camelHashMap">
+		/* user.selectLctreAtnlcPosblList */
+		SELECT
+			tla.atnlc_user_seq
+			,IFNULL(tla.atnlc_sttus_se, 'R') as atnlc_sttus_se <!-- R:강의신청 C:강의신청반려 통역가등은 따로 신청하지않으므로 기본 'R'처리 -->
+			,CASE WHEN (tla.atnlc_user_seq) IS NOT NULL THEN 'Y' ELSE 'N' END AS apply_yn
+			<!-- ,CASE WHEN (tvb.bsk_user_seq) IS NOT NULL THEN 'Y' ELSE 'N' END AS bsk_yn -->
+			,CASE WHEN (NOW() BETWEEN tl.rcrit_begin_dt AND tl.rcrit_end_dt) THEN 'Y' ELSE 'N' END AS rcrit_appliable_yn
+			,tl.lctre_seq
+			,tl.lctre_nm
+			,tl.lctre_knd_code
+			,fn_codenm(tl.lctre_knd_code) AS lctre_knd_code_nm
+			,tl.use_lang_cd
+			,fn_codenm(tl.use_lang_cd) AS use_lang_cd_nm
+			,tl.specl_lctre_at
+			,tl.profsr_user_seq
+			,fn_usernm(tl.profsr_user_seq) AS profsr_user_seq_nm
+			,tl.lctre_week_array
+			,tl.lctre_begin_de
+			,tl.lctre_end_de
+			,tl.lctre_begin_time
+			,tl.lctre_end_time
+			,tl.lctre_place_nm
+			,tl.rcrit_begin_dt
+			,tl.rcrit_end_dt
+			,tl.atnlc_author_array
+			,tl.atnlc_co
+			,tl.lctre_image_cn
+			,tl.lctre_dc
+			,tl.detail_lctre_co
+			,tl.clctre_code
+			,tl.clctre_dc
+			,tl.regist_id
+			,tl.regist_dt
+			,tl.updt_id
+			,tl.updt_dt
+			,tl.lctre_sttus_se -- 강의상태- R C D
+			,IF(tl.lctre_sttus_se in ('R', 'C') , 'Y', 'N') as use_at
+			, CASE
+				WHEN NOW() <![CDATA[<]]> tl.rcrit_begin_dt THEN 'P'
+				WHEN tl.rcrit_begin_dt <![CDATA[<=]]> NOW() AND NOW() <![CDATA[<=]]> tl.rcrit_end_dt THEN 'I'
+				WHEN tl.rcrit_end_dt <![CDATA[<]]> NOW() THEN 'C'
+			END AS rcrit_status
+			, CASE
+				WHEN NOW() <![CDATA[<]]> tl.rcrit_begin_dt THEN '모집예정'
+				WHEN tl.rcrit_begin_dt <![CDATA[<=]]> NOW() AND NOW() <![CDATA[<=]]> tl.rcrit_end_dt THEN '모집중'
+				WHEN tl.rcrit_end_dt <![CDATA[<]]> NOW() THEN '모집마감'
+			END AS lctre_status_nm
+			,(SELECT lctre_sn from tb_lctre_fx tlf  <!-- 현재 서버 시간이랑 비교해서 tb_lctre_fx 의 lctre_dt랑 오늘 날짜가 같은 lctre_sn을 리턴, 없으면 null -->
+				WHERE tlf.lctre_seq = tl.lctre_seq 
+					AND DATE_FORMAT(now(), '%Y%m%d') = tlf.lctre_dt
+					AND tlf.use_at = 'Y' -- 휴강제외
+				LIMIT 1
+			) AS lctre_sn_active
+			,(SELECT GROUP_CONCAT(lctre_dt) FROM tb_lctre_fx tlf WHERE tlf.lctre_seq = tl.lctre_seq) as lctre_dt_list
+		FROM tb_lctre tl
+			LEFT JOIN tb_lctre_atnlc tla 
+				ON tl.lctre_seq = tla.lctre_seq
+				AND tla.atnlc_user_seq = #{user.userSeq}
+			<!-- LEFT JOIN tb_vod_bsk tvb 
+				ON tvb.vod_type_seq = tl.lctre_seq 
+				AND tvb.bsk_user_seq = #{user.userSeq} -->
+		WHERE (1=1)
+			<!-- 전체 강의중 내 카테고리(ST, TJ, ETC 등등)에 맞는 강의만 -->
+			AND (
+				tl.atnlc_author_array = 'ALL' OR
+				FIND_IN_SET(#{user.userAuthor}, tl.atnlc_author_array) <![CDATA[>]]> 0
+			)
+
+			AND (
+				tl.lctre_sttus_se in ('R', 'C') -- 미정이거나 확정만
+				<if test='includeCanceled == "Y"'>
+					OR ts.lctre_sttus_se in ('D') -- 폐강 포함
+				</if>
+			)
+
+			<if test='@com.sch.util.CommonUtil@isNotEmpty(lctreKndCode)'>
+				AND tl.lctre_knd_code = #{lctreKndCode} -- LCTRE_KND_1
+			</if>
+
+			<if test='applyYn == "Y"'>
+				<!-- AND tla.atnlc_user_seq IS NOT NULL -->
+				<!-- 내가 신청한것만 + 내가 통역가인 경우-->
+				AND (
+					tla.atnlc_user_seq IS NOT NULL
+					OR tl.smtm_intrpr_seq = #{user.userSeq}
+				)
+			</if>
+			<if test='bskYn == "Y"'>
+				<!-- 내가 vod 신청한것만 -->
+				AND tvb.bsk_user_seq IS NOT NULL
+			</if>
+			<if test='@com.sch.util.CommonUtil@isNotEmpty(searchText)'>
+				AND ( 
+					 tl.lctre_nm like concat('%', #{searchText}, '%')
+					 OR tl.lctre_place_nm like concat('%', #{searchText}, '%')
+				)
+			</if>
+			<!-- "applySttus": ["R"] 신청완료, 출석은 다른 tb_lctre_atend 테이블 -->
+			<if test='@com.sch.util.CommonUtil@isNotEmpty(applySttus)'>
+				AND tla.atnlc_sttus_se IN
+				<foreach collection="applySttus" item="type" index="index" open="(" close=")" separator=",">
+					#{type}
+				</foreach>
+			</if>
+			<choose>
+				<when test='@com.sch.util.CommonUtil@isNotEmpty(rcritType) and rcritType == "P"'>
+					AND NOW() <![CDATA[<]]> tl.rcrit_begin_dt 
+				</when>
+				<when test='@com.sch.util.CommonUtil@isNotEmpty(rcritType) and rcritType == "I"'>
+					AND NOW() BETWEEN tl.rcrit_begin_dt AND tl.rcrit_end_dt
+				</when>
+				<when test='@com.sch.util.CommonUtil@isNotEmpty(rcritType) and rcritType == "C"'>
+					AND tl.rcrit_end_dt <![CDATA[<]]> NOW()
+				</when>
+
+			</choose>
+			
+		<!-- 전체강의 시작이 도래하는 순서대로 -->
+		ORDER BY tl.lctre_begin_de DESC, tl.lctre_begin_time
+			<!-- AND CURRENT_TIMESTAMP() between tl.rcrit_begin_dt and tl.rcrit_end_dt -->
+	</select>
+
+	<!-- 강의 신청 -->
+	<insert id="insertLctreAtnlc" parameterType="map">
+		/* user.insertLctreAtnlc */
+		INSERT INTO tb_lctre_atnlc
+		(
+			lctre_seq 			-- 강의일련
+			, atnlc_user_seq	-- 수강이용자일련
+			, atnlc_sttus_se	-- 수강상태구분(R:신청,C:취소)
+			, reqst_dt
+		)
+		VALUES
+		(
+			#{lctreSeq}
+			, #{user.userSeq}
+			, 'R'
+			, now()
+		)
+	</insert>
+
+	<delete id="deletetLctreAtnlc" parameterType="map">
+		/* user.deletetLctreAtnlc */
+		DELETE FROM tb_lctre_atnlc
+		WHERE lctre_seq = #{lctreSeq} -- LCTRE_00000013
+			AND atnlc_user_seq = #{user.userSeq} -- USER_0000123
+	</delete>
+
+	<!-- 개별강좌 출석 -->
+	<insert id="insertLctreAtend" parameterType="map">
+		/* user.insertLctreAtend */
+		INSERT INTO tb_lctre_atend
+		(
+			lctre_seq
+			, lctre_sn
+			, atnlc_user_seq
+			, atnlc_sttus_se
+			, atend_dt
+		)
+		VALUES
+		(
+			#{lctreSeq}
+			, #{lctreSn}
+			, #{user.userSeq}
+			, 'A'
+			, now()
+		)
+		
+		ON DUPLICATE KEY
+		UPDATE atend_dt = now()
+	</insert>
+
+	<!-- 세미나 시작 -->
+	<!-- 세미나 시작 -->
+	<!-- 세미나 시작 -->
+
+	<!-- 세미나 신청가능리스트 -->
+	<select id="selectSeminaPosbleList" parameterType="map" resultType="camelHashMap">
+		SELECT
+			tsa.atnlc_user_seq
+			,CASE WHEN (tsa.atnlc_user_seq) IS NOT NULL THEN 'Y' ELSE 'N' END AS apply_yn
+			<!-- ,CASE WHEN (tvb.bsk_user_seq) IS NOT NULL THEN 'Y' ELSE 'N' END AS bsk_yn -->
+			,CASE WHEN (NOW() BETWEEN ts.rcrit_begin_dt AND ts.rcrit_end_dt) THEN 'Y' ELSE 'N' END AS rcrit_appliable_yn
+			,fn_usernm(tsa.atnlc_user_seq) atnlc_user_nm
+			,tsa.reqst_dt
+			,tsa.atend_dt
+			,ts.semina_seq
+			,ts.semina_nm
+			,ts.semina_knd_code
+			,ts.semina_knd_code
+			,fn_codenm(ts.semina_knd_code) semina_knd_code_nm
+			,use_lang_cd
+			,fn_codenm(ts.use_lang_cd) use_lang_cd_nm
+			,ts.progrs_user_seq -- 진행자
+			,fn_usernm(ts.progrs_user_seq) progrs_user_seq_nm
+			,ts.lctr_user_seq_array -- 강연이용자 배열 USER_123, USER_321
+			,CASE WHEN INSTR(ts.lctr_user_seq_array, #{user.userSeq}) <![CDATA[>]]> 1 THEN 'Y' ELSE 'N' END AS lctr_user_yn
+			,ts.semina_style_se
+			,ts.semina_de
+			,ts.semina_begin_time
+			,ts.semina_end_time
+			,ts.rcrit_begin_dt
+			,ts.rcrit_end_dt
+			,ts.semina_place_nm
+			,ts.semina_image_cn
+			,ts.semina_dc
+			,ts.semina_cn
+			,ts.on_air_at
+			,ts.vod_file_seq
+			,ts.semina_sttus_se -- 세미나상태- R C D
+			,IF(ts.semina_sttus_se in ('R', 'C') , 'Y', 'N') as use_at
+			, CASE
+				WHEN NOW() <![CDATA[<]]> ts.rcrit_begin_dt THEN 'P'
+				WHEN ts.rcrit_begin_dt <![CDATA[<=]]> NOW() AND NOW() <![CDATA[<=]]> ts.rcrit_end_dt THEN 'I'
+				WHEN ts.rcrit_end_dt <![CDATA[<]]> NOW() THEN 'C'
+			END AS rcrit_status
+			, CASE
+				WHEN NOW() <![CDATA[<]]> ts.rcrit_begin_dt THEN '모집예정'
+				WHEN ts.rcrit_begin_dt <![CDATA[<=]]> NOW() AND NOW() <![CDATA[<=]]> ts.rcrit_end_dt THEN '모집중'
+				WHEN ts.rcrit_end_dt <![CDATA[<]]> NOW() THEN '모집마감'
+			END AS semina_status_nm
+			,CASE WHEN DATE_FORMAT(NOW(), '%Y%m%d') = ts.semina_de THEN 'Y' ELSE 'N' END AS semina_active
+			,IFNULL(tsa.atnlc_sttus_se, 'R') as atnlc_sttus_se  -- 나의 상담상태 R신청 A출석 N결석 D교수일방적인취소, 통역가등은 따로 신청하지않으므로 기본 'R'처리
+			,tsa.reqst_dt -- 유저가 신청한 날짜
+			,tsa.atend_dt -- 유저 출석 날짜
+			,ts.semina_place_nm
+		FROM
+			tb_semina ts
+			LEFT JOIN tb_semina_atnlc tsa 
+				ON tsa.semina_seq = ts.semina_seq 
+				AND tsa.atnlc_user_seq = #{user.userSeq}
+			<!-- LEFT JOIN tb_vod_bsk tvb 
+				ON tvb.vod_type_seq = ts.semina_seq 
+				AND tvb.bsk_user_seq = #{user.userSeq} -->
+		WHERE (1=1)
+			<!-- 전체 세미나중 내 카테고리(ST, TJ, ETC 등등)에 맞는 강의만 -->
+			AND (
+				ts.atnlc_author_array = 'ALL' OR
+				FIND_IN_SET(#{user.userAuthor}, ts.atnlc_author_array) <![CDATA[>]]> 0
+			)
+
+			AND (
+				ts.semina_sttus_se in ('R', 'C') -- 미정이거나 확정만
+				<if test='includeCanceled == "Y"'>
+					OR ts.semina_sttus_se in ('D') -- 세미나취소 포함
+				</if>
+			)
+			<if test='@com.sch.util.CommonUtil@isNotEmpty(seminaKndCode)'>
+				AND ts.semina_knd_code = #{seminaKndCode} -- SEMINA_KND_1...
+			</if>
+			<if test='applyYn == "Y"'>
+				<!-- 내가 신청한것만 + 내가 강연자중 한명일 경우 + 내가 통역가인 경우-->
+				AND (
+						tsa.atnlc_user_seq IS NOT NULL
+						OR INSTR(ts.lctr_user_seq_array, #{user.userSeq}) <![CDATA[>]]> 1
+						OR ts.smtm_intrpr_seq = #{user.userSeq}
+					)
+			</if>
+			<if test='bskYn == "Y"'>
+				<!-- 내가 vod 신청한것만 -->
+				AND tvb.bsk_user_seq IS NOT NULL
+			</if>
+			<if test='@com.sch.util.CommonUtil@isNotEmpty(applySttus)'>
+				<!-- 내가 신청한것의 상태값 "applySttus": ["R", "A", "N"] 신청완료, 출석완료, 미출석 인경우만 -->
+				AND tsa.atnlc_sttus_se IN
+				<foreach collection="applySttus" item="type" index="index" open="(" close=")" separator=",">
+					#{type}
+				</foreach>
+			</if>
+			<if test='@com.sch.util.CommonUtil@isNotEmpty(searchText)'>
+				AND ( 
+					 ts.semina_nm like concat('%', #{searchText}, '%')
+					 OR ts.semina_place_nm like concat('%', #{searchText}, '%')
+				)
+			</if>
+			<choose>
+				<when test='@com.sch.util.CommonUtil@isNotEmpty(rcritType) and rcritType == "P"'>
+					AND NOW() <![CDATA[<]]> ts.rcrit_begin_dt 
+				</when>
+				<when test='@com.sch.util.CommonUtil@isNotEmpty(rcritType) and rcritType == "I"'>
+					AND NOW() BETWEEN ts.rcrit_begin_dt AND ts.rcrit_end_dt
+				</when>
+				<when test='@com.sch.util.CommonUtil@isNotEmpty(rcritType) and rcritType == "C"'>
+					AND ts.rcrit_end_dt <![CDATA[<]]> NOW()
+				</when>
+
+			</choose>
+		ORDER BY semina_de DESC
+	</select>
+
+	<insert id="insertSeminaAtnlc" parameterType="map">
+		/* user.insertSeminaAtnlc */
+		INSERT INTO tb_semina_atnlc
+		(
+			semina_seq 			-- 세미나일련
+			, atnlc_user_seq	-- 수강이용자일련
+			, atnlc_sttus_se	-- 수강상태구분(R:신청,C:취소 N결석 A출석)
+			, reqst_dt
+		)
+		VALUES
+		(
+			#{seminaSeq}
+			, #{user.userSeq}
+			, 'R'
+			, now()
+		)
+	</insert>
+
+	<update id="updateSeminaAtnlc" parameterType="map">
+        /* user.updateSeminaAtnlc */
+		UPDATE tb_semina_atnlc tea
+		SET 
+			atnlc_sttus_se = #{seminaSttusSe} -- R신청 A출석 N결석
+			<if test='seminaSttusSe == "A"'>
+				,atend_dt = now()
+			</if>
+		WHERE tea.semina_seq = #{seminaSeq} -- 'SEMINA_00000013'
+			AND tea.atnlc_user_seq = #{user.userSeq} -- 'USER_00000132'
+    </update>
+	
+	<delete id="deleteSeminaAtnlc" parameterType="map">
+		DELETE FROM tb_semina_atnlc
+		WHERE semina_seq = #{seminaSeq} -- 'SEMINA_00000013'
+			AND atnlc_user_seq = #{user.userSeq} -- 'USER_00000132'
+	</delete>
+
+	<!-- 시작 -->
+	<!-- 시작 -->
+	<!-- 시작 -->
+
+	<!-- 교수목록 -->
+	<select id="selectPrfsorList" parameterType="map" resultType="camelHashMap">
+		SELECT 
+			tu.user_seq
+			,tu.user_email
+			,tu.user_nm
+			,tu.user_ncnm
+		 from tb_user tu
+		WHERE (1=1) 
+			AND use_at IN ('Y') 
+			AND user_author = 'PR'
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(userNm)'>
+			AND tu.user_nm like concat('%', #{userNm}, '%')
+		</if>
+	</select>
+
+	<!-- 교수가 상담하는 목록 - tb_ X tb__fx 개수 -->
+	<select id="selectPrfsorNoticePosbleList" parameterType="map" resultType="camelHashMap">
+		SELECT 
+			tc.profsr_user_seq
+			,tcr._user_seq
+			,fn_usernm(tcr._user_seq) _user_seq_nm
+			,CASE WHEN (tcr._user_seq) IS NOT NULL THEN 'Y' ELSE 'N' END AS apply_yn
+			,CASE WHEN (NOW() BETWEEN tc.rcrit_begin_dt AND tc.rcrit_end_dt) THEN 'Y' ELSE 'N' END AS rcrit_appliable_yn
+			,fn_usernm(tc.profsr_user_seq) profsr_user_seq_nm 
+			,tc._nm
+			,tc._knd_code
+			,fn_codenm(tc._knd_code) as _knd_code_nm
+			,tcf._dt -- 상담날짜- 요일은dayjs로
+			,tcf._begin_time
+			,tcf._end_time
+			,tcf._seq 
+			,tcf._sn 
+			,tcf.on_air_at
+			,(select count(1) from tb__reqst tcr WHERE tcr._seq = tcf._seq AND tcr._sn = tcf._sn ) _co_current
+			,_co -- 총상담생수
+			, CASE 
+				WHEN NOW() <![CDATA[<]]> tc.rcrit_begin_dt THEN 'P'
+				WHEN tc.rcrit_begin_dt <![CDATA[<=]]> NOW() AND NOW() <![CDATA[<=]]> tc.rcrit_end_dt THEN 'I'
+				WHEN tc.rcrit_end_dt <![CDATA[<]]> NOW() THEN 'C'
+			END AS rcrit_status
+			, CASE
+				WHEN NOW() <![CDATA[<]]> tc.rcrit_begin_dt THEN '모집예정'
+				WHEN tc.rcrit_begin_dt <![CDATA[<=]]> NOW() AND NOW() <![CDATA[<=]]> tc.rcrit_end_dt THEN '모집중'
+				WHEN tc.rcrit_end_dt <![CDATA[<]]> NOW() THEN '모집마감'
+			END AS _status_nm
+			,CASE WHEN 
+				(
+					DATE_FORMAT(NOW(), '%Y%m%d') = tcf._dt
+					AND DATE_FORMAT(NOW(), '%H%i') BETWEEN tcf._begin_time AND tcf._end_time
+				) THEN 'Y' ELSE 'N' END 
+				AS _active
+			,tcf.use_at -- 사용여부 Y-N
+			,tcr._sttus_se -- 상담상태 R신청 A출석 N결석 D교수일방적인취소
+			,tcr.reqst_dt -- 유저가 신청한 날짜
+			,tcr.atend_dt -- 유저 출석 날짜
+			,tc._place_nm
+			<!-- ,tcf.*  -->
+		FROM
+			tb_ tc
+			LEFT JOIN tb__fx tcf ON tc._seq = tcf._seq
+			LEFT JOIN tb__reqst tcr 
+				ON tcf._seq = tcr._seq 
+				AND tcf._sn = tcr._sn
+				AND tcr._user_seq = #{user.userSeq}
+		WHERE (1=1)
+		AND (
+			tcf.use_at in ('Y') --  미취소만
+			<if test='includeCanceled == "Y"'>
+				OR tcf.use_at in ('N') -- 취소 포함
+			</if>
+		)
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(prfsorUserSeq)'>
+			AND tc.profsr_user_seq = #{prfsorUserSeq} -- ex USER_00000017
+		</if>
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(KndCode)'>
+			AND tc._knd_code = #{KndCode} -- _knd_code_1 or _knd_code_2
+		</if>
+		<if test='applyYn == "Y"'>
+			AND tcr._user_seq IS NOT NULL
+		</if>
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(searchText)'>
+			AND ( 
+				 tc._place_nm like concat('%', #{searchText}, '%')
+			)
+		</if>
+		<!-- "applySttus": ["R", "A", "N"] 신청완료, 출석완료, 미출석 인경우만 -->
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(applySttus)'>
+			AND tcr._sttus_se IN
+			<foreach collection="applySttus" item="type" index="index" open="(" close=")" separator=",">
+				#{type}
+			</foreach>
+		</if>
+		<!-- 이하 모집기간 서치 -->
+		<choose> 
+			<when test='@com.sch.util.CommonUtil@isNotEmpty(rcritType) and rcritType == "P"'>
+				AND NOW() <![CDATA[<]]> tc.rcrit_begin_dt 
+			</when>
+			<when test='@com.sch.util.CommonUtil@isNotEmpty(rcritType) and rcritType == "I"'>
+				AND NOW() BETWEEN tc.rcrit_begin_dt AND tc.rcrit_end_dt
+			</when>
+			<when test='@com.sch.util.CommonUtil@isNotEmpty(rcritType) and rcritType == "C"'>
+				AND tc.rcrit_end_dt <![CDATA[<]]> NOW()
+			</when>
+		</choose>
+		ORDER BY tcf._dt DESC, tcf._begin_time
+	</select>
+
+	<insert id="insertNoticeReqst" parameterType="map">
+		/* user.insertNoticeReqst */
+		INSERT INTO tb__reqst
+		(
+			_seq 			-- 상담일련
+			, _sn	-- 상담순번일련
+			, _user_seq	-- 상담유저이용자일련
+			, _sttus_se	-- 상담상태(R:신청,C:취소 N결석 A출석)
+			, reqst_dt
+		)
+		VALUES
+		(
+			#{Seq}
+			, #{Sn}
+			, #{user.userSeq}
+			, 'R'
+			, now()
+		)
+	</insert>
+	<update id="updateNoticeReqst" parameterType="map">
+        /* user.updateNoticeReqst */
+		UPDATE tb__reqst ter
+		SET 
+			_sttus_se = #{SttusSe} -- R신청 A출석 N결석
+			<if test='SttusSe == "A"'>
+				,atend_dt = now()
+			</if>
+		WHERE ter._seq = #{Seq} -- 'CNSLT_00000013'
+			AND ter._sn = #{Sn} -- 2
+			AND ter._user_seq = #{user.userSeq} -- 'USER_00000132'
+    </update>
+	
+	<delete id="deleteNoticeReqst" parameterType="map">
+		DELETE FROM tb__reqst
+		WHERE _seq = #{Seq} -- 'CNSLT_00000013'
+			AND _sn = #{Sn} -- 2
+			AND _user_seq = #{user.userSeq} -- 'USER_00000132'
+	</delete>
+	<!-- 끝 -->
+
+	<!-- 체험신청 시작 -->
+	<select id="selectExprnPosbleList" parameterType="map" resultType="camelHashMap">
+		SELECT 
+			te.exprn_knd_code
+			,ter.exprn_user_seq
+			,fn_usernm(ter.exprn_user_seq) exprn_user_seq_nm
+			,CASE WHEN (ter.exprn_user_seq) IS NOT NULL THEN 'Y' ELSE 'N' END AS apply_yn
+			,CASE WHEN (NOW() BETWEEN te.rcrit_begin_dt AND te.rcrit_end_dt) THEN 'Y' ELSE 'N' END AS rcrit_appliable_yn
+			,fn_codenm(te.exprn_knd_code) exprn_knd_code_nm 
+			,tef.exprn_dt -- 상담날짜- 요일은dayjs로
+			,tef.exprn_begin_time
+			,tef.exprn_end_time
+			,tef.exprn_seq 
+			,tef.exprn_sn
+			,(select count(1) from tb_exprn_reqst ter WHERE ter.exprn_seq = tef.exprn_seq AND ter.exprn_sn = tef.exprn_sn ) exprn_co_current
+			,exprn_co -- 총상담생수
+			, CASE 
+				WHEN NOW() <![CDATA[<]]> te.rcrit_begin_dt THEN 'P'
+				WHEN te.rcrit_begin_dt <![CDATA[<=]]> NOW() AND NOW() <![CDATA[<=]]> te.rcrit_end_dt THEN 'I'
+				WHEN te.rcrit_end_dt <![CDATA[<]]> NOW() THEN 'C'
+			END AS rcrit_status
+			, CASE
+				WHEN NOW() <![CDATA[<]]> te.rcrit_begin_dt THEN '모집예정'
+				WHEN te.rcrit_begin_dt <![CDATA[<=]]> NOW() AND NOW() <![CDATA[<=]]> te.rcrit_end_dt THEN '모집중'
+				WHEN te.rcrit_end_dt <![CDATA[<]]> NOW() THEN '모집마감'
+			END AS exprn_status_nm
+			,CASE WHEN -- 날짜가 같고 시작시간-지금시간-종료시간 이면 active한 체험
+				(
+					DATE_FORMAT(NOW(), '%Y%m%d') = tef.exprn_dt
+					AND DATE_FORMAT(NOW(),  '%H%i') BETWEEN tef.exprn_begin_time AND tef.exprn_end_time
+				) THEN 'Y' ELSE 'N' END 
+				AS exprn_active
+			,tef.use_at -- 사용여부 Y-N
+			,ter.exprn_sttus_se -- 상담상태 R신청 A출석 N결석 D교수일방적인취소
+			,ter.reqst_dt -- 유저가 신청한 날짜
+			,ter.atend_dt -- 유저 출석 날짜
+			,te.exprn_place_nm
+			,te.exprn_nm
+		FROM
+			tb_exprn te
+			LEFT JOIN tb_exprn_fx tef ON te.exprn_seq = tef.exprn_seq
+			LEFT JOIN tb_exprn_reqst ter 
+				ON tef.exprn_seq = ter.exprn_seq 
+				AND tef.exprn_sn = ter.exprn_sn
+				AND ter.exprn_user_seq = #{user.userSeq} -- 'USER_00000132'
+		WHERE (1=1)
+		AND (
+			tef.use_at in ('Y') -- 체험 미취소만
+			<if test='includeCanceled == "Y"'>
+				OR tef.use_at in ('N') -- 체험취소 포함
+			</if>
+		)
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(exprnKndCode)'>
+			AND te.exprn_knd_code = #{exprnKndCode} -- exprn_knd_code_1 write서예체험
+		</if>
+		<if test='applyYn == "Y"'>
+			AND ter.exprn_user_seq IS NOT NULL
+		</if>
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(searchText)'>
+			AND ( 
+				te.exprn_place_nm like concat('%', #{searchText}, '%')
+			)
+		</if>
+		<!-- "applySttus": ["R", "A", "N"] 신청완료, 출석완료, 미출석 이면 신청완료, C면 미신청 -->
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(applySttus)'>
+			AND ter.exprn_sttus_se IN
+			<foreach collection="applySttus" item="type" index="index" open="(" close=")" separator=",">
+				#{type}
+			</foreach>
+		</if>
+		<choose>
+			<when test='@com.sch.util.CommonUtil@isNotEmpty(rcritType) and rcritType == "P"'>
+				AND NOW() <![CDATA[<]]> te.rcrit_begin_dt 
+			</when>
+			<when test='@com.sch.util.CommonUtil@isNotEmpty(rcritType) and rcritType == "I"'>
+				AND NOW() BETWEEN te.rcrit_begin_dt AND te.rcrit_end_dt
+			</when>
+			<when test='@com.sch.util.CommonUtil@isNotEmpty(rcritType) and rcritType == "C"'>
+				AND te.rcrit_end_dt <![CDATA[<]]> NOW()
+			</when>
+			
+		</choose>
+		
+		ORDER BY tef.exprn_dt DESC, tef.exprn_begin_time
+	</select>
+
+	<!-- /* user.insertExprnReqst */ -->
+	<insert id="insertExprnReqst" parameterType="map">
+		INSERT INTO tb_exprn_reqst
+		(
+			exprn_seq 			-- 체험일련
+			, exprn_sn	-- 체험순번일련
+			, exprn_user_seq	-- 체험유저이용자일련
+			, exprn_sttus_se	-- 체험상태(R:신청,C:취소 N결석 A출석)
+			, reqst_dt
+		)
+		VALUES
+		(
+			#{exprnSeq}
+			, #{exprnSn}
+			, #{user.userSeq}
+			, 'R' -- 신청할떄는 R로 고정
+			, now()
+		)
+	</insert>
+	
+	<update id="updateExprnReqst" parameterType="map">
+        /* user.updateExprnReqst */
+		UPDATE tb_exprn_reqst ter
+		SET 
+			exprn_sttus_se = #{exprnSttusSe} -- R신청 A출석 N결석
+			<if test='exprnSttusSe == "A"'>
+				,atend_dt = now()
+			</if>
+		WHERE ter.exprn_seq = #{exprnSeq} -- 'EXPRN_00000013'
+			AND ter.exprn_sn = #{exprnSn} -- 2
+			AND ter.exprn_user_seq = #{user.userSeq} -- 'USER_00000132'
+    </update>
+	
+	<delete id="deleteExprnReqst" parameterType="map">
+		DELETE FROM tb_exprn_reqst
+		WHERE exprn_seq = #{exprnSeq} -- 'EXPRN_00000013'
+			AND exprn_sn = #{exprnSn} -- 2
+			AND exprn_user_seq = #{user.userSeq} -- 'USER_00000132'
+	</delete>
+	<!-- 체험신청 끝 -->
+
+
+
+
+	<update id="updateMberUseAt" parameterType="map">
+        /* sysManage.updateMberUseAt */
+        UPDATE tb_user tu
+        SET tu.use_at = #{useAt}
+            , tu.updt_dt = current_timestamp
+            , tu.updt_id = #{user.userEmail}
+        WHERE tu.user_seq = #{userSeq}
+    </update>
+	
+	<select id="selectUserInfo" parameterType="map" resultType="camelHashMap">
+		SELECT * from tb_user
+		WHERE 
+			user_seq = #{user.userSeq} 
+	</select>
+	<select id="selectUserStplat" parameterType="map" resultType="camelHashMap">
+		SELECT 
+			user_seq
+			,stplat_code
+			,agre_at
+			,DATE_FORMAT(regist_dt, '%Y-%m-%d') as regist_dt
+			,DATE_FORMAT(updt_dt, '%Y-%m-%d') as updt_dt
+		 from tb_user_stplat
+		WHERE 
+			user_seq = #{user.userSeq} 
+	</select>
+	
+	<select id="selectCtgry02" parameterType="map" resultType="camelHashMap">
+		select cmmn_code, cmmn_code_nm
+			,upper_cmmn_code, cmmn_code_etc
+		from tb_cmmn_code
+		
+		where use_at = 'Y'
+			and upper_cmmn_code like concat('CTGRY','%')
+			and upper_cmmn_code != 'CTGRY'
+		order by sort_sn, cmmn_code
+	</select>
+
+	<select id="selectUserInfoWithAuthor" parameterType="map" resultType="camelHashMap">
+		/* user.selectUserInfoWithAuthor */
+		SELECT
+		    tu.user_seq
+			, tu.user_email
+			, tu.user_nm
+			, tu.user_ncnm
+			, fn_codenm(tu.user_author) user_author_nm
+		from tb_user tu
+		WHERE user_author IN (
+			<if test='@com.sch.util.CommonUtil@isNotEmpty(userAuthor0)'>
+				#{userAuthor0}
+			</if>
+			<if test='@com.sch.util.CommonUtil@isNotEmpty(userAuthor1)'>
+				, #{userAuthor1}
+			</if>
+			<if test='@com.sch.util.CommonUtil@isNotEmpty(userAuthor2)'>
+				, #{userAuthor2}
+			</if>
+			<if test='@com.sch.util.CommonUtil@isNotEmpty(userAuthor3)'>
+				, #{userAuthor3}
+			</if>
+			)
+		  AND use_at = 'Y'
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(keyword)'>
+		AND ((tu.user_nm LIKE concat('%', #{keyword} , '%')) OR (tu.user_ncnm LIKE concat('%', #{keyword} , '%')))
+		</if>
+	</select>
+
+	<select id="selectUserList" parameterType="map" resultType="camelHashMap">
+		/* user.selectUserList */
+		select user_seq
+			, user_email
+			, user_nm
+			, user_ncnm
+			, user_author
+			, use_at
+			, psitn_nm
+			, user_innb
+			, mbtlnum
+			, brthdy
+			, sexdstn
+			, atnlc_sbject_nm
+			, zip
+			, main_adres
+			, detail_adres
+			, profsr_hist
+			, proof_image_cn
+			, profl_image_cn
+			, profl_color
+			, lang
+			, qestn_code
+			, qestn_rspns
+			, app_os
+			, device_token
+		from tb_user
+		where use_at = 'Y'
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(userSeq)'>
+			and user_seq = #{userSeq}
+		</if>
+	</select>
+
+	<select id="selectAlarmUserList" parameterType="map" resultType="camelHashMap">
+		/* userMapper.selectAlarmUserList */
+		SELECT DISTINCT
+		user_seq
+		, app_os
+		, device_token
+		, user_email
+		, user_nm
+		, user_ncnm
+		, lang
+		FROM tb_user tu
+		<!-- WHERE device_token IS NOT NULL 토큰유무 controlle에서 체크 -->
+		WHERE (1=1)
+		<!-- <if test='@com.sch.util.CommonUtil@isNotEmpty(applySttus)'>
+			AND tla.atnlc_sttus_se IN
+			<foreach collection="applySttus" item="type" index="index" open="(" close=")" separator=",">
+				#{type}
+			</foreach>
+		</if> -->
+
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(alarmUserSeqList)'>
+			AND user_seq IN
+			<foreach item="item" index="index" collection="alarmUserSeqList" open="(" separator="," close=")">
+			<!-- <foreach item="item" index="index" collection="alarmUserSeqList.split(',')" open="(" separator="," close=")"> -->
+				#{item}
+			</foreach>
+		</if>
+		<if test='@com.sch.util.CommonUtil@isNotEmpty(alarmTarget)'>
+			<choose>
+				<when test='alarmTarget == "ALL"'>
+					AND user_author IS NOT NULL
+				</when>
+				<otherwise>
+					AND user_author IN
+					<foreach item="item" index="index" collection="alarmTarget.split(',')" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</otherwise>
+			</choose>
+		</if>
+
+		<!-- <if test='@com.sch.util.CommonUtil@isEmpty(alarmTarget) and @com.sch.util.CommonUtil@isEmpty(alarmUserSeqList)'>
+			AND (1=2)
+		</if> -->
+
+	</select>
+</mapper>
