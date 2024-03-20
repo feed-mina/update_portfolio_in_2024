@@ -5,11 +5,9 @@
 - CRUD
 - error page handling
 - 슬라이드 기능
-
-  업데이트 할 목록
 - CRUD custom
+  
+  업데이트 할 목록
 - 이미지 gallary
 - smtp 
-
-
--- 2024.03.16 배포 예정
+ 
