@@ -17,6 +17,9 @@ configurations {
 repositories {
 	mavenCentral()
 }
+bootJar {
+    mainClassName = 'com.sch.AdvertisingApplication' // 여기에 실행 가능한 클래스의 풀 패키지 경로를 지정하세요.
+}
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-aop'

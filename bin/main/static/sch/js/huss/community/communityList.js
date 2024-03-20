@@ -2,12 +2,12 @@ let vueData = {
     totalCount: 0,
     communityList: [],
     searchData: {
-        division: "",
+        division: "F",
         tag: "",
         searchKnd: "",
         searchText: "",
-        pageLength: "10",
-        pageNo: "",
+        dataPerPage: "12",
+        pageNo: "1",
     },
     userAuthor: "", //로그인한 사용자의 권한
     userName: "",   //로그인한 사용자의 이름
@@ -16,20 +16,18 @@ let vueData = {
     accessToken: "",
     userId:"",      //로그인ID
     pagination: {
-        division: "",
+        division: "F",
         pageNo: "1",
         dataPerPage: "12",
-        pageLength:"10",
+        pageCount:"10",
         totalData: "",
         totalPage: "",
         pageGroup: "",
         last:"",
         first:"",
         selectedLast:"",
-        tag : "",
     },
     isActive: true,
-    tag : "",
 };
 
 let vm;
@@ -63,42 +61,28 @@ let vueInit = () => {
                 event.getCommunityList();
             },
             setTag: function (tag) {
-                    let videoEl = $(".video");
-                    let posterEl = $(".poster");
-                    
-                        if (tag == 'video') {
-                console.log('video 테그') 
+                if (tag == 'video') {
+                    var videoEl = $(".video");
                     for (var i= 0; i<videoEl.length; i++) {
-                       posterEl[i].classList == "posterEl on"; 
-                        console.log(videoEl[i])
-                        console.log(posterEl[i]) 
-                        // video toggle >> 카드에 id를 video로 바꾸고 css를 display:none한다.   
-                       	 let videolitag = document.getElementsByClassName('posterlitag')[i] 
-                       	 let posterlitag = document.getElementsByClassName('videolitag')[i]  
-                        videolitag.classList.add("toggleOFFposter") 
-                        document.querySelectorAll('.toggleOFFposter')[i].style.display = 'none';     
-                        console.log(videolitag)  
-                        console.log('videolitag---------------') 
-                    posterlitag.classList =  posterlitag.classList[0]
-                        console.log(  posterlitag.classList)   
-                      
+                        if (videoEl[i].classList.value.indexOf("on") !== -1 ) {
+                            videoEl[i].classList = videoEl[i].classList.value.substring(0, 5);
+                            videoEl[i].parentNode.classList = videoEl[i].parentNode.classList.value.substring(0, 5);
+                        } else {
+                            videoEl[i].classList += " on";
+                            videoEl[i].parentNode.classList += " on";
+                        }
                     }
-                }  
-             if (tag == 'poster') {
-                console.log('poster 테그') 
+                } else if (tag == 'poster') {
+                    var posterEl = $(".poster");
                     for (var i= 0; i<posterEl.length; i++) {
-                            videoEl[i].classList == "videoEl on";  
-                        console.log(videoEl[i])  //토글버튼 video
-                       console.log(posterEl[i])// 토글버튼 poster 
-                        // poster toggle >> 카드에 id를 poster로 바꾸고 css를 display:none한다. 
-                       	 let posterlitag = document.getElementsByClassName('videolitag')[i] 
-                       	 let videolitag = document.getElementsByClassName('posterlitag')[i] 
-                        posterlitag.classList.add("toggleOFFvideo")
-                        document.querySelectorAll('.toggleOFFvideo')[i].style.display = 'none';    
-                        console.log( posterlitag)  
-                        console.log('posterlitag---------------')   
-                    videolitag.classList =  videolitag.classList[0]
-                        console.log(  videolitag.classList)    
+                        if (posterEl[i].classList.value.indexOf("on") !== -1 ) {
+                            posterEl[i].classList = posterEl[i].classList.value.substring(0, 5);
+                            posterEl[i].classList = posterEl[i].classList.value.substring(0, 10);
+                            posterEl[i].parentNode.classList = posterEl[i].parentNode.classList.value.substring(0, 5);
+                        } else {
+                            posterEl[i].classList += " on";
+                            posterEl[i].parentNode.classList += " on";
+                        }
                     }
                 }
             },
@@ -109,7 +93,6 @@ let vueInit = () => {
 
 let event = {
     init: () => {
-    // 자유 게시
         $(document).on("click", "#freeNtce", function (e) {
             vm.searchData.division = "F";
             vm.pagination.division = vm.searchData.division;
@@ -117,7 +100,6 @@ let event = {
             event.getCommunityList();
             event.clearTagValue();
         });
-    // 수상작
         $(document).on("click", "#prizeNtce", function (e) {
             vm.searchData.division = "P";
             vm.pagination.division = vm.searchData.division;
@@ -125,59 +107,9 @@ let event = {
             event.getCommunityList();
             event.clearTagValue();
         });
-       // Video        
-        $(document).on("click", "#VideoDivison", function (e) {
-            vm.searchData.tag = "video";
-            vm.tag = "video";
-            vm.pagination.tag = vm.searchData.tag;
-            event.setPageNoOne();
-            event.getCommunityList();
-            event.clearTagValue();
-        });
-       // Poster       
-        $(document).on("click", "#PosterDivison", function (e) {
-            vm.searchData.tag = "poster";
-            vm.tag = "poster";
-            vm.pagination.tag = vm.searchData.tag;
-            event.setPageNoOne();
-            event.getCommunityList();
-            event.clearTagValue();
-        });
-       
-        
     },
     getCommunityList: () => {
-        $.sendAjax({
-            url: "/communityController/getPagination.api",
-            data: vm.pagination,
-            contentType: "application/json",
-            success: (res) => {
-                vm.pagination.totalData = res.data.totalData;
-                vm.pagination.totalPage = res.data.totalPage;
-                vm.pagination.pageGroup = res.data.pageGroup;
-                vm.pagination.last = res.data.last;
-                vm.pagination.first = res.data.first;
-                vm.pagination.pagingList = res.data.pagingList;
-            },
-            error: function (e) {
-                $.alert(e.responseJSON.message);
-            },
-        });
-        $.sendAjax({
-            url: "/communityController/selectCommunityList.api",
-            data: vm.searchData,
-            contentType: "application/json",
-            success: (res) => {
-            console.log(res.data)
-            console.log( res.data.totalCount)
-            	vm.pagination.totalData = res.data.totalCount
-                vm.communityList = res.data.list;
-
-            },
-            error: function (e) {
-                $.alert(e.responseJSON.message);
-            },
-        });
+     
     },
     setPageNoOne: () => {
         vm.searchData.pageNo = "1";
