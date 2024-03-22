@@ -4,9 +4,18 @@ plugins {
 	id 'java'
 }
 
+repositories {
+	mavenCentral()
+}
+
+bootJar {
+    mainClassName = 'com.sch.AdvertisingApplication'  
+}
+
 group = 'com.sch'
-version = ''
-sourceCompatibility = '1.8'
+version = '0.0.1-SNAPSHOT'
+
+sourceCompatibility = '1.8' 
 
 configurations {
 	compileOnly {
@@ -14,12 +23,7 @@ configurations {
 	}
 }
 
-repositories {
-	mavenCentral()
-}
-bootJar {
-    mainClassName = 'com.sch.AdvertisingApplication' // 여기에 실행 가능한 클래스의 풀 패키지 경로를 지정하세요.
-}
+
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
@@ -67,3 +71,8 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+task run(type: JavaExec, dependsOn: 'classes') {
+	main = 'com.sch.AdvertisingApplication'
+	classpath = sourceSets.main.runtimeClasspath
+}
+
