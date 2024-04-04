@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>HUSS</title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta
+	content="A fully featured admin theme which can be used to build CRM, CMS, etc."
+	name="description" />
+<meta name="author" content="">
+<title>메인페이지</title>
 <link rel="stylesheet" href="/css/pc/style.css">
 <link rel="stylesheet" href="/css/pc/aos.css">
 <link rel="stylesheet" href="/css/pc/jquery-ui.css">
@@ -15,7 +20,7 @@
 <script src="/js/common.js"></script>
 <script src="/js/aos.js"></script>
 
-<script src="/sch/js/huss/dashBoard/main.js"></script>
+<script src="/sch/js/huss/dashBoard/noticeSlider.js"></script>
 </head>
 
 <body>
@@ -32,6 +37,8 @@
 		<!-- header -->
 		<header id="header_wrap"></header>
 		<!-- // header -->
+				<!-- ===== app ====== -->
+				<div id="app">
 		<!-- container -->
 		<div class="container " id="container">
 			<div class="contents_full main_banner">
@@ -321,8 +328,12 @@
 
 						<!--======크로쉘2======-->
 					</div>
+					<div id="notice_slide">
+						                		<div class="input-group dp_center mr-3 w-50">
+						                        <input type="text" v-model="searchData.searchText" class="form-control" @keyup.enter="fnSearch" placeholder="검색어를 입력해주세요.">dfafadsfdsf</div>
 				</div>
 			</div>
+		</div>
 
 		</div>
 
@@ -478,27 +489,7 @@ function slider(){
 		  innerafterinnerLogin.innerHTML = "<div>"+ "님 안녕하세요!</div>"+"<br/><p>환영합니다.</p>"
 	  }
 
-      let noticeSeq = 'CNSLT_0001'
-		let paramMap = {'noticeSeq': noticeSeq};
-    /*
-      $.sendAjax({
-			type: "post",
-			url: "/notice/selectNoticeList.api",
-			data: paramMap,
-			// data:JSON.stringify({searchText:'',pageNo:1,pageLEngth:10}) ,
-			contentType: "application/json",
-			success: (res) => {
-				// vm.totalCount = res.data.totalCount;
-				//vm.noticeList = res.data.list;
-				
-				console.log(res.data) 
-			
-			}
-			, error: function(e) {
-				$.alert(e.responseJSON);
-			}
-		}); 
-    */
+ 
       
     </script>
 	<script> 

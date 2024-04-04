@@ -40,12 +40,15 @@ public class NoticeService {
     }
 
     public List<Map<String, Object>> selectNoticeList(Map<String, Object> paramMap) {
-        int dataPerPage = Integer.parseInt(paramMap.get("dataPerPage").toString());
-        int currentPage = Integer.parseInt(paramMap.get("currentPage").toString());
-        int offsetNumber = (currentPage-1) * dataPerPage;
-        paramMap.put("offsetNumber", offsetNumber);
-        paramMap.put("dataPerPage", dataPerPage);
-        paramMap.put("currentPage", currentPage);
+		System.out.println("selectList paramMap" + paramMap);
+      //  int dataPerPage = Integer.parseInt(paramMap.get("dataPerPage").toString());
+		//  int currentPage = Integer.parseInt(paramMap.get("currentPage").toString());
+		//   int offsetNumber = (currentPage-1) * dataPerPage;
+		//String noticeSeq = paramMap.get("noticeSeq").toString();
+		//   paramMap.put("noticeSeq", noticeSeq);
+		//	System.out.println("selectList paramMap" + paramMap);
+        //   paramMap.put("dataPerPage", dataPerPage);
+        //     paramMap.put("currentPage", currentPage);
         return commonService.selectList("notice.selectNoticeListPaging", paramMap);
     }
 

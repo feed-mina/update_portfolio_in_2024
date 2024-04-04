@@ -1,72 +1,36 @@
-let vueData = {
-    totalCount: 0,
-    noticeList: [],
-    searchData: {
-        division: "F",
-        tag: "",
-        searchKnd: "",
-        searchText: "",
-        dataPerPage: "12",
-        currentPage:"1",
-        pageNo: "1",
-    },
-    userAuthor: "", //로그인한 사용자의 권한
-    userName: "",   //로그인한 사용자의 이름
-    userEmail: "",  //로그인한 사용자의 이메일
-    userSeq: "",    //로그인한 사용자의 일련번호
-    accessToken: "",
-    userId:"",      //로그인ID
-    pagination: {
-        division: "F",
-        pageNo: "1",
-        dataPerPage: "12",
-        currentPage:"1",
-        pageCount:"10",
-        totalData: "",
-        totalPage: "",
-        pageGroup: "",
-        last:"",
-        first:"",
-        selectedLast:"",
-    },
-    isActive: true,
-};
- 
+var vueData = {
+	imageButton: "false",
+	step: "master",
+	totalCount: 0,
 
-let dataPerPage = 12;
+	modifyData: {},
+	noticeList: [],
+	searchData: {
+		searchText: '',
+		pageNo: 1,
+		pageLength: 10,
+	},
+	noticeTimeList: {}
+};
+
+let dataPerPage = 10;
 let pagePerBar = 10;
 let pageCount = 10;
-let vm;
-let token;
-
+var vm;
 let vueInit = () => {
     const app = Vue.createApp({
         data() {
             return vueData;
-       },
-        computed: {
-            pagingList() {
-                var pagingListVar = [];
-                for (var i=this.pagination.first; i<=this.pagination.last; i++) {
-                    pagingListVar.push(i);
-                }
-                return pagingListVar;
-            },
-        },
+       }, 
         methods: {
-            fnSearch: function () {
-               
-                this.searchData.pageNo = 1;
-                this.pagination.pageNo = this.searchData.pageNo;
-                event.getNoticeList();
+            fnSearch: function (userAuthor) {
+				this.searchData.pageNo = 1;
+				event.getCnsltList();
             },
-            fnDetail: event.fnDetail,
-        },
-            fnPaging: function (pageNo) {
-                this.searchData.pageNo = pageNo;
-                this.pagination.pageNo = this.searchData.pageNo;
-                event.getNoticeList();
-            },
+			fnDtail: (noticeSeq) => {
+				 location.assign("/sch/huss/notice/noticeDetail.html?noticeSeq=" + noticeSeq)
+			}, 
+		}
     });
     vm = app.mount("#content");
 };
@@ -74,38 +38,45 @@ let vueInit = () => {
 let event = {
     getNoticeList: () => {
         $.sendAjax({
-            url: "/noticeController/selectNoticeList.api",
+            url: "/noticeController/selectNoticetestList.api",
             data: vm.searchData,
             contentType: "application/json",
             success: (res) => {
-                vm.totalCount = res.data.totalCount;
-                vm.noticeList = res.data.list;
-                vm.pagination.totalData = res.data.totalData;
-                vm.pagination.totalPage = res.data.totalPage;
-                vm.pagination.pageGroup = res.data.pageGroup;
-                vm.pagination.last = res.data.last;
-                vm.pagination.first = res.data.first;
-                vm.pagination.pagingList = res.data.pagingList;
-
-                fnPaging(res.data.totalCount, dataPerPage, pageCount, res.data.pageNo, (selectPage) => {
-                    vm.searchData.pageNo = selectPage;
-                    event.getNoticeList();
-                })
+				vm.totalCount = res.data.totalCount;
+				vm.noticeList = res.data.list;
+				
+				console.log(res.data)
+				console.log(res.data.list)
+               
+				for (var i = 0; i < vm.noticeList.length; i++) {
+				// 글자가 8글자 이상일때 ...
+					if(vm.noticeList[i].noticeSj.length>= 8){
+    					vm.noticeList[i].noticeSj = vm.noticeList[i].noticeSj.substring(0, 8) + '...';
+						 
+				// 글자가 20글자 이상일때 ...
+					if(vm.noticeList[i].noticeCn.length>= 20){
+    					vm.noticeList[i].noticeCn = vm.noticeList[i].noticeCn.substring(0, 20) + '...';
+					}
+					}
+					 
+				}
+				// 페이지
+				fnPaging(res.data.totalCount, dataPerPage, pageCount, res.data.pageNo, (selectPage) => {
+					vm.searchData.pageNo = selectPage;
+					event.getNoticeList();
+				})
+						
             },
             error: function (e) {
                 $.alert(e.responseJSON);
-            },
+            }
         });
-    },
-    setPageNoOne: () => {
-        vm.searchData.pageNo = "1";
-        vm.pagination.pageNo = vm.searchData.pageNo;
-    },
+    } 
    
-}
+};
 
 $(document).ready(() => {
     vueInit();
-    util.tableSetting();
     event.getNoticeList();
+    util.tableSetting();
 });

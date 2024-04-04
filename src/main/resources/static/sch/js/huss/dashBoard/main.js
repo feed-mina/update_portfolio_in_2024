@@ -1,3 +1,24 @@
+     let noticeSeq = 'CNSLT_0001'
+		let paramMap = {'noticeSeq': noticeSeq};
+      
+      $.sendAjax({
+			type: "post",
+			url: "/noticeController/selectNoticeList.api",
+			data: paramMap,
+			// data:JSON.stringify({searchText:'',pageNo:1,pageLEngth:10}) ,
+			contentType: "application/json",
+			success: (res) => {
+				// vm.totalCount = res.data.totalCount;
+				//vm.noticeList = res.data.list;
+				
+				console.log(res.data) 
+			
+			}
+			, error: function(e) {
+				$.alert(e.responseJSON);
+			}
+		}); 
+
 let event = {
 	init: () => { 
 	}, 

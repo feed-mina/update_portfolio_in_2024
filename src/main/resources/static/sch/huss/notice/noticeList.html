@@ -10,16 +10,18 @@
 	name="description" />
 <meta name="author" content="">
 <title>리스트</title>
-    <link rel="stylesheet" href="/css/pc/style.css">
-    <link rel="stylesheet" href="/css/pc/aos.css">
-    <link rel="stylesheet" href="/css/pc/jquery-ui.css">
-    <link rel="stylesheet" href="/css/pc/swiper-bundle.min.css">
-    <link  rel="stylesheet" href="/css/custom.css" />
-    <script src="/js/allVendors.js"></script>
-    <script src="/js/common.js"></script>
-    <script src="/js/swiper-bundle.min.js"></script>
-    <script src="/js/aos.js"></script>
-    <script src="/sch/js/huss/noticeList.js"></script>
+<link rel="stylesheet" href="/css/pc/style.css">
+<link rel="stylesheet" href="/css/pc/aos.css">
+<link rel="stylesheet" href="/css/pc/jquery-ui.css">
+<link rel="stylesheet" href="/css/pc/swiper-bundle.min.css">
+<link rel="stylesheet" href="/css/custom.css" />
+<link rel="stylesheet" href="/css/style_legacy.css">
+<script src="/js/aos.js"></script>
+<script src="/js/swiper-bundle.min.js"></script> 
+<script src="/js/allVendors.js"></script>
+<script src="/js/common.js"></script>
+
+    <script src="/sch/js/huss/notice/noticeList.js"></script>
 </head>
 <body>
 	   <!-- header --> 
@@ -32,7 +34,7 @@
 		<div id="content-wrapper" class="d-flex flex-column">
 			<div id="content" class="pt-0">
 				<!-- ===== app ====== -->
-				<div id="app">
+				<div id="app"> 
 					<!-- ===== container ====== -->
 					<div id="container" class="d-flex flex-column">
 						<div class="container-fluid">
@@ -76,16 +78,11 @@
 														<colgroup></colgroup>
 														<thead>
 															<tr>
-																<th>순번</th>
-																<th>이름</th>
-																<th> 형태</th>
-																<th>신청자수</th>
-																<th>기간</th>
-																<th>요일</th>
-																<th>시간</th>
-																<th>횟수</th>
-																<th>장소</th>
-																<th>신청상태</th>
+																<th>순번</th>    
+																<th>제목</th>
+																<th>내용</th>
+																<th>날짜</th>
+																<!-- <th>썸네일</th>  -->
 															</tr>
 														</thead>
 														<tbody>
@@ -94,30 +91,10 @@
 
 																<td>{{totalCount - (searchData.pageNo - 1) * 10 -
 																	idx}}</td>
-
-																<td>{{obj.userNm}}</td>
-																<!--  형태 -->
-																<td>{{obj.noticeSeStr}}</td>
-																<!-- 신청자수 -->
-																<td>{{obj.noticeCo}}<span>명</span></td>
-																<!-- 기간 -->
-																<td><a href="javascript:;" class="link-style"
-																	@click="fnDtail(obj.noticeSeq)">{{obj.noticeBeginDate}}
-																		~ {{obj.noticeEndDate}}</a></td>
-																<!-- 요일 -->
-																<td>{{obj.noticeWeekArray}}</td>
-																<!-- 시간 -->
-																<td>
-																	{{obj.noticeBeginTimeHour}}:{{obj.noticeBeginTimeMinutes}}~{{obj.noticeEndTimeHour}}:{{obj.noticeEndTimeMinutes}}
-																</td>
-
-																<!-- 횟수 -->
-																<!-- 시간이랑 요일 곱한 값으로 횟수를 처리해야 함 -->
-																<td>{{obj.noticeSeqCnt}}<span>회</span></td>
-																<!-- 장소 -->
-																<td>{{obj.noticePlaceNm}}</td>
-																<!-- 신청상태 -->
-																<td>{{obj.noticeStatus}}</td>
+																<td>{{obj.noticeSj}}</td>
+																<td>{{obj.noticeCn}}</td>
+																<td>{{obj.registDt}}</td> 
+															<!-- 	<td>{{obj.noticeImageCn}}</td> -->
 															</tr>
 															<tr v-else>
 																<td colspan="7">조회된 데이터가 없습니다.</td>

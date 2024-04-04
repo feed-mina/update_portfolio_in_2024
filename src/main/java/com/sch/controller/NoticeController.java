@@ -1,6 +1,7 @@
 package com.sch.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,8 +49,50 @@ public class NoticeController {
     FileService fileService;
 
     @Autowired
-    JwtTokenProvider jwtTokenProvider;
-
+	private JwtTokenProvider jwtTokenProvider;
+    
+    @PostMapping(value="/selectNoticeSlideList.api")
+    @ApiOperation(value="슬라이드에 사용하는 공지사항 리스트", notes="최신순으로 9개 공지사항리스트 출력"+ //\r\n"
+    		  "\t{\r\n" + //
+            "\t\t\"searchDivision\": \"noticeSj\",\r\n" + // 
+            "\t\t\"dataPerPage\": \"9\",\r\n" + //
+            "\t\t\"currentPage\": \"1\"\r\n" + //
+            "\t}\r\n" + //
+            "\t")
+	public ResponseEntity<?> selectNoticeSlideList(@RequestBody Map<String, Object> paramMap) throws Exception {
+		 List<Map<String, Object>> NoticeSlideList = commonService.selectList("notice.selectNoticeSlideList", paramMap);
+		return CommonResponse.statusResponse(HttpServletResponse.SC_OK, NoticeSlideList);
+	}
+    
+    
+/*
+ *     @PostMapping(value="/selectNoticeSlideList.api")
+    @ApiOperation(value="슬라이드에 사용하는 공지사항 리스트", notes="최신순으로 9개 공지사항리스트 출력"+ //\r\n"
+    		  "\t{\r\n" + //
+            "\t\t\"searchDivision\": \"noticeSj\",\r\n" + // 
+            "\t\t\"dataPerPage\": \"9\",\r\n" + //
+            "\t\t\"currentPage\": \"1\"\r\n" + //
+            "\t}\r\n" + //
+            "\t")
+	public ResponseEntity<?> selectNoticeSlideList(@UserParam Map<String, Object> paramMap) {
+		return CommonResponse.statusResponse(HttpServletResponse.SC_OK,
+				commonService.selectPaging("notice.selectNoticeSlideListPaging", paramMap));
+	}
+    
+ * */
+    @PostMapping(value="/selectNoticetestList.api")
+    @ApiOperation(value="슬라이드에 사용하는 공지사항 리스트", notes="최신순으로 9개 공지사항리스트 출력"+ //\r\n"
+    		  "\t{\r\n" + //
+            "\t\t\"searchDivision\": \"noticeSj\",\r\n" + // 
+            "\t\t\"dataPerPage\": \"9\",\r\n" + //
+            "\t\t\"currentPage\": \"1\"\r\n" + //
+            "\t}\r\n" + //
+            "\t")
+	public ResponseEntity<?> selectNoticetestList(@RequestBody Map<String, Object> paramMap) {
+		return CommonResponse.statusResponse(HttpServletResponse.SC_OK,
+				commonService.selectPaging("notice.selectNoticeSlideListPaging", paramMap));
+	}
+    
     /**
      * 공지사항 List
      *

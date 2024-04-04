@@ -70,9 +70,7 @@ dependencies {
 
 test {
 	useJUnitPlatform()
-}
-task run(type: JavaExec, dependsOn: 'classes') {
-	main = 'com.sch.AdvertisingApplication'
-	classpath = sourceSets.main.runtimeClasspath
-}
-
+} 
+bootRun {
+	mainClass = 'com.sch.AdvertisingApplication'
+	}

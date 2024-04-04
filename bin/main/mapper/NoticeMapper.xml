@@ -3,9 +3,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<!--
-	강의 > select, insert, update, delete
--->
+ 
 
 <mapper namespace="notice">
 	<sql id="sql_noticeList">
@@ -14,54 +12,47 @@
 			tn.notice_seq				-- 공지사항일련
 			, tn.notice_sj				-- 공지사항제목
 			, tn.notice_image_cn		-- 공지사항이미지내용
-			, tn.notice_cn				-- 공지사항내용
-			, tu.user_nm				-- 등록자 이름
+			, tn.notice_cn				-- 공지사항내용 
 			, LEFT(tn.regist_dt, 10) as regist_dt	-- 등록일시
-		FROM tb_notice tn
+		FROM tb_notice tn 
 		LEFT JOIN tb_user tu ON tu.user_seq = tn.regist_id
-		WHERE 1 = 1
-		<choose>
-			<when test="searchDivision == 'noticeSj'">
-				<if test='@com.sch.util.CommonUtil@isNotEmpty(searchText)'>
-					AND (tn.notice_sj LIKE concat('%', #{searchText} , '%'))
-				</if>
-			</when>
-			<when test="searchDivision == 'registNm'">
-				<if test='@com.sch.util.CommonUtil@isNotEmpty(searchText)'>
-					AND (tu.user_nm LIKE concat('%', #{searchText} , '%'))
-				</if>
-			</when>
-			<otherwise>
-				<if test='@com.sch.util.CommonUtil@isNotEmpty(searchText)'>
-					AND ((tn.notice_sj LIKE concat('%', #{searchText} , '%')) OR (tu.user_nm LIKE concat('%', #{searchText} , '%')))
-				</if>
-			</otherwise>
-		</choose>
+		WHERE 1 = 1 
 		ORDER BY tn.notice_seq DESC
-	</sql>
-<!--
-	<select id="" parameterType="map" resultType="camelHashMap">
-		/* notice.selectNoticeListPagingCount */
-		<include refid="common.COUNT_HEAD"/>
-		<include refid="sql_noticeList"/>
-		<include refid="common.COUNT_FOOT"/>
-	</select>
+	</sql> 
 
-	<select id="" parameterType="map" resultType="camelHashMap">
-		/* notice.selectNoticeListPaging */
+	<select id="selectNoticeSlideListPaging" parameterType="map" resultType="camelHashMap">
+		/* notice.selectNoticeSlideListPaging */
 		<include refid="sql_noticeList"/>
 		<include refid="common.PAGING"/>
 	</select>
--->
-
+	<select id="selectNoticeSlideListPagingCount" parameterType="map" resultType="camelHashMap">
+		/* notice.selectNoticeSlideListPagingCount */
+		<include refid="common.COUNT_HEAD"/>
+		<include refid="sql_noticeList"/>
+		<include refid="common.COUNT_FOOT"/>
+	</select> 
+<select id="selectNoticeSlideList" parameterType="map" resultType="camelHashMap">
+		/* notice.selectNoticeListPaging */
+		SELECT
+		tn.notice_seq				-- 공지사항일련
+		, tn.notice_sj				-- 공지사항제목
+		, tn.notice_image_cn		-- 공지사항이미지내용
+		, tn.notice_cn				-- 공지사항내용 
+		, LEFT(tn.regist_dt, 10) as regist_dt	-- 등록일시
+		FROM tb_notice tn
+		LEFT JOIN tb_user tu ON tu.user_seq = tn.regist_id
+		WHERE 1 = 1
+		 
+		ORDER BY tn.notice_seq DESC 
+		LIMIT 1,9;
+	</select>
 	<select id="selectNoticeListPaging" parameterType="map" resultType="camelHashMap">
 		/* notice.selectNoticeListPaging */
 		SELECT
 		tn.notice_seq				-- 공지사항일련
 		, tn.notice_sj				-- 공지사항제목
 		, tn.notice_image_cn		-- 공지사항이미지내용
-		, tn.notice_cn				-- 공지사항내용
-		, tu.user_nm				-- 등록자 이름
+		, tn.notice_cn				-- 공지사항내용 
 		, LEFT(tn.regist_dt, 10) as regist_dt	-- 등록일시
 		FROM tb_notice tn
 		LEFT JOIN tb_user tu ON tu.user_seq = tn.regist_id

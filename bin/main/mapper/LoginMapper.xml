@@ -123,7 +123,7 @@
 	<!-- login.userRegist 일반회원가입-->
 	<insert id="userRegist" parameterType="map">
 		
-		INSERT INTO ad.tb_user
+		INSERT INTO tb_user
 			(
 				user_email
 				,user_nm
