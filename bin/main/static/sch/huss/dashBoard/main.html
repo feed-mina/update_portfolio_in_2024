@@ -15,30 +15,24 @@
 <link rel="stylesheet" href="/css/pc/jquery-ui.css">
 <link rel="stylesheet" href="/css/pc/swiper-bundle.min.css">
 <link rel="stylesheet" href="/css/custom.css" />
+<link rel="stylesheet" href="/css/style_legacy.css">
+<script src="/js/aos.js"></script>
 <script src="/js/swiper-bundle.min.js"></script> 
 <script src="/js/allVendors.js"></script>
-<script src="/js/common.js"></script>
-<script src="/js/aos.js"></script>
-
+<script src="/js/common.js"></script> 
 <script src="/sch/js/huss/dashBoard/noticeSlider.js"></script>
 </head>
-
 <body>
-
-	<!-- skip -->
-	<div class="skip">
-		<a href="#container">본문 바로가기</a>
-	</div>
-	<!-- ===== header ====== -->
-	<!-- // skip -->
-	<div class="wrapper">
-		<!-- background -->
-
-		<!-- header -->
-		<header id="header_wrap"></header>
-		<!-- // header -->
+	   <!-- header --> 
+    <header id="header_wrap"></header>
+	<!-- ===== /header ====== -->
+	<div id="wrapper">
+	 
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content" class="pt-0">
 				<!-- ===== app ====== -->
-				<div id="app">
+				<div id="app">  
+					
 		<!-- container -->
 		<div class="container " id="container">
 			<div class="contents_full main_banner">
@@ -215,106 +209,22 @@
 						<div class="" id="goNotice">
 
 							<div class="slider" >
-								<div class="inner"  style="width: 1800px;">
-									<ul class="swiper-wrapper slide_list">
-										<li class="swiper-slide" ><a
-											href="/sch/huss/dashBoard/program.html"
+								<div class="inner" >
+									<ul class="swiper-wrapper slide_list" id="swiperUL"   style="width: 500px;"  >
+										<li class="swiper-slide" id="swiperPerSlide" v-for="(obj, idx) in noticeSlideList" v-if="noticeSlideList.length" v-bind:key="noticeSlideList.id" >
+										<a	href="/sch/huss/dashBoard/program.html"
 											class="main_notice_mid_card">
-												<div class="main_notice_mid_card_head">
-													<h2>제목</h2>
+												<div class="main_notice_mid_card_head" id="noticeSlideSj">
+													<h2>{{obj.noticeSj}}</h2>
 												</div>
-												<div class="main_notice_mid_card_mid">
-													<p>내용</p>
+												<div class="main_notice_mid_card_mid" id="noticeSlideCn">
+													{{obj.noticeCn}}
 												</div>
-												<div class="main_notice_mid_card_foot mt30">
-													<span> 2024.01.10 </span>
+												<div class="main_notice_mid_card_foot mt30" id="noticeSlideDt">
+													<span>>{{obj.registDt}} </span>
 												</div>
-										</a></li>
-										<li class="swiper-slide"><a href="#"
-											class="main_notice_mid_card">
-												<div class="main_notice_mid_card_head">
-													<h2>제목</h2>
-												</div>
-												<div class="main_notice_mid_card_mid">
-													<p>내용</p>
-												</div>
-												<div class="main_notice_mid_card_foot mt30">
-													<span> 2024.01.10 </span>
-												</div>
-										</a></li>
-
-										<li class="swiper-slide"><a href="#"
-											class="main_notice_mid_card">
-												<div class="main_notice_mid_card_head">
-													<h2>제목</h2>
-												</div>
-												<div class="main_notice_mid_card_mid">
-													<p>내용</p>
-												</div>
-												<div class="main_notice_mid_card_foot mt30">
-													<span> 2024.01.10 </span>
-												</div>
-										</a></li>
-										<li class="swiper-slide"><a href="#"
-											class="main_notice_mid_card">
-												<div class="main_notice_mid_card_head">
-													<h2>제목</h2>
-												</div>
-												<div class="main_notice_mid_card_mid">
-													<p>내용</p>
-												</div>
-												<div class="main_notice_mid_card_foot mt30">
-													<span> 2024.01.10 </span>
-												</div>
-										</a></li>
-										<li class="swiper-slide"><a href="#"
-											class="main_notice_mid_card">
-												<div class="main_notice_mid_card_head">
-													<h2>제목</h2>
-												</div>
-												<div class="main_notice_mid_card_mid">
-													<p>내용</p>
-												</div>
-												<div class="main_notice_mid_card_foot mt30">
-													<span> 2024.01.10 </span>
-												</div>
-										</a></li>
-										<li class="swiper-slide"><a href="#"
-											class="main_notice_mid_card">
-												<div class="main_notice_mid_card_head">
-													<h2>제목</h2>
-												</div>
-												<div class="main_notice_mid_card_mid">
-													<p>내용</p>
-												</div>
-												<div class="main_notice_mid_card_foot mt30">
-													<span> 2024.01.10 </span>
-												</div>
-										</a></li>
-										<li class="swiper-slide"><a href="#"
-											class="main_notice_mid_card">
-												<div class="main_notice_mid_card_head">
-													<h2>제목</h2>
-												</div>
-												<div class="main_notice_mid_card_mid">
-													<p>내용</p>
-												</div>
-												<div class="main_notice_mid_card_foot mt30">
-													<span> 2024.01.10 </span>
-												</div>
-										</a></li>
-										<li class="swiper-slide"><a href="#"
-											class="main_notice_mid_card">
-												<div class="main_notice_mid_card_head">
-													<h2>제목</h2>
-												</div>
-												<div class="main_notice_mid_card_mid">
-													<p>내용</p>
-												</div>
-												<div class="main_notice_mid_card_foot mt30">
-													<span> 2024.01.10 </span>
-												</div>
-										</a></li>
+										</a></li> 
+										<li v-else>조회된 데이터가 없습니다.</li>
 									</ul>
 								</div>
 								<div style="float:right; margin-top: 10px;">
@@ -328,10 +238,7 @@
 
 						<!--======크로쉘2======-->
 					</div>
-					<div id="notice_slide">
-						                		<div class="input-group dp_center mr-3 w-50">
-						                        <input type="text" v-model="searchData.searchText" class="form-control" @keyup.enter="fnSearch" placeholder="검색어를 입력해주세요.">dfafadsfdsf</div>
-				</div>
+					 
 			</div>
 		</div>
 
@@ -340,161 +247,161 @@
 		<!-- footer -->
 		<footer id="footer_wrap"></footer>
 		<!-- // footer -->
-	</div>
-	<script>
-	
-const mySwiper = new Swiper('.swiper-container', {
-  direction: 'horizontal',
-	speed: 500,
-	//  slidesPerView: 2
-  navigation: {
-    nextEl: '.swiper-button-next',
-    prevEl: '.swiper-button-prev',
-  },
-  centeredSlides: true, // 1번 슬라이드가 가운데 보이기
-
-});
-
-	var mySwiper2 = new Swiper('.swiper-container2', {
-		direction: 'horizontal',
-		speed: 500,
-			slidesPerView: 4,
-			slidesPerGroup: 4,
-			observer: true,
-			observeParents: true,
-			spaceBetween: 24,
-			navigation: {
-					nextEl: '.swiper-button-next2',
-					prevEl: '.swiper-button-prev2',
-			},
-			centeredSlides: true, // 1번 슬라이드가 가운데 보이기
-		
-	});
-	
-
-	$(window).on('load', function () {
-    slider();  
-})
-
-function slider(){
-    $(".slider").each(function(index){
-        let $this = $(this);
-        let swiper = undefined;
-        let slideNum =  $this.find('.swiper-slide').length //슬라이드 총 개수
-        let slideInx = 0; //현재 슬라이드 index
-        
-        //디바이스 체크
-        let oldWChk = window.innerWidth > 768 ? 'pc' : 'mo';
-        sliderAct();
-        $(window).on('resize', function () {
-            let newWChk = window.innerWidth > 768 ? 'pc' : 'mo';
-            if(newWChk != oldWChk){
-                oldWChk = newWChk;
-                sliderAct();
-            }
-        })
-
-        function sliderAct(){
-            //슬라이드 인덱스 클래스 추가
-            $this.addClass(`slider${index}`);
-
-            //슬라이드 초기화 
-            if (swiper != undefined){ 
-                swiper.destroy();
-                swiper = undefined;
-            }
-
-            //slidesPerView 옵션 설정
-            let viewNum = oldWChk == 'pc' ? 5 : 2;
-            //loop 옵션 체크
-            let loopChk = slideNum > viewNum;
-
-            swiper = new Swiper(`.slider${index} .inner`, {
-                slidesPerView: viewNum,
-                initialSlide :slideInx,
-                spaceBetween: 10,
-                slidesPerGroup: 1,
-                loop: loopChk,
-                navigation: {
-                    prevEl: $(`.slider${index} .btn_prev`)[0],
-                    nextEl: $(`.slider${index} .btn_next`)[0],
-                },
-                on: {
-                    activeIndexChange: function () {
-                        slideInx = this.realIndex; //현재 슬라이드 index 갱신
-                    }
-                },
-            });
-        }
-    });
-}
-
-</script>
-	<script>
-      var swiper = new Swiper(".mainbannerswiper", {
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
-      });
-      let DISPATCHER_GET = "/dashBoard/dispatcher.api";
-
-
-    /*
-     $.ajax({
-			type: "get",
-			url: "/dashBoard/dispatcher.api",
-			datatype: "json",
-			contentType: "application/json",
-			success: (res) => {
-				console.log(res)
-			},
-			error: function (e) {
-				console.log(e.responseJSON);
-			},
-		})
-    */
-      const kakaoAccessToken = document.cookie.split("; ")[0].split("=")[1];
-      console.log()
-      // 일반로그인일때 와 카카오 로그인할때 쿠키값 여부에 따라 로그인 할 수 있는 창 을 회원정보 수정페이지 버튼으로 이동하기 
-      // 값이 있다면 로그인 버튼에 class를 추가해서 display none으로 만들어주기, 그리고 수정페이지버튼 가는 class에서 display none을 remove시키기
-      const loginsectionDiv = document.querySelector("#loginsection");
-      const innserloginsectionDiv =document.querySelector("#loginbox");
-      const afterLoginDiv = document.querySelector("#afterLogin");
-      const innerafterinnerLogin = document.querySelector("#afterinnerLogin");
-      
-      if(util.getToken()=== null){
-		  if(!(kakaoAccessToken === undefined)){
-		  console.log('카카오 로그인 한상태 1');
-		  document.querySelector("#afterLogin2").remove()
-			document.querySelector("#loginbox").classList.add("toggleLogin");
-           document.querySelector("#loginsection").classList.add("beforeLogin");	// afterLoginㄴ
-		  innerafterinnerLogin.innerHTML = "<div>"+ " 안녕하세요!</div>"+"<br/><p>환영합니다.</p>"
-		  }else{ 
-		  console.log('일반 로그인안한상태');
-		  document.querySelector("#afterLogin").remove()
-		   document.querySelector("#afterLogin2").remove()
-		  }
-	  }else if(!(util.getUserSeq() === undefined)){
-		  // 로그인 값이 있어서 로그인 될때
-		  console.log("로그인상태1")
-      document.querySelector("#afterLogin2").remove()
-		document.querySelector("#loginbox").classList.add("toggleLogin");
-           document.querySelector("#loginsection").classList.add("beforeLogin");	// afterLogin
-		  innerafterinnerLogin.innerHTML = "<div>"+ util.getuserNm() +"님 안녕하세요!</div>"+"<br/><p>환영합니다.</p>"
-                  //  document.querySelector("#afterLogin").remove();	//  
-	  }else if(!(kakaoAccessToken===null) || !(util.getUserSeq() === undefined)){
-		console.log("로그인상태2")
-           document.querySelector("#loginsection").classList.add("beforeLogin");	// afterLogin
-		  innerafterinnerLogin.innerHTML = "<div>"+ "님 안녕하세요!</div>"+"<br/><p>환영합니다.</p>"
-	  }
-
+	</div> 
  
-      
-    </script>
-	<script> 
-        AOS.init();
-    </script>
+	<script>
+	
+		const mySwiper = new Swiper('.swiper-container', {
+		  direction: 'horizontal',
+			speed: 500,
+			//  slidesPerView: 2
+		  navigation: {
+			nextEl: '.swiper-button-next',
+			prevEl: '.swiper-button-prev',
+		  },
+		  centeredSlides: true, // 1번 슬라이드가 가운데 보이기
+		
+		});
+		
+			var mySwiper2 = new Swiper('.swiper-container2', {
+				direction: 'horizontal',
+				speed: 500,
+					slidesPerView: 4,
+					slidesPerGroup: 4,
+					observer: true,
+					observeParents: true,
+					spaceBetween: 24,
+					navigation: {
+							nextEl: '.swiper-button-next2',
+							prevEl: '.swiper-button-prev2',
+					},
+					centeredSlides: true, // 1번 슬라이드가 가운데 보이기
+				
+			});
+			
+		
+			$(window).on('load', function () {
+			slider();  
+		})
+		
+		function slider(){
+			$(".slider").each(function(index){
+				let $this = $(this);
+				let swiper = undefined;
+				let slideNum =  $this.find('.swiper-slide').length //슬라이드 총 개수
+				let slideInx = 0; //현재 슬라이드 index
+				
+				//디바이스 체크
+				let oldWChk = window.innerWidth > 768 ? 'pc' : 'mo';
+				sliderAct();
+				$(window).on('resize', function () {
+					let newWChk = window.innerWidth > 768 ? 'pc' : 'mo';
+					if(newWChk != oldWChk){
+						oldWChk = newWChk;
+						sliderAct();
+					}
+				})
+		
+				function sliderAct(){
+					//슬라이드 인덱스 클래스 추가
+					$this.addClass(`slider${index}`);
+		
+					//슬라이드 초기화 
+					if (swiper != undefined){ 
+						swiper.destroy();
+						swiper = undefined;
+					}
+		
+					//slidesPerView 옵션 설정
+					let viewNum = oldWChk == 'pc' ? 5 : 2;
+					//loop 옵션 체크
+					let loopChk = slideNum > viewNum;
+		
+					swiper = new Swiper(`.slider${index} .inner`, {
+						slidesPerView: viewNum,
+						initialSlide :slideInx,
+						spaceBetween: 10,
+						slidesPerGroup: 1,
+						loop: loopChk,
+						navigation: {
+							prevEl: $(`.slider${index} .btn_prev`)[0],
+							nextEl: $(`.slider${index} .btn_next`)[0],
+						},
+						on: {
+							activeIndexChange: function () {
+								slideInx = this.realIndex; //현재 슬라이드 index 갱신
+							}
+						},
+					});
+				}
+			});
+		}
+		
+		</script>
+			<script>
+			  var swiper = new Swiper(".mainbannerswiper", {
+				navigation: {
+				  nextEl: ".swiper-button-next",
+				  prevEl: ".swiper-button-prev",
+				},
+			  });
+			  let DISPATCHER_GET = "/dashBoard/dispatcher.api";
+		
+		
+			/*
+			 $.ajax({
+					type: "get",
+					url: "/dashBoard/dispatcher.api",
+					datatype: "json",
+					contentType: "application/json",
+					success: (res) => {
+						console.log(res)
+					},
+					error: function (e) {
+						console.log(e.responseJSON);
+					},
+				})
+			*/
+			  const kakaoAccessToken = document.cookie.split("; ")[0].split("=")[1];
+			  console.log()
+			  // 일반로그인일때 와 카카오 로그인할때 쿠키값 여부에 따라 로그인 할 수 있는 창 을 회원정보 수정페이지 버튼으로 이동하기 
+			  // 값이 있다면 로그인 버튼에 class를 추가해서 display none으로 만들어주기, 그리고 수정페이지버튼 가는 class에서 display none을 remove시키기
+			  const loginsectionDiv = document.querySelector("#loginsection");
+			  const innserloginsectionDiv =document.querySelector("#loginbox");
+			  const afterLoginDiv = document.querySelector("#afterLogin");
+			  const innerafterinnerLogin = document.querySelector("#afterinnerLogin");
+			  
+			  if(util.getToken()=== null){
+				  if(!(kakaoAccessToken === undefined)){
+				  console.log('카카오 로그인 한상태 1');
+				  document.querySelector("#afterLogin2").remove()
+					document.querySelector("#loginbox").classList.add("toggleLogin");
+				   document.querySelector("#loginsection").classList.add("beforeLogin");	// afterLoginㄴ
+				  innerafterinnerLogin.innerHTML = "<div>"+ " 안녕하세요!</div>"+"<br/><p>환영합니다.</p>"
+				  }else{ 
+				  console.log('일반 로그인안한상태');
+				  document.querySelector("#afterLogin").remove()
+				   document.querySelector("#afterLogin2").remove()
+				  }
+			  }else if(!(util.getUserSeq() === undefined)){
+				  // 로그인 값이 있어서 로그인 될때
+				  console.log("로그인상태1")
+			  document.querySelector("#afterLogin2").remove()
+				document.querySelector("#loginbox").classList.add("toggleLogin");
+				   document.querySelector("#loginsection").classList.add("beforeLogin");	// afterLogin
+				  innerafterinnerLogin.innerHTML = "<div>"+ util.getuserNm() +"님 안녕하세요!</div>"+"<br/><p>환영합니다.</p>"
+						  //  document.querySelector("#afterLogin").remove();	//  
+			  }else if(!(kakaoAccessToken===null) || !(util.getUserSeq() === undefined)){
+				console.log("로그인상태2")
+				   document.querySelector("#loginsection").classList.add("beforeLogin");	// afterLogin
+				  innerafterinnerLogin.innerHTML = "<div>"+ "님 안녕하세요!</div>"+"<br/><p>환영합니다.</p>"
+			  }
+		
+		 
+			  
+			</script>
+			<script> 
+				AOS.init();
+			</script>
 </body>
-
 </html>

@@ -23,7 +23,7 @@ import java.util.Set;
 @Configuration 	// 스프링 실행시 설정파일 읽어드리기 위한 어노테이션 
 @EnableSwagger2 // swagger2를 사용하겠다는 어노테이션 
 public class SwaggerConfiguration {
-//http://localhost:8189/swagger-ui/index.html
+//http://52.78.212.203:8189/swagger-ui/index.html
 	@Bean
 	public Docket schApi(TypeResolver resolver) {
 

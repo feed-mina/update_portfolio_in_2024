@@ -63,7 +63,19 @@ public class NoticeController {
 		 List<Map<String, Object>> NoticeSlideList = commonService.selectList("notice.selectNoticeSlideList", paramMap);
 		return CommonResponse.statusResponse(HttpServletResponse.SC_OK, NoticeSlideList);
 	}
-    
+
+    @PostMapping(value="/selectNoticeSlidetestList.api")
+    @ApiOperation(value="슬라이드에 사용하는 공지사항 리스트", notes="최신순으로 9개 공지사항리스트 출력"+ //\r\n"
+    		  "\t{\r\n" + //
+            "\t\t\"searchDivision\": \"noticeSj\",\r\n" + // 
+            "\t\t\"dataPerPage\": \"9\",\r\n" + //
+            "\t\t\"currentPage\": \"1\"\r\n" + //
+            "\t}\r\n" + //
+            "\t")
+	public ResponseEntity<?> selectNoticeSlidetestList(@RequestBody Map<String, Object> paramMap) {
+		return CommonResponse.statusResponse(HttpServletResponse.SC_OK,
+				commonService.selectPaging("notice.selectNoticeSlideListPaging", paramMap));
+	}
     
 /*
  *     @PostMapping(value="/selectNoticeSlideList.api")

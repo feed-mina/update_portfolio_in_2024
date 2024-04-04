@@ -80,11 +80,11 @@ public class KaKaoAPIService {
 		kakaoParamMap.add("grant_type", "authorization_code");
 		// kakaoParamMap.add("client_id", "eb95cf99e5aa0fda9503becaf235c123"); // 앱
 		kakaoParamMap.add("client_id", "142c700061d20152ca151a489428cf6e"); // 테스트 앱
-		kakaoParamMap.add("redirect_uri", "http://localhost:8189/auth/kakaoTest1.api");
+		kakaoParamMap.add("redirect_uri", "http://52.78.212.203:8189/auth/kakaoTest1.api");
 		// kakaoParamMap.add("redirect_uri",
-		// "http://localhost:8189/auth/login-callback");
+		// "http://52.78.212.203:8189/auth/login-callback");
 		// kakaoParamMap.add("redirect_uri",
-		// "http://localhost:8189/auth/kakaoTest1.api");
+		// "http://52.78.212.203:8189/auth/kakaoTest1.api");
 
 		kakaoParamMap.add("code", code);
 

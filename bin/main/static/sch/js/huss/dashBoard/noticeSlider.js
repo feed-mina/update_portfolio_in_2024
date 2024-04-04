@@ -1,10 +1,10 @@
 var vueData = {
 	imageButton: "false",
 	step: "master",
-	totalCount: 0,
-
+	totalCount: 9,
 	modifyData: {},
 	noticeList: [],
+	noticeSlideList: [],
 	searchData: {
 		searchText: '',
 		pageNo: 1,
@@ -45,27 +45,24 @@ var vueInit = () => {
 	//let noticeSeq = 'CNSLT_0001'
 	//let paramMap = {'noticeSeq': ''};
 		$.sendAjax({
-			url: "/noticeController/selectNoticeSlideList.api", 
-	    data: vm.searchData,
+			url: "/noticeController/selectNoticeSlidetestList.api", 
+	    	data: vm.searchData,
 			contentType: "application/json",
-			success: (res) => {
-			
+			success: (res) => { 
 				console.log(res.data) 
 				let totalCount = res.data.length;
-				
+				vm.noticeSlideList = res.data.list;
 				for (var i = 0; i <totalCount; i++) {
 				// 글자가 8글자 이상일때 ...
-					if(res.data[i].noticeSj.length>= 8){
-    					res.data[i].noticeSj = res.data[i].noticeSj.substring(0, 8) + '...';
+					if(vm.noticeSlideList[i].noticeSj.length>= 8){
+    					vm.noticeSlideList[i].noticeSj = vm.noticeSlideList[i].noticeSj.substring(0, 8) + '...';
 					}
 				// 글자가 20글자 이상일때 ...
-					if(res.data[i].noticeCn.length>= 20){
-    					res.data[i].noticeCn = res.data[i].noticeCn.substring(0, 20) + '...';
+					if(vm.noticeSlideList[i].noticeCn.length>= 10){
+    					vm.noticeSlideList[i].noticeCn =vm.noticeSlideList[i].noticeCn.substring(0, 10) + '...';
 					}
-			 
-						 console.log(res.data[i].noticeSj);
-						 console.log(res.data[i].noticeCn);  
-						 console.log(res.data[i].registDt);  
+			   
+						 console.log(vm.noticeSlideList[i].registDt);  
 				}
 			 
 			}

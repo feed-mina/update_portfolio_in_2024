@@ -711,7 +711,7 @@ var util = {
 	},
 	REST_Call: (path)=> {
 		axios
-			.get("http://localhost:8189" + path, {
+			.get("http://52.78.212.203:8189" + path, {
 				params: {},
 				withCredentials: true,
 			})
@@ -726,7 +726,7 @@ var util = {
 	},
 	getKakaoLogin: () => { 
 
-let KAKAO_GET = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=142c700061d20152ca151a489428cf6e&redirect_uri=http://localhost:8189/auth/register.api";
+let KAKAO_GET = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=bc6f76bb8856c35bd57a3fa6a4331069&redirect_uri=http://ec2-52-78-212-203.ap-northeast-2.compute.amazonaws.com:8189/auth/register.api";
 
 var MAIN_PAGE = "/sch/huss/dashBoard/main.html";
 console.log('카카오 로그인');
@@ -753,7 +753,7 @@ console.log('카카오 로그인');
 	login: () => {
 		// 로그인 이후 이동할 페이지
 		var MAIN_PAGE = "/sch/huss/dashBoard/main.html";
-	//var MAIN_PAGE = "http://http://localhost/:8189/sch/huss/dashBoard/main.html";
+	//var MAIN_PAGE = "http://http://52.78.212.203/:8189/sch/huss/dashBoard/main.html";
 		// 로칼 저장값을 함수에서 로그인버튼을 누르지 않아도 로컬스토리지에 저장이 되는 부분이 있다.
 		// 그 이유가 왜 그런지 알아보기
 		var autoLogin = $("#autoLogin").prop("checked");

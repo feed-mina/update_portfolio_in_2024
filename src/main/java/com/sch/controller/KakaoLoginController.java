@@ -95,7 +95,7 @@ public class KakaoLoginController {
 	
 	// code가 헤더값에 들어가야 한다. u8lnlrJoNmU2NLGgR5E3YfRkmY9KhvGXfM_j7AFJqCLWifOcRENskCzi3NwKPXWcAAABjYD2Oqv_A_o_BVb6-Q
 	@GetMapping("/register.api")
-	@ApiOperation(value = "카카오 가입/로그인할때 호출되는 api", notes = "http://localhost:8189/auth/kakao/callback?code={코드값}")
+	@ApiOperation(value = "카카오 가입/로그인할때 호출되는 api", notes = "http://52.78.212.203:8189/auth/kakao/callback?code={코드값}")
 	@ApiImplicitParam(name = "code", required = true, dataTypeClass = String.class, value = "{\r\n" + //
 			"\t\"code\": \"u8lnlrJoNmU2NLGgR5E3YfRkmY9KhvGXfM_j7AFJqCLWifOcRENskCzi3NwKPXWcAAABjYD2Oqv_A_o_BVb6-Q \"\r\n" + //
 			"}", example = "{\r\n" + //
@@ -114,14 +114,13 @@ public class KakaoLoginController {
 
 		kakaoParamMap.add("grant_type", "authorization_code");
 	
-		kakaoParamMap.add("client_id", "142c700061d20152ca151a489428cf6e"); // 테스트 앱 
-		//  kakaoParamMap.add("redirect_uri", "http://localhost:8189/auth/register.api");
-		kakaoParamMap.add("redirect_uri", "http://localhost:8189/auth/register.api"); 
+		kakaoParamMap.add("client_id", "142c700061d20152ca151a489428cf6e"); // 테스트 앱  
+		kakaoParamMap.add("redirect_uri", "http://52.78.212.203:8189/auth/register.api"); 
 		// 카카오 로그인에서 사용할 Logout Redirect URI 
-		//http://localhost:8189/auth/kakao/terms.html 서비스약관
+		//http://52.78.212.203:8189/auth/kakao/terms.html 서비스약관
 		// 약관 TAG service_20240212 영문약관제목 Terms of Service
-		//http://localhost:8189/sch/huss/auth/kakao/sinkCallback 카카오싱크 플러그인이 서비스에 인가코드를 전달하기 위한 리다이렉트
-		// http://localhost:8189/auth/kakao/callback
+		//http://52.78.212.203:8189/sch/huss/auth/kakao/sinkCallback 카카오싱크 플러그인이 서비스에 인가코드를 전달하기 위한 리다이렉트
+		// http://52.78.212.203:8189/auth/kakao/callback
 		kakaoParamMap.add("code", code);
 
 		// HttpHeader와 HttpBody를 하나의 오브젝트에 담기
@@ -244,7 +243,7 @@ public class KakaoLoginController {
 			System.out.println("dispatcher forward전");
 			
 			dispatcher.forward(request, response); 
-			// include에서 /auth/register.api 로 페이지 이동 ??  http://localhost:8189/auth/register.api?code=geHFzLHo7UhmJstZq28rDAd9TJoCRBylywqbLftbt8M2nfFQjLyGUfKYsVAKPXKXAAABjejBAwPRDLJpR7eCqA
+			// include에서 /auth/register.api 로 페이지 이동 ??  http://52.78.212.203:8189/auth/register.api?code=geHFzLHo7UhmJstZq28rDAd9TJoCRBylywqbLftbt8M2nfFQjLyGUfKYsVAKPXKXAAABjejBAwPRDLJpR7eCqA
 			//	System.out.println("dispatcher include전");
 			//	dispatcher.include(request, response);	
 			//	System.out.println(dispatcher);
@@ -283,7 +282,7 @@ public class KakaoLoginController {
  
 	// 서비스와 컨트롤러 분리 
 	@GetMapping(value="/kakaoTest1.api")
-	@ApiOperation(value = "카카오 로그인할때 호출되는 api", notes = "http://localhost:8189/auth/kakao/callback?code={코드값}")
+	@ApiOperation(value = "카카오 로그인할때 호출되는 api", notes = "http://52.78.212.203:8189/auth/kakao/callback?code={코드값}")
 	public ResponseEntity<?> kakaoTest1(String code, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		HttpSession session = request.getSession();
@@ -326,9 +325,9 @@ public class KakaoLoginController {
 			Cookie userSeq = new Cookie("userSeq",(String) loginMap.get("userSeq"));
 			Cookie loginMode = new Cookie("loginMode","true");
 			System.out.println("Token : "+Token.getValue()); 
-//http://localhost/
-			Token.setDomain("localhost");
-			// Token.setDomain("localhost");
+//http://52.78.212.203/
+			Token.setDomain("52.78.212.203");
+			// Token.setDomain("52.78.212.203");
 			Token.setPath("/");
 			// 30초간 저장
 			Token.setMaxAge(30*60*60);
@@ -339,7 +338,7 @@ public class KakaoLoginController {
 
 
 			Email.setDomain("211.37.148.144");
-			// Email.setDomain("localhost");
+			// Email.setDomain("52.78.212.203");
 			Email.setPath("/");
 			// 30초간 저장
 			Email.setMaxAge( 60 * 60 * 10);
@@ -349,7 +348,7 @@ public class KakaoLoginController {
 
 
 			loginMode.setDomain("211.37.148.144");
-			// loginMode.setDomain("localhost");
+			// loginMode.setDomain("52.78.212.203");
 			loginMode.setPath("/");
 			// 30초간 저장
 			loginMode.setMaxAge(60 * 60 * 10);
@@ -358,8 +357,8 @@ public class KakaoLoginController {
 			System.out.println("쿠키 정보 전달 완료 : "+ loginMode);
 
 
-			userSeq.setDomain("localhost");
-			// userSeq.setDomain("localhost");
+			userSeq.setDomain("52.78.212.203");
+			// userSeq.setDomain("52.78.212.203");
 			userSeq.setPath("/");
 			// 30초간 저장
 			userSeq.setMaxAge(30*60);
@@ -405,32 +404,32 @@ public class KakaoLoginController {
 		session.removeAttribute("userSeq");
 
 		Cookie Token = new Cookie("accessToken",null);
-		Token.setDomain("localhost");
-		// Token.setDomain("localhost");
+		Token.setDomain("52.78.212.203");
+		// Token.setDomain("52.78.212.203");
 		Token.setPath("/");
 		Token.setMaxAge(0);
 		Token.setSecure(true);
 		response.addCookie(Token);
 
 		Cookie loginMode = new Cookie("loginMode",null);
-		loginMode.setDomain("localhost");
-		// loginMode.setDomain("localhost");
+		loginMode.setDomain("52.78.212.203");
+		// loginMode.setDomain("52.78.212.203");
 		loginMode.setPath("/");
 		loginMode.setMaxAge(0);
 		loginMode.setSecure(true);
 		response.addCookie(loginMode);
 
 		Cookie userEmail = new Cookie("userEmail",null);
-		userEmail.setDomain("localhost");
-		// userEmail.setDomain("localhost");
+		userEmail.setDomain("52.78.212.203");
+		// userEmail.setDomain("52.78.212.203");
 		userEmail.setPath("/");
 		userEmail.setMaxAge(0);
 		userEmail.setSecure(true);
 		response.addCookie(userEmail);
 
 		Cookie userSeq = new Cookie("userSeq",null);
-		userSeq.setDomain("localhost");
-		// userSeq.setDomain("localhost");
+		userSeq.setDomain("52.78.212.203");
+		// userSeq.setDomain("52.78.212.203");
 		userSeq.setPath("/");
 		userSeq.setMaxAge(0);
 		userSeq.setSecure(true);

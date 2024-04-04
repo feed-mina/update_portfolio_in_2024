@@ -114,8 +114,8 @@ System.out.println("req access_token : " + request.getAttribute("access_token"))
 	 String userToken =  (String) request.getAttribute("access_token");
 		 Cookie Token = new Cookie("accessToken",userToken);
 
-	 	Token.setDomain("localhost");
-			// Token.setDomain("localhost");
+	 	Token.setDomain("52.78.212.203");
+			// Token.setDomain("52.78.212.203");
 	 Token.setPath("/");
 			// 30초간 저장
 	 	Token.setMaxAge(30*60*60);
