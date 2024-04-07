@@ -16,15 +16,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sch.config.security.JwtTokenProvider;
 import com.sch.service.CommonService;
 import com.sch.service.FileService;
 import com.sch.service.NoticeService;
+import com.sch.util.CamelHashMap;
 import com.sch.util.CommonResponse;
+import com.sch.util.CommonUtil;
 import com.sch.util.UserParam;
 
 import io.swagger.annotations.Api;
@@ -153,16 +157,32 @@ public class NoticeController {
             "\t}\r\n" + //
             "\t")
     public ResponseEntity<?> insertNotice(
-            @RequestParam(value = "paramMap", required = true) Map<String, Object> paramMap) throws Exception {
+			@RequestParam(value = "blogFiles", required = false) MultipartFile[] noticeFiles,
+			@RequestPart(value = "paramMap", required = true) Map<String, Object> paramMap) throws Exception {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
+		Map<String, Object> tmpMap = new CamelHashMap();
+		tmpMap.put("userSeq", paramMap.get("registId"));
 
-        String accessToken = jwtTokenProvider.resolveToken(request);
-        String userSeq = jwtTokenProvider.getUserPk(accessToken);
+
+		Map<String, Object> loginMap = commonService.selectMap("login.selectLogin", tmpMap);
+		// loginMap 에 userSeq를 추가한다.
+		paramMap.put("userSeq", tmpMap.get("userSeq"));
+
+		// 로그인 검증 이후 메모리 loginSession세팅 후 데이터와 accessToken 리턴
+		CommonUtil.loginSession.put((String) tmpMap.get("userSeq"), tmpMap);
+
+		System.out.println("tmpMap : " + tmpMap);
+		System.out.println("paramMap : " + paramMap);
+
+		// String loginUserSeq = (String) sessionMap.get("userSeq");
+		String loginUserSeq = (String) tmpMap.get("userSeq");
+		System.out.println("loginUserSeq : " + loginUserSeq);
+		 
         Map<String, Object> userMap = new HashMap<String, Object>();
-        userMap.put("userSeq", userSeq);
+        userMap.put("userSeq", loginUserSeq);
         paramMap.put("user", userMap);
-        noticeService.insertNotice(paramMap);
+        noticeService.insertNotice(paramMap, noticeFiles);
         return CommonResponse.statusResponse(HttpServletResponse.SC_OK);
     }
 
@@ -197,14 +217,7 @@ public class NoticeController {
     }
     
     // 2024.03.14 커스텀
-
-	@PostMapping(value = "/insertnotice.api")
-	@ApiOperation(value = "notice 공통 UPSERT", notes = "notice(, 체험신청 공통사용하는 insert) ")
-	@ApiImplicitParam(name = "paramMap", value = " 시퀀스(noticeSeq) 들어있는 맵", dataTypeClass = Map.class)
-	public ResponseEntity<?> insertnotice(@UserParam Map<String, Object> paramMap) {
-		noticeService.insertnotice(paramMap);
-		return CommonResponse.statusResponse(HttpServletResponse.SC_OK);
-	}
+ 
 
 	@PostMapping(value = "/selectCusotmNoticeList.api")
 	@ApiOperation(value = " 개설 리스트 조회", notes = "custom 공지 목록을 불러옵니다.")

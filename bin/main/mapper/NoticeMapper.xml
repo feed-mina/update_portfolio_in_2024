@@ -111,9 +111,7 @@
 	</select>
 
 	<insert id="insertNotice" parameterType="map">
-		<selectKey resultType="String" keyProperty="noticeSeq" order="BEFORE">
-			SELECT fn_nextval('NOTICE')
-		</selectKey>
+		 
 		/* notice.insertNotice */
 		INSERT INTO tb_notice
 		(

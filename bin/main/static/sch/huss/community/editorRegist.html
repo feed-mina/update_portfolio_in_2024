@@ -1,25 +1,24 @@
 <!-- 게시판 등록 -->
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
-<meta charset="utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta
-	content="A fully featured admin theme which can be used to build CRM, CMS, etc."
-	name="description" />
-<meta name="author" content="">
-<link rel="stylesheet" href="/css/pc/style.css">
-<link rel="stylesheet" href="/css/style_legacy.css">
-<link rel="stylesheet" href="/css/pc/aos.css">
-<link rel="stylesheet" href="/css/custom.css" />
-<script src="/js/allVendors.js"></script>
-<script src="/js/common.js"></script>
-<script src="/js/aos.js"></script>
-<script src="/js/sortable.min.js"></script> 
- <script src="/sch/js/huss/editorRegist.js"></script> 
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+	<meta name="author" content="">
+	<link rel="stylesheet" href="/css/pc/style.css">
+	<link rel="stylesheet" href="/css/style_legacy.css">
+	<link rel="stylesheet" href="/css/pc/aos.css">
+	<link rel="stylesheet" href="/css/custom.css" />
+	<script src="/js/allVendors.js"></script>
+	<script src="/js/common.js"></script>
+	<script src="/js/aos.js"></script>
+	<script src="/js/sortable.min.js"></script>
+	<script src="/sch/js/huss/editorRegist.js"></script>
 </head>
+
 <body>
 	<!-- header -->
 	<header id="header_wrap"></header>
@@ -35,8 +34,7 @@
 					<!-- ===== container ====== -->
 					<div id="container" class="d-flex flex-column">
 						<div class="container-fluid">
-							<div
-								class="d-sm-flex align-items-center justify-content-between mb-4">
+							<div class="d-sm-flex align-items-center justify-content-between mb-4">
 								<h1 class="h1 mb-0 text-gray-800">커뮤니티 등록</h1>
 							</div>
 							<form id="formTag">
@@ -53,49 +51,59 @@
 																		<th>제목 <span class="required">*</span>
 																		</th>
 																		<td class="input-group"><input id="communitySj"
-																			class="form-control" type="text"
-																			v-model=blogData.communitySj placeholder="제목을 입력해 주세요."></td>
+																				class="form-control" type="text"
+																				v-model=blogData.communitySj
+																				placeholder="제목을 입력해 주세요."></td>
 																	</tr>
 																	<tr>
 																		<th>글쓴이 <span class="required">*</span>
 																		</th>
 																		<td class="input-group"><input id="userNm"
-																			class="form-control" type="text"
-																			v-model=blogData.userNm placeholder="작성자"></td>
-																	</tr> 
+																				class="form-control" type="text"
+																				v-model=blogData.userNm
+																				placeholder="작성자"></td>
+																	</tr>
 																	<tr>
 																		<th>카테고리 <span class="required">*</span>
 																		</th>
 																		<td>
 																			<div class="sel_typ1">
-																				<select  id="division" class="custom-select" v-model=blogData.division>
-																					<option value="">카테고리를 선택하세요</option>
-																				 
+																				<select id="division"
+																					class="custom-select"
+																					v-model=blogData.division>
+																					<option value="">카테고리를 선택하세요
+																					</option>
+
 																					<option value="V">Video</option>
 																					<option value="P">Poster</option>
 																				</select>
 																			</div>
 																		</td>
 																	</tr>
-																<tr>
-																	<th>상태 <span class="required">*</span>
-																	</th>
-																	<td>
-																		<div class="sel_typ1">
-																			<select class="custom-select" v-model=blogData.useAt>
-																				<option value="">노출상태를 선택하세요</option>
-																				<option value="Y">노출 중</option>
-																				<option value="N">노출 중지</option>
-																			</select>
-																		</div>
-																	</td>
-																</tr>
-															 
+																	<tr>
+																		<th>상태 <span class="required">*</span>
+																		</th>
+																		<td>
+																			<div class="sel_typ1">
+																				<select class="custom-select"
+																					v-model=blogData.useAt>
+																					<option value="">노출상태를 선택하세요
+																					</option>
+																					<option value="Y">노출 중</option>
+																					<option value="N">노출 중지</option>
+																				</select>
+																			</div>
+																		</td>
+																	</tr>
+
 																	<tr>
 																		<th>내용 <span class="required">*</span>
 																		</th>
-																		<td><textarea placeholder="내용을 입력해 주세요" id="communityCn"
-																		 style="min-height: 300px; min-width: 650px"  v-model="blogData.communityCn"></textarea></td>
+																		<td><textarea placeholder="내용을 입력해 주세요"
+																				id="communityCn"
+																				style="min-height: 300px; min-width: 650px"
+																				v-model="blogData.communityCn"></textarea>
+																		</td>
 																	</tr>
 																	<tr>
 																		<th class="align-middle">첨부파일&nbsp;&nbsp;</th>
@@ -104,9 +112,12 @@
 																				<div class="form-check col-6 ml-3">
 																					<input type="file" id="fnAddFiles"
 																						class="custom-file-input form-control"
-																						accept=".jpeg, .jpg, .png, .mp4" multiple /> <label
-																						for="fnAddFiles" class="custom-file-label">파일찾기
-																						( &nbsp jpeg &nbsp/&nbsp jpg &nbsp/&nbsp png
+																						accept=".jpeg, .jpg, .png, .mp4"
+																						multiple /> <label
+																						for="fnAddFiles"
+																						class="custom-file-label">파일찾기
+																						( &nbsp jpeg &nbsp/&nbsp jpg
+																						&nbsp/&nbsp png
 																						&nbsp/&nbsp mp4 파일만 가능 )</label>
 																				</div>
 																			</div>
@@ -114,21 +125,27 @@
 																				<div class="fileList row col">
 																					<div id="fileList"
 																						class="inp_title_03 row mr-2 justify-content-center align-content-end"
-																						draggable="true" v-for="(obj, idx) in filesList"
+																						draggable="true"
+																						v-for="(obj, idx) in filesList"
 																						v-if="filesList.length">
-																						<div v-if="obj.fileType === 'image'">
+																						<div
+																							v-if="obj.fileType === 'image'">
 																							<img :src=obj.src>
 																						</div>
 																						<div v-else-if="obj.fileType === 'video'"
 																							id="fileType">
 																							<video :src=obj.src></video>
 																						</div>
-																						<div class="display-text" id="fileSn"
-																							name="fileSn" :data-value=idx>
+																						<div class="display-text"
+																							id="fileSn" name="fileSn"
+																							:data-value=idx>
 																							{{obj.name}}
-																							<button type="button" class="ml-2 search_details"
-																								id="delFiles" @click="delFiles(obj.idx)">
-																								<img src="\images\pc\registImgS.png" >
+																							<button type="button"
+																								class="ml-2 search_details"
+																								id="delFiles"
+																								@click="delFiles(obj.idx)">
+																								<img
+																									src="\images\pc\registImgS.png">
 																							</button>
 																						</div>
 																					</div>
@@ -149,9 +166,9 @@
 															<div class="pl-5">
 																<!--  <button id="save" onclick="save()" type="submit" class="btn_type04">저장</button>  -->
 																<a href="#"
-																class="btn btn-primary btn-icon btn_search_width"
-																@click=fnSave()> <span class="text">저장</span>
-															</a>
+																	class="btn btn-primary btn-icon btn_search_width"
+																	@click=fnSave()> <span class="text">저장</span>
+																</a>
 															</div>
 														</div>
 													</div>
@@ -172,22 +189,23 @@
 
 	<script>
 
-$( function() {
-    $( "#tabs" ).tabs();
-});
+		$(function () {
+			$("#tabs").tabs();
+		});
 
-// 탭 배경
-$(document).ready(function(){
-    const tabs = $('.program_tabs li');
-    tabs.click(function(){
-        if (this.classList.contains('tabs_right')) {
-            $('.active_back').css('left', '115px');
-        } else if (this.classList.contains('tabs_left')) {
-            $('.active_back').css('left', '0px');
-        }
-        //  탭 배경 끝
-    });
-});
-</script> 
+		// 탭 배경
+		$(document).ready(function () {
+			const tabs = $('.program_tabs li');
+			tabs.click(function () {
+				if (this.classList.contains('tabs_right')) {
+					$('.active_back').css('left', '115px');
+				} else if (this.classList.contains('tabs_left')) {
+					$('.active_back').css('left', '0px');
+				}
+				//  탭 배경 끝
+			});
+		});
+	</script>
 </body>
+
 </html>

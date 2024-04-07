@@ -1,10 +1,14 @@
 var vueData = {
-	blogData: {
+	noticeData: {
 		division: '',
-		tag: 'COMMUNITY',
-		communitySj: '',
+		tag: 'NOTICE',
+		noticeSj: '',
 		useAt: '',
-		communityCn: ''
+		noticeCn: '',
+		noticeSe: '',
+		userNm: util.getuserNm(),
+		userSeq: util.getUserSeq(),
+		registId: util.getUserSeq()
 	},
 	cmmnCode: [],
 	filesList: [],
@@ -23,77 +27,73 @@ var vueInit = () => {
 			return vueData;
 		},
 		methods: {
-			getCmmnCodeList: () => {
-				let param = {
-					upperCmmnCode: 'BBS'
-				}
-				$.sendAjax({
-					url: "/cmmn/selectCmmnCode.api",
-					data: param,
-					contentType: "application/json",
-					success: (res) => {
-						vm.cmmnCode = res.data;
-					}
-				})
-			},
 			fnSave: () => {
 				//에디터값을 -> textarea에 저장 -> vue에 저장
-				event.editorToTextarea();
+				// event.editorToTextarea();
 
-				if (vm.blogData.division === '') {
-					$.alert("카테고리를 선택하세요.");
-					return false;
-				}
-				if (util.sjChk(vm.blogData.communitySj)) {
+				if (util.sjChk(vm.noticeData.noticeSj)) {
 					$.alert("제목은 100자 이내로 작성해주세요.");
 					return false;
 				}
-				if (vm.blogData.useAt === '') {
-					$.alert("노출상태를 선택하세요.");
-					return false;
-				}
-				let valiChk = event.removeHtml(vm.blogData.communityCn);
+				/**
+				 * 
+				let valiChk = event.removeHtml(vm.noticeData.noticeCn);
 				if (util.cnChk(valiChk)) {
 					$.alert("내용은 2000자 이내로 작성해주세요.");
 					return false;
 				}
+				 */
+
+				if (util.emptyCheck(vm.noticeData.noticeCn) === '') {
+					$.alert("내용은 2000자 이내로 작성해주세요.");
+					return false;
+				}
+				if (vm.noticeData.useAt === 'Y') {
+					vm.noticeData.noticeSe = 'H' // 숨김
+				} else if (vm.noticeData.useAt === 'N') {
+					vm.noticeData.noticeSe = 'B' // 보임
+				}
+
+				var text = vm.noticeData.noticeCn;
+
+				text = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+				vm.noticeData.noticeCn = text
 
 				let formData = new FormData();
-				formData.append('paramMap', new Blob([JSON.stringify(vm.blogData)], { type: 'application/json' }));
+				formData.append('paramMap', new Blob([JSON.stringify(vm.noticeData)], { type: 'application/json' }));
 
 				for (let i = 0; i < vm.filesList.length; i++) {
 					let j = $('div[name=fileSn]')[i].dataset.value
-					vm.blogFiles[i] = vm.filesList[j]
-					formData.append('blogFiles', vm.blogFiles[i]);
+					vm.noticeFiles[i] = vm.filesList[j]
+					formData.append('noticeFiles', vm.noticeFiles[i]);
 				}
 
+				console.log(formData)
 				for (var pair of formData.entries()) { }
 
 				$.sendAjax({
-					url: "/communityController/insertCommunity.api",
+					url: "/noticeController/insertNotice.api",
 					data: formData,
 					enctype: "multipart/form-data",
 					contentType: false,
 					processData: false,
 					cache: false,
 					success: (res) => {
-						console.log(res);
-						//$.alert("커뮤니티 게시글이 등록되었습니다.커뮤니티 목록으로 이동합니다.", () => {
-						//	location.href = "communityList.html";});
-
+						console.log(res)
+						$.alert("등록이 완료되었습니다. 목록으로 이동합니다.", () => {
+							// location.href = "noticeList.html";
+						});
 					}
 				})
 			},
 			fnCancel: () => {
 				$.confirm("지금까지 입력한 내용이 모두 사라집니다. 정말 취소하시겠습니까?", () => {
-					vm.blogData = {};
-					vm.blogData.division = "";
-					vm.blogData.tag = "COMMUNITY";
-					vm.blogData.useAt = "";
+					vm.noticeData = {};
 					vm.filesList = [];
-					oEditors.getById["communityCn"].exec("SET_IR", [""]); //내용초기화
-					//$.confirm("입력한 내용이 취소되어 목록으로 이동합니다.", () => {
-					//location.href = "faqList.html"}) 
+					// oEditors.getById["noticeCn"].exec("SET_IR", [""]); //내용초기화
+					$.confirm("입력한 내용이 취소되어 목록으로 이동합니다.", () => {
+						location.href = "noticeList.html"
+					})
 				})
 			},
 			delFiles: (idx) => {
@@ -112,26 +112,28 @@ let event = {
 			event.addFiles(obj);
 		})
 
-		nhn.husky.EZCreator.createInIFrame({
-			oAppRef: oEditors,
-			elPlaceHolder: "communityCn",		//textarea에서 지정한 id와 일치해야 합니다.
-			//SmartEditor2Skin.html 파일이 존재하는 경로
-			sSkinURI: "/js/SE2/SmartEditor2Skin.html",	// Editor HTML파일 위치로 변경
-			htParams: {
-				// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
-				bUseToolbar: true,
-				// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
-				bUseVerticalResizer: true,
-				// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
-				bUseModeChanger: true,
-			},
-			fOnAppLoad: function () {
-				oEditors.getById['communityCn'].setDefaultFont("돋움", 12);  // 기본 글꼴 설정 추가
-				//예제 코드
-				//oEditors.getById["communityCn"].exec("PASTE_HTML", ["내용을 입력해 주세요."]);
-			},
-			fCreator: "createSEditor2",
-		})
+		/**
+		 * 		nhn.husky.EZCreator.createInIFrame({
+					oAppRef: oEditors,
+					elPlaceHolder: "noticeCn",		//textarea에서 지정한 id와 일치해야 합니다.
+					//SmartEditor2Skin.html 파일이 존재하는 경로
+					sSkinURI: "/js/SE2/SmartEditor2Skin.html",	// Editor HTML파일 위치로 변경
+					htParams: {
+						// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+						bUseToolbar: true,
+						// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+						bUseVerticalResizer: true,
+						// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+						bUseModeChanger: true,
+					},
+					fOnAppLoad: function() {
+						oEditors.getById['noticeCn'].setDefaultFont("돋움", 12);  // 기본 글꼴 설정 추가
+						//예제 코드
+						//oEditors.getById["noticeCn"].exec("PASTE_HTML", ["내용을 입력해 주세요."]);
+					},
+					fCreator: "createSEditor2",
+				})
+		 */
 
 		const columns = document.querySelectorAll(".fileList");
 		columns.forEach((item) => {
@@ -142,12 +144,18 @@ let event = {
 			});
 		});
 	},
-
 	editorToTextarea: () => {
-		oEditors.length && oEditors.getById["communityCn"].exec("UPDATE_CONTENTS_FIELD", []);
-		$("#communityCn")[0].dispatchEvent(new Event("input"));
+		oEditors.length && oEditors.getById["noticeCn"].exec("UPDATE_CONTENTS_FIELD", []);
+		$("#noticeCn")[0].dispatchEvent(new Event("input"));
 	},
 
+	/**
+	 * 	editorToTextarea: () => {
+			oEditors.length && oEditors.getById["noticeCn"].exec("UPDATE_CONTENTS_FIELD", []);
+			$("#noticeCn")[0].dispatchEvent(new Event("input"));
+		},
+	
+	 */
 	removeHtml: function (text) {
 		text = text.replace(/<br>/ig, '');
 		text = text.replace(/&nbsp;/ig, ''); // 공백제거
@@ -206,5 +214,4 @@ let event = {
 $(document).ready(() => {
 	vueInit();
 	event.init();
-	vm.getCmmnCodeList();
 })

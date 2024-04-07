@@ -111,11 +111,7 @@
   </select>
   
   <insert id="upsertUserQna" parameterType="map">
-    		/* bbsQna.upsertUserQna */
-    		<selectKey resultType="String" keyProperty="bbsSeq" order="BEFORE">
-            <!-- bbsSeq값이 NULL이면 seq생성, else PARAM값 -->
-            SELECT fn_nextval('BBS')
-        </selectKey>
+    	 
         INSERT INTO tb_bbs
         (
         	bbs_code

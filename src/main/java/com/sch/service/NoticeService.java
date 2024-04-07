@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sch.dao.CommonDao;
 import com.sch.util.CamelHashMap;
@@ -26,7 +27,9 @@ public class NoticeService {
 
 	 
 	
-    public void insertNotice(Map<String, Object> paramMap) throws Exception {
+    public void insertNotice(Map<String, Object> paramMap, MultipartFile[] noticeFiles) throws Exception {
+        fileService.filesRegist(noticeFiles, paramMap, "file");
+        System.out.println("blogFiles : " + noticeFiles);
         commonService.insert("notice.insertNotice", paramMap);
     }
 

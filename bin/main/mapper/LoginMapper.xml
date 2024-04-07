@@ -67,9 +67,7 @@
  
 <!--login.kakaoUserRegist 카카오회원가입-->
 		<insert id="kakaoUserRegist" parameterType="map">
-		<selectKey resultType="String" keyProperty="userSeq" order="BEFORE">
-			select fn_nextval('USER')
-		</selectKey>
+		 
 
 		INSERT INTO tb_user
 			(
@@ -106,9 +104,9 @@
 				,'G'
 				,'K'
 				,NULL
-				,CURRENT_TIMESTAMP()
+				,current_timestamp()
 				,NULL
-				,CURRENT_TIMESTAMP()
+				,current_timestamp()
 				,'Y' <!--카카오인증은 로그인과 동시에 회원가입이므로 use_at 파람을 Y로 default한다.-->  
 				<if test='@com.sch.util.CommonUtil@isNotEmpty(policyMarkt)'>
 				, 'Y'
@@ -156,9 +154,9 @@
 				,'G'
 				,'U'
 				,NULL
-				,CURRENT_TIMESTAMP()
+				,current_timestamp()
 				,NULL
-				,CURRENT_TIMESTAMP()
+				,current_timestamp()
 				,'N'   
 				<if test='@com.sch.util.CommonUtil@isNotEmpty(policyMarktFlag)'>
 				, #{policyMarktFlag}
@@ -174,7 +172,7 @@
 		UPDATE tb_user
 		SET
 			updt_id = #{userSeq}
-			,updt_dt = CURRENT_TIMESTAMP() 
+			,updt_dt = current_timestamp()
 			<if test='@com.sch.util.CommonUtil@isNotEmpty(userNewPassword)'>
 				,user_password = #{userNewPassword}
 			</if>
@@ -191,14 +189,14 @@
  
 <!--왠지 안쓰는 sql문같음
 	<update id="userPasswordUpdate" parameterType="map">
-		UPDATE ad.tb_user
+		UPDATE HUSS.tb_user
 		SET user_password = #{userPassword}
 		WHERE user_seq = #{userSeq}
 	</update>
 -->
 <!--회원동의
 	<insert id="userStplat" parameterType="map">
-		INSERT INTO ad.tb_user_stplat
+		INSERT INTO HUSS.tb_user_stplat
 			(
 				user_seq
 				,stplat_code
@@ -211,8 +209,8 @@
 				#{userSeq}
 				,#{stplatCode}
 				,#{agreAt}
-				,CURRENT_TIMESTAMP()
-				,CURRENT_TIMESTAMP()
+				,current_timestamp()
+				,current_timestamp()
 			)
 	</insert>  -->
 	<!--login.userIdFind 이메일찾기-->

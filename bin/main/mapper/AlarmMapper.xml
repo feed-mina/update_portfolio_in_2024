@@ -19,7 +19,7 @@
 			fn_codenm(tam.alarm_category) as alarm_category,
 			tam.sj,
 			tam.msg,
-			COUNT(tad.alarm_seq) as send_Count,
+			COUNT(tHUSS.alarm_seq) as send_Count,
 			CASE
 				WHEN tam.alarm_form = 'A' THEN
 					(SELECT COUNT(*)
@@ -29,7 +29,7 @@
 			END AS alarm_count,
 			tam.regist_dt
 		FROM tb_alarm_mastr tam
-				 INNER JOIN tb_alarm_detail tad ON tam.alarm_seq = tad.alarm_seq
+				 INNER JOIN tb_alarm_detail tad ON tam.alarm_seq = tHUSS.alarm_seq
 		WHERE 1=1
 			<if test='@com.sch.util.CommonUtil@isNotEmpty(alarmCategory)'>
 				AND tam.alarm_category = #{alarmCategory}
@@ -72,7 +72,7 @@
 			fn_codenm(tam.alarm_category) as alarm_category,
 			tam.sj,
 			tam.msg,
-			COUNT(tad.alarm_seq) as send_Count,
+			COUNT(tHUSS.alarm_seq) as send_Count,
 			CASE
 				WHEN tam.alarm_form = 'A' THEN
 					(SELECT COUNT(*)
@@ -82,17 +82,14 @@
 				END AS alarm_count,
 			tam.regist_dt
 		FROM tb_alarm_mastr tam
-				 INNER JOIN tb_alarm_detail tad ON tam.alarm_seq = tad.alarm_seq
+				 INNER JOIN tb_alarm_detail tad ON tam.alarm_seq = tHUSS.alarm_seq
 		WHERE
 			tam.alarm_seq = #{alarmSeq}
 		GROUP BY tam.alarm_seq
 	</select>
 
 	<insert id="insertAlarm" parameterType="map" >
-		/* alarm.insertAlarm */
-		<selectKey resultType="String" keyProperty="alarmSeq" order="BEFORE">
-		SELECT sch.fn_nextval('ALARM')
-		</selectKey>
+		 
 		INSERT INTO tb_alarm_mastr
 			(
 				alarm_seq
@@ -145,10 +142,10 @@
 		<!-- alarm.selecUserAlarm -->
 		SELECT 
 			alarm_form
-			,tad.user_seq
+			,tHUSS.user_seq
 			,fn_usernm(user_seq) as user_seq_nm
-			,tad.check_yn
-			,tad.regist_dt
+			,tHUSS.check_yn
+			,tHUSS.regist_dt
 			,tam.alarm_seq
 			,tam.alarm_type
 			,fn_codenm(tam.alarm_type) as alarm_type_nm
@@ -159,14 +156,14 @@
 			,tam.msg
 			,tam.msg_ch
 		FROM tb_alarm_detail tad 
-			LEFT JOIN tb_alarm_mastr tam ON tad.alarm_seq = tam.alarm_seq
+			LEFT JOIN tb_alarm_mastr tam ON tHUSS.alarm_seq = tam.alarm_seq
 		
 		WHERE user_seq = #{userSeq} -- 특정유저의 알림함
 			AND alarm_form = 'A' -- a알림 p푸시 m이메일
 		<if test='@com.sch.util.CommonUtil@isNotEmpty(alarmCategory)'>
 			AND alarm_category = #{alarmCategory}
 		</if>
-		ORDER BY tad.regist_dt DESC
+		ORDER BY tHUSS.regist_dt DESC
 	</select>
 	<update id="updateUserAlarmCheck">
 		update tb_alarm_detail tad

@@ -78,9 +78,9 @@ var vueInit = () => {
 					cache: false,
 					success: (res) => {
 						console.log(res);
-						//$.alert("FAQ 등록이 완료되었습니다. FAQ 목록으로 이동합니다.", () => {
-						//	location.href = "faqList.html";});
-						
+						//$.alert("커뮤니티 게시글이 등록되었습니다.커뮤니티 목록으로 이동합니다.", () => {
+						//	location.href = "communityList.html";});
+
 					}
 				})
 			},
@@ -93,7 +93,7 @@ var vueInit = () => {
 					vm.filesList = [];
 					oEditors.getById["communityCn"].exec("SET_IR", [""]); //내용초기화
 					//$.confirm("입력한 내용이 취소되어 목록으로 이동합니다.", () => {
-						//location.href = "faqList.html"}) 
+					//location.href = "faqList.html"}) 
 				})
 			},
 			delFiles: (idx) => {
@@ -108,7 +108,7 @@ var vueInit = () => {
 
 let event = {
 	init: () => {
-		$('#fnAddFiles').on('change', function(obj) {
+		$('#fnAddFiles').on('change', function (obj) {
 			event.addFiles(obj);
 		})
 
@@ -125,7 +125,7 @@ let event = {
 				// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
 				bUseModeChanger: true,
 			},
-			fOnAppLoad: function() {
+			fOnAppLoad: function () {
 				oEditors.getById['communityCn'].setDefaultFont("돋움", 12);  // 기본 글꼴 설정 추가
 				//예제 코드
 				//oEditors.getById["communityCn"].exec("PASTE_HTML", ["내용을 입력해 주세요."]);
@@ -148,13 +148,13 @@ let event = {
 		$("#communityCn")[0].dispatchEvent(new Event("input"));
 	},
 
-	removeHtml: function(text) {
+	removeHtml: function (text) {
 		text = text.replace(/<br>/ig, '');
 		text = text.replace(/&nbsp;/ig, ''); // 공백제거
 		text = text.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, ''); // html태그 삭제
 		return text;
 	},
-	addFiles: function(obj) {
+	addFiles: function (obj) {
 		const _this = this;
 		let maxCnt = 12; // 첨부파일 최대 갯수
 		let attachFileCnt = vm.filesNo; // 기존 추가된 첨부파일 갯수
@@ -165,12 +165,12 @@ let event = {
 		if (currentFileCnt > ableFileCnt) {
 			$.alert('첨부파일은 최대 12개까지만 가능합니다.');
 		} else {
-			$.each(obj.target.files, function(i, val) {
+			$.each(obj.target.files, function (i, val) {
 				// 첨부파일 검증
 				if (_this.fileValidation(val)) {
 					// 파일 배열에 담기
 					let reader = new FileReader();
-					reader.onload = function(e) {
+					reader.onload = function (e) {
 						val.src = e.target.result
 						val.fileType = val.type.split('/')[0]
 						vm.filesList.push(val);
@@ -183,7 +183,7 @@ let event = {
 			});
 		}
 	},
-	fileValidation: function(obj) {
+	fileValidation: function (obj) {
 		const fileTypes = ['image/jpeg', 'image/jpg', 'image/png', 'video/mp4'];
 		if (obj.name.length > 100) {
 			$.alert("파일명이 100자 이상인 파일은 제외되었습니다.");
