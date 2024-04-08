@@ -17,6 +17,7 @@ import com.sch.util.JSONObject;
 @Service
 public class LoginService {
 
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -28,7 +29,7 @@ public class LoginService {
 	// AlarmService alarmService;
 	
 	public void useAtUpdate(Map<String, Object> paramMap) {
-		System.out.println("parmaMap"+paramMap);
+		logger.info("parmaMap"+paramMap);
 		commonService.insert("login.useAtUpdate", paramMap);
 	}
 	
@@ -78,14 +79,14 @@ public class LoginService {
 
 
 	public void sendVerificationMail(String userSeq, HttpServletRequest request) throws Exception{
-		System.out.println("userSeq"+userSeq);
-		System.out.println("request"+request);
+		logger.info("userSeq"+userSeq);
+		logger.info("request"+request);
 		JSONObject emailJson = new JSONObject();
 		emailJson.put("emailJson",emailJson);
-		System.out.println("request"+request);
+		logger.info("request"+request);
 		String  jsonString = AES256Encrypt.encrypt(emailJson.toString());
 
-		System.out.println("jsonString"+jsonString);
+		logger.info("jsonString"+jsonString);
 		// 이메일 전송
 		String targetUrl = CommonUtil.getHostAddress(request) + "/sch/user/registerEmailComplete.html?encData=" + jsonString;
 	}
