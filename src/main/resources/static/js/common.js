@@ -4,7 +4,7 @@
  * 공통 스크립트
  *
  */
-const gServerApiUrl = ""; 
+const gServerApiUrl = "";
 // function setGnb(type, el) {
 // 	$("#gnbCtgry > button").removeClass("active");
 // 	$(el).addClass("active");
@@ -12,43 +12,43 @@ const gServerApiUrl = "";
 // 	type != "gp-all" && $(`#accordionSidebar > li:not([data-group='${type}'])`).hide();
 // }
 
-$(document).ready(function() {
+$(document).ready(function () {
 
 	// 헤더가 있는 페이지는 헤더, 사이드바 공통 세팅
 	if ($("#header_wrap").length) {
-		var path = window.location.pathname; 
+		var path = window.location.pathname;
 		$.when(
-			$.get("/include/header.html", function(data) {
-				$("#header_wrap").html(data); 
+			$.get("/include/header.html", function (data) {
+				$("#header_wrap").html(data);
 			}),
-		).done(function() {
+		).done(function () {
 			// sidebar, 헤더 부분 css Active 추가
 			const locNm = location.pathname + location.search; // ex '/sch/admin/lctreSemina/lctreSemina.html?name=hi'
 			let aTag = $("a[href='" + locNm + "']");
 			aTag.closest(".nav-item").addClass("active"); // 사이드바 active추가
 			$(".navbar").find("[data-category=" + sidebarCategory + "]").find("a").addClass("active")  // 헤더 active추가 url기준(sidebarCategory)으로 header.html 안의 data-category에 활성화될 카테고리 입력해놓음
 
-		//	initUserAuth(); 
+			//	initUserAuth(); 
 		});
 	}
-// 헤더가 있는 페이지는 헤더, 사이드바 공통 세팅
+	// 헤더가 있는 페이지는 헤더, 사이드바 공통 세팅
 	if ($("#footer_wrap").length) {
 		var path = window.location.pathname;
 		var pathArray = path.split("/");
 		var sidePath = "/include/sidebar.html";
 		var sidebarCategory = pathArray[3]; // board, dashboard, notice, sysManage, userManage 등등
 		$.when(
-			$.get("/include/footer.html", function(data) {
-				$("#footer_wrap").html(data); 
+			$.get("/include/footer.html", function (data) {
+				$("#footer_wrap").html(data);
 			}),
-		).done(function() {
+		).done(function () {
 			// sidebar, 헤더 부분 css Active 추가
 			const locNm = location.pathname + location.search; // ex '/sch/admin/lctreSemina/lctreSemina.html?name=hi'
 			let aTag = $("a[href='" + locNm + "']");
 			aTag.closest(".nav-item").addClass("active"); // 사이드바 active추가
 			$(".navbar").find("[data-category=" + sidebarCategory + "]").find("a").addClass("active")  // 헤더 active추가 url기준(sidebarCategory)으로 header.html 안의 data-category에 활성화될 카테고리 입력해놓음
 
-		//	initUserAuth(); 
+			//	initUserAuth(); 
 		});
 	}
 	$("#contents").prepend(
@@ -78,7 +78,7 @@ $(document).ready(function() {
 	let htmlFileName = url.substring(startIndex + 1, extensionIndex);
 	let alertTargetPage = ["/lctreSemina", "/dashBoard", "/userManage", "/noticeExprn", "/alarm", "/board", "/sysManage"];
 	if (alarmPageList.includes(htmlFileName)) {
-		window.onbeforeunload = function(event) {
+		window.onbeforeunload = function (event) {
 			let targetHref = event.target.activeElement.href;
 			let targetLastIndex = targetHref.lastIndexOf("/");
 			targetHref = targetHref.substr(0, targetLastIndex);
@@ -93,7 +93,7 @@ $(document).ready(function() {
 
 
 // 캘린더
-var datepicker = function() {
+var datepicker = function () {
 	$.datepicker.setDefaults({
 		dateFormat: "yy-mm-dd",
 		yearSuffix: "년",
@@ -111,7 +111,7 @@ var datepicker = function() {
 	});
 	$(".datepicker")
 		.datepicker()
-		.on("change", function() {
+		.on("change", function () {
 			this.dispatchEvent(new Event("input"));
 			if ($(this).hasClass("datepicker_from")) {
 				$(this).closest(".bx_calendar").find(".datepicker_to").datepicker("option", "minDate", this.value);
@@ -121,15 +121,15 @@ var datepicker = function() {
 		});
 };
 
-$(document).ajaxStart(function() {
+$(document).ajaxStart(function () {
 	$("body").css("overflow", "hidden");
 	$("#loadingSpinner").show();
 });
-$(document).ajaxStop(function() {
+$(document).ajaxStop(function () {
 	$("body").css("overflow", "");
 	$("#loadingSpinner").hide();
 });
-$(document).on("keyup", ".only-phone", function(e) {
+$(document).on("keyup", ".only-phone", function (e) {
 	var val = util.formmater.phone($(this).val());
 	$(this).val(val);
 });
@@ -170,7 +170,7 @@ var fnPaging = (totalData, dataPerPage, pageCount, currentPage, callBack, loadin
 
 	$(elemId + " li")
 		.off("click")
-		.on("click", function() {
+		.on("click", function () {
 			if (loadingYn != null && loadingYn == "Y") {
 				$("#loadingDiv").addClass("dimm_load").show();
 			}
@@ -292,11 +292,11 @@ jQuery.confirm = (msg, successCb = null, failCb = null, option = {}, isAlert = f
 
 	$("#alertCenter")
 		.off("click.alert")
-		.on("click.alert", ".btn-primary", function() {
+		.on("click.alert", ".btn-primary", function () {
 			$("#alertCenter.modal").modal("hide").data("bs.modal", null);
 			typeof successCb == "function" && successCb();
 		})
-		.on("click.alert", ".btn-secondary, .close", function() {
+		.on("click.alert", ".btn-secondary, .close", function () {
 			$("#alertCenter.modal").modal("hide").data("bs.modal", null);
 			typeof failCb == "function" && failCb();
 		});
@@ -317,18 +317,18 @@ jQuery.toast = (msg = "", type = "info", title = "알림") => {
 	$("#toastAlert").toast("show");
 };
 
-const loginmode = $("#login"); 
-const logoutmode = $("#logout"); 
+const loginmode = $("#login");
+const logoutmode = $("#logout");
 // 공통 유틸 함수
 var util = {
-	
+
 	validator: {
-		isHpFormat : (hp) =>{	
-			if(hp == ""){	
+		isHpFormat: (hp) => {
+			if (hp == "") {
 				return true;
-			}	
+			}
 			var phoneRule = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
-				return phoneRule.test(hp);
+			return phoneRule.test(hp);
 		}
 		,
 		isTelNumber: (tel) => {
@@ -344,13 +344,13 @@ var util = {
 			var numberMap = number
 				.replace(/-/gi, "")
 				.split("")
-				.map(function(d) {
+				.map(function (d) {
 					return parseInt(d, 10);
 				});
 			if (numberMap.length == 10) {
 				var keyArr = [1, 3, 7, 1, 3, 7, 1, 3, 5];
 				var chk = 0;
-				keyArr.forEach(function(d, i) {
+				keyArr.forEach(function (d, i) {
 					chk += d * numberMap[i];
 				});
 				chk += parseInt((keyArr[8] * numberMap[8]) / 10, 10);
@@ -518,7 +518,7 @@ var util = {
 		addDateColon: (date) => {
 			return date.slice(0, 2) + ":" + date.slice(2, 4);
 		},
-		getDayOfWeek: function(dateStr) { //ex) getDayOfWeek('2022-06-13')
+		getDayOfWeek: function (dateStr) { //ex) getDayOfWeek('2022-06-13')
 			const week = ['일', '월', '화', '수', '목', '금', '토'];
 			const dayOfWeek = week[new Date(dateStr).getDay()];
 			return dayOfWeek;
@@ -530,7 +530,7 @@ var util = {
 		* @param {Number} pnDayTerm		추가 일수
 		* @return {String} 날짜 문자열
 		*/
-		addDate: function(psDate, pnDayTerm) {
+		addDate: function (psDate, pnDayTerm) {
 			var pnYear = psDate.substring(0, 4);
 			var pnMonth = psDate.substring(5, 7);
 			var pnDay = psDate.substring(8, 10);
@@ -576,14 +576,14 @@ var util = {
 		* @param {String} psDate2nd    년월 문자열(ex: 2017-02-01)
 		* @return {Number} 일수(Day)
 		*/
-		getDiffDay: function(psDate1st, psDate2nd) {
+		getDiffDay: function (psDate1st, psDate2nd) {
 			var startDt = new Date(psDate1st);
 			var endDt = new Date(psDate2nd);
 
 			return parseInt((endDt - startDt) / (1000 * 60 * 60 * 24));
 		},
 
-		getDayIndex: function(addedDateDay) {
+		getDayIndex: function (addedDateDay) {
 			let addedDateDayIndex = 0;
 			switch (addedDateDay) {
 				case "일": addedDateDayIndex = 0; break;
@@ -597,7 +597,7 @@ var util = {
 			return addedDateDayIndex;
 		},
 
-		getDateAfterOneMonthStr: function() {
+		getDateAfterOneMonthStr: function () {
 			var now = new Date();
 			var oneMonthLater = new Date(now.setMonth(now.getMonth() + 2));
 			var yearStr = oneMonthLater.getFullYear().toString();
@@ -614,7 +614,7 @@ var util = {
 			return oneMonthLaterStr;
 		},
 
-		getCurrentDateStr: function() {
+		getCurrentDateStr: function () {
 			var now = new Date();
 			var yearStr = now.getFullYear().toString();
 			var monthStr = (now.getMonth() + 1).toString();
@@ -629,7 +629,7 @@ var util = {
 			var currentDateStr = this.addDateDash(dateStrFull);
 			return currentDateStr;
 		},
-		datepickerValueValidation: function(val) {
+		datepickerValueValidation: function (val) {
 			var regex = /^[0-9]*$/; // 숫자만 체크
 			if (regex.test(val)) {
 				var isDateStr = new Date(util.date.addDateDash(val));
@@ -709,7 +709,7 @@ var util = {
 			return minute;
 		}
 	},
-	REST_Call: (path)=> {
+	REST_Call: (path) => {
 		axios
 			.get("http://52.78.212.203:8189" + path, {
 				params: {},
@@ -724,36 +724,56 @@ var util = {
 				$("#contents").html(JSON.stringify(err));
 			});
 	},
-	getKakaoLogin: () => { 
+	getKakaoLogin: () => {
 
-let KAKAO_GET = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=bc6f76bb8856c35bd57a3fa6a4331069&redirect_uri=http://www.arcadeframes.net:8189/auth/register.api";
+		let KAKAO_GET = "https://kauth.kakao.com/oauth/authorize?client_id=bc6f76bb8856c35bd57a3fa6a4331069&redirect_uri=http://localhost:8189/auth/register.api&response_type=code";
 
-var MAIN_PAGE = "/sch/huss/dashBoard/main.html";
-console.log('카카오 로그인');
- window.location.assign(KAKAO_GET);
-/**
-	$.ajax({
-			type: "get",
-			url: KAKAO_GET,
+		var MAIN_PAGE = "/sch/huss/dashBoard/main.html";
+		console.log('카카오 로그인');
+		window.location.assign(KAKAO_GET); 
+		console.log('메인페이지로 이동 시도'); 
+	},
+	/**getKakaoLogin: () => {
+		var MAIN_PAGE = "/sch/huss/dashBoard/main.html";
+		util.kakaoLogin()
+	    .then((res) => {
+	        var email = res.kakao_account.email;
+
+	        $.ajax({
+			type: "post",
+			url: "/login/login.api",
+			// headers: {}, // 공통에서 헤더에 토큰을 넣기때문에 여기서는 빈값으로 넣어서 덮어쓴다.
+			data: JSON.stringify({
+				userEmail: email,
+				loginType:"K"
+			}),
 			datatype: "json",
 			contentType: "application/json",
-			success: (res) => {
-				console.log(res)
-//window.sessionStorage.setItem("k","k");
-				 window.location.assign(MAIN_PAGE);
-			},
-			error: function (e) {
-				console.log(e.responseJSON.message);
-			},
-		}) 
-		 */
-		 console.log('메인페이지로 이동 시도');
-		  //window.location.assign(MAIN_PAGE);
-	},
+			success: function (res) {
+				//accessToken 저장
+				util.setStorage("accessToken", res.data.accessToken);
+		        util.setStorage("userEmail", email);
+		        util.setStorage("userAuthor", res.data.userAuthor);
+		        util.setStorage("userSeq", res.data.userSeq);
+		        util.setStorage("userNm", res.data.userNm);
+		        util.setStorage("loginType", "kakao");
+		        
+		        window.location.assign(MAIN_PAGE);
+	      },
+	      error: function (err) {
+	        console.log(err.responseJSON.message); 
+	        alert(err.responseJSON.message);
+	      },
+    	});
+	    })
+	    .catch((err) => {
+	        console.log("로그인 실패!", err);
+	    });
+	}, */
 	login: () => {
 		// 로그인 이후 이동할 페이지
 		var MAIN_PAGE = "/sch/huss/dashBoard/main.html";
-	//var MAIN_PAGE = "http://http://52.78.212.203/:8189/sch/huss/dashBoard/main.html";
+		//var MAIN_PAGE = "http://http://52.78.212.203/:8189/sch/huss/dashBoard/main.html";
 		// 로칼 저장값을 함수에서 로그인버튼을 누르지 않아도 로컬스토리지에 저장이 되는 부분이 있다.
 		// 그 이유가 왜 그런지 알아보기
 		var autoLogin = $("#autoLogin").prop("checked");
@@ -790,40 +810,40 @@ console.log('카카오 로그인');
 				//accessToken 저장
 				util.setStorage("accessToken", res.data.accessToken);
 
-          //userEmail 저장
-          util.setStorage("keepEmail", keepEmail);
-          util.setStorage("userEmail", $("#adminLoginId").val());
-        //userAuthor 저장
-        util.setStorage("userAuthor", res.data.userAuthor);
-        //userSeq 저장
-        util.setStorage("userSeq", res.data.userSeq);
-        util.setStorage("userNm", res.data.userNm);
-        
-        window.location.assign(MAIN_PAGE);
-        // location.href = MAIN_PAGE;
-      },
-      error: function (err) {
-        console.log(err.responseJSON.message); 
-        alert(err.responseJSON.message);
-      //  $("#loginFail").modal("show");
-       // $("#modalText").text(err.responseJSON.message);
-      },
-    });
-  },
- enterkey: () =>{
-    if (window.event.keyCode == 13) {
-      login();
-    }
-  }
-,
-	logout: () => {  
-	const kakaoAccessToken = document.cookie.split("; ")[0].split("=")[1];
-		if (!(JSON.parse(window.localStorage.getItem("sch")).userSeq===null)) {
+				//userEmail 저장
+				util.setStorage("keepEmail", keepEmail);
+				util.setStorage("userEmail", $("#adminLoginId").val());
+				//userAuthor 저장
+				util.setStorage("userAuthor", res.data.userAuthor);
+				//userSeq 저장
+				util.setStorage("userSeq", res.data.userSeq);
+				util.setStorage("userNm", res.data.userNm);
+
+				window.location.assign(MAIN_PAGE);
+				// location.href = MAIN_PAGE;
+			},
+			error: function (err) {
+				console.log(err.responseJSON.message);
+				alert(err.responseJSON.message);
+				//  $("#loginFail").modal("show");
+				// $("#modalText").text(err.responseJSON.message);
+			},
+		});
+	},
+	enterkey: () => {
+		if (window.event.keyCode == 13) {
+			login();
+		}
+	}
+	,
+	logout: () => {
+		const kakaoAccessToken = document.cookie.split("; ")[0].split("=")[1];
+		if (!(JSON.parse(window.localStorage.getItem("sch")).userSeq === null)) {
 			$.sendAjax({
 				url: "/login/logout.api",
-				method: "POST", 
-				data : { userSeq: util.getUserSeq() },
-			//	data: JSON.stringify({usrSeq: JSON.parse(window.localStorage.getItem("sch")).userSeq	}),
+				method: "POST",
+				data: { userSeq: util.getUserSeq() },
+				//	data: JSON.stringify({usrSeq: JSON.parse(window.localStorage.getItem("sch")).userSeq	}),
 				contentType: "application/json",
 				success: (res) => {
 					console.log("🚀 ~ res:", res);
@@ -831,8 +851,8 @@ console.log('카카오 로그인');
 					util.clearStorage();
 				}
 			})
-		} else if(!(kakaoAccessToken===null || kakaoAccessToken === undefined)) {
-				$.sendAjax({
+		} else if (!(kakaoAccessToken === null || kakaoAccessToken === undefined)) {
+			$.sendAjax({
 				url: "/auth/kakaoLogout.api",
 				data: {},
 				contentType: "application/json",
@@ -840,13 +860,13 @@ console.log('카카오 로그인');
 					console.log("🚀 ~ res:", res);
 					location.href = "/sch/huss/dashBoard/main.html"
 				},
-      error: function (err) {
-        console.log(err.responseJSON.message); 
-        alert(err.responseJSON.message);
-      
-      },
+				error: function (err) {
+					console.log(err.responseJSON.message);
+					alert(err.responseJSON.message);
+
+				},
 			})
-			
+
 		}
 	},
 	setStorage: (key, val) => {
@@ -862,17 +882,17 @@ console.log('카카오 로그인');
 	},
 	clearStorage2: (key, val) => {
 		const storage = window.localStorage.getItem("sch")
-		;const data = {
-			...JSON.parse(storage),
-			[key]: val,
-		};
+			; const data = {
+				...JSON.parse(storage),
+				[key]: val,
+			};
 		window.localStorage.removeItem("sch", JSON.stringify(data));
-	
+
 	},
-	clearloginMode : () =>{
+	clearloginMode: () => {
 		window.localStorage.removeItem(util.getStorage("loginMode"));
 	},
-	clearlogoutMode: () =>{
+	clearlogoutMode: () => {
 		window.localStorage.removeItem(util.getStorage("logoutMode"));
 	},
 	getStorage: (key) => {
@@ -932,7 +952,7 @@ console.log('카카오 로그인');
 	/** url 파라미터를 json으로 리턴 a.com?a=1&b=2 -> {a:1, b:2} */
 	getUrlParamJson: (url = location.href) => {
 		const result = {};
-		url.replace(/[?&]{1}([^=&#]+)=([^&#]*)/g, function(s, k, v) {
+		url.replace(/[?&]{1}([^=&#]+)=([^&#]*)/g, function (s, k, v) {
 			result[k] = decodeURIComponent(v);
 		});
 		return result;
@@ -964,8 +984,8 @@ console.log('카카오 로그인');
 		/**
 		 * th 클릭 시 정렬.
 		 */
-		$("#tableList th").each(function(column) {
-			$(this).click(function() {
+		$("#tableList th").each(function (column) {
+			$(this).click(function () {
 				if ($(this).is(".asc")) {
 					$(this).removeClass("asc");
 					$(this).addClass("desc");
@@ -980,7 +1000,7 @@ console.log('카카오 로그인');
 				$(this).siblings().removeClass("desc");
 
 				var rec = $("#tableList").find("tbody > tr").get();
-				rec.sort(function(a, b) {
+				rec.sort(function (a, b) {
 					var val1 = $(a).children("td").eq(column).text().toUpperCase();
 					var val2 = $(b).children("td").eq(column).text().toUpperCase();
 					/*if(val1 === "" && val2 === ""){
@@ -990,13 +1010,13 @@ console.log('카카오 로그인');
 					return val1 < val2 ? -sortdir : val1 > val2 ? sortdir : 0;
 				});
 
-				$.each(rec, function(index, row) {
+				$.each(rec, function (index, row) {
 					$("#tableList tbody").append(row);
 				});
 			});
 		});
 
-		$("#tableList tbody").on("click", "tr", function() {
+		$("#tableList tbody").on("click", "tr", function () {
 			if ($(this).hasClass("selected")) {
 				$(this).removeClass("selected");
 			} else {
@@ -1076,13 +1096,13 @@ console.log('카카오 로그인');
 	},
 	changeCheckedStatus: (checkedStatus, inputTagName) => {
 		let userKindInputList = document.getElementsByName(inputTagName);
-		$.each(userKindInputList, function(idx, obj) {
+		$.each(userKindInputList, function (idx, obj) {
 			obj.checked = checkedStatus;
 		});
 	},
 	changeCheckedStatusByClass: (checkedStatus, inputTagClass) => {
 		let userKindInputList = document.getElementsByClassName(inputTagClass);
-		$.each(userKindInputList, function(idx, obj) {
+		$.each(userKindInputList, function (idx, obj) {
 			obj.checked = checkedStatus;
 		});
 	},
@@ -1105,7 +1125,7 @@ console.log('카카오 로그인');
 			.replaceAll(",", "")
 		return str
 	},
-	
+
 	chnNumToDay: (obj) => {
 		// 요일변환 : 숫자를 한글로 반환 + 요일 사이 '/'
 		let str = obj.replace("1", "월")
@@ -1213,7 +1233,7 @@ function closePop(classId) {
 }
 
 function search_details() {
-	$(document).on("click", ".search_details img", function() {
+	$(document).on("click", ".search_details img", function () {
 		$(".visibil").stop().slideToggle();
 		$(".search_details").toggleClass("on");
 	});
