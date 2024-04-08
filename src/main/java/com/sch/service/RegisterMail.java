@@ -8,6 +8,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RegisterMail implements MailServiceInter {
 
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     JavaMailSender emailSender; // MailConfig에서 등록해둔 Bean을 autowired하여 사용하기
 
@@ -23,8 +26,8 @@ public class RegisterMail implements MailServiceInter {
     // 메일 내용 작성
     @Override
     public MimeMessage creatMessage(String to) throws MessagingException, UnsupportedEncodingException {
-        System.out.println("메일받을 사용자" + to);
-        System.out.println("인증번호" + ePw);
+        logger.info("메일받을 사용자" + to);
+        logger.info("인증번호" + ePw);
 
         MimeMessage message = emailSender.createMimeMessage();
 
@@ -45,9 +48,9 @@ public class RegisterMail implements MailServiceInter {
         message.setText(msgg, "utf-8", "html"); // 메일 내용, charset타입, subtype
         // 보내는 사람의 이메일 주소, 보내는 사람 이름
         message.setFrom(new InternetAddress("alsdpfls_@naver.com", "testcase"));
-        System.out.println("********creatMessage 함수에서 생성된 msgg 메시지********" + msgg);
+        logger.info("********creatMessage 함수에서 생성된 msgg 메시지********" + msgg);
 
-        System.out.println("********creatMessage 함수에서 생성된 리턴 메시지********" + message);
+        logger.info("********creatMessage 함수에서 생성된 리턴 메시지********" + message);
 
         return message;
     }
@@ -64,7 +67,7 @@ public class RegisterMail implements MailServiceInter {
                                            .limit(targetStringLength)
                                            .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                                            .toString();
-            System.out.println("생성된 랜덤 인증코드"+ key);
+            logger.info("생성된 랜덤 인증코드"+ key);
             return key;
     }
 
@@ -76,11 +79,11 @@ public class RegisterMail implements MailServiceInter {
     public String sendSimpleMessage(String to) throws Exception {
 
         ePw = createKey(); // 랜덤 인증코드 생성
-        System.out.println("********생성된 랜덤 인증코드******** => " + ePw);
+        logger.info("********생성된 랜덤 인증코드******** => " + ePw);
 
         MimeMessage message = creatMessage(to); // "to" 로 메일 발송
 
-        System.out.println("********생성된 메시지******** => " + message);
+        logger.info("********생성된 메시지******** => " + message);
 
         try { // 예외처리
             emailSender.send(message);
