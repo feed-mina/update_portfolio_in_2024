@@ -212,7 +212,7 @@
 								<div class="inner" >
 									<ul class="swiper-wrapper slide_list" id="swiperUL"   style="width: 500px;"  >
 										<li class="swiper-slide" id="swiperPerSlide" v-for="(obj, idx) in noticeSlideList" v-if="noticeSlideList.length" v-bind:key="noticeSlideList.id" >
-										<a	href="/sch/huss/dashBoard/program.html"
+										<a	 href="javascript:;"  @click="fnDtail(obj.noticeSeq)"
 											class="main_notice_mid_card">
 												<div class="main_notice_mid_card_head" id="noticeSlideSj">
 													<h2>{{obj.noticeSj}}</h2>
