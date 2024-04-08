@@ -14,10 +14,9 @@
 			, tn.notice_image_cn		-- 공지사항이미지내용
 			, tn.notice_cn				-- 공지사항내용 
 			, LEFT(tn.regist_dt, 10) as regist_dt	-- 등록일시
-		FROM tb_notice tn 
-		LEFT JOIN tb_user tu ON tu.user_seq = tn.regist_id
+		FROM tb_notice tn  
 		WHERE 1 = 1 
-		ORDER BY tn.notice_seq DESC
+		ORDER BY tn.regist_dt DESC 
 	</sql> 
 
 	<select id="selectNoticeSlideListPaging" parameterType="map" resultType="camelHashMap">
@@ -39,8 +38,7 @@
 		, tn.notice_image_cn		-- 공지사항이미지내용
 		, tn.notice_cn				-- 공지사항내용 
 		, LEFT(tn.regist_dt, 10) as regist_dt	-- 등록일시
-		FROM tb_notice tn
-		LEFT JOIN tb_user tu ON tu.user_seq = tn.regist_id
+		FROM tb_notice tn 
 		WHERE 1 = 1
 		 
 		ORDER BY tn.notice_seq DESC 
@@ -54,8 +52,7 @@
 		, tn.notice_image_cn		-- 공지사항이미지내용
 		, tn.notice_cn				-- 공지사항내용 
 		, LEFT(tn.regist_dt, 10) as regist_dt	-- 등록일시
-		FROM tb_notice tn
-		LEFT JOIN tb_user tu ON tu.user_seq = tn.regist_id
+		FROM tb_notice tn 
 		WHERE 1 = 1
 		<choose>
 			<when test="searchDivision == 'noticeSj'">
@@ -65,30 +62,29 @@
 			</when>
 			<when test="searchDivision == 'registNm'">
 				<if test='@com.sch.util.CommonUtil@isNotEmpty(searchText)'>
-					AND (tu.user_nm LIKE concat('%', #{searchText} , '%'))
+					AND (tn.user_nm LIKE concat('%', #{searchText} , '%'))
 				</if>
 			</when>
 			<otherwise>
 				<if test='@com.sch.util.CommonUtil@isNotEmpty(searchText)'>
-					AND ((tn.notice_sj LIKE concat('%', #{searchText} , '%')) OR (tu.user_nm LIKE concat('%', #{searchText} , '%')))
+					AND ((tn.notice_sj LIKE concat('%', #{searchText} , '%')) OR (tn.user_nm LIKE concat('%', #{searchText} , '%')))
 				</if>
 			</otherwise>
 		</choose>
 		ORDER BY tn.notice_seq DESC 
-		LIMIT 1,2;
+		LIMIT 1,9;
 	</select>
 
-	<select id="selectNotice" parameterType="map" resultType="camelHashMap">
+	<select id="selectNoticeDetail" parameterType="map" resultType="camelHashMap">
 		/* notice.selectNotice */
 		SELECT
 			tn.notice_seq				-- 공지사항일련
 			 , tn.notice_sj				-- 공지사항제목
 			 , tn.notice_image_cn		-- 공지사항이미지내용
 			 , tn.notice_cn				-- 공지사항내용
-			 , tu.user_nm				-- 등록자 이름
+			 , tn.user_nm				-- 등록자 이름
 			 , LEFT(tn.regist_dt, 10) as regist_dt	-- 등록일시
-		FROM tb_notice tn
-			LEFT JOIN tb_user tu ON tu.user_seq = tn.regist_id
+		FROM tb_notice tn 
 		WHERE tn.notice_seq = #{noticeSeq}
 	</select>
 
@@ -110,6 +106,13 @@
 		LIMIT 1
 	</select>
 
+    <update id="viewsUpdt" parameterType="map">
+    <!-- 조회수증가 -->
+    /* notice.viewsUpdt */
+    	UPDATE tb_bbs
+    	SET views_co = views_co + 1
+    	WHERE bbs_seq = #{bbsSeq} 
+    </update>
 	<insert id="insertNotice" parameterType="map">
 		 
 		/* notice.insertNotice */
@@ -136,4 +139,10 @@
 	<select id="getTotalCount" parameterType="map" resultType="camelHashMap">
 		SELECT COUNT(*) AS total_data FROM tb_notice
 	</select>
+	
+	<delete id="deleteNoticeOne" parameterType="map">
+	/* Notice.deleteNoticeOne*/
+	DELETE FROM tb_notice
+	WHERE notice_seq = #{noticeSeq}
+	</delete>
 </mapper>

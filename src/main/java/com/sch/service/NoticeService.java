@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -15,7 +17,7 @@ import com.sch.util.CamelHashMap;
 @Service
 public class NoticeService {
 
-
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	private CommonDao commonDao;
 	
@@ -28,8 +30,10 @@ public class NoticeService {
 	 
 	
     public void insertNotice(Map<String, Object> paramMap, MultipartFile[] noticeFiles) throws Exception {
-        fileService.filesRegist(noticeFiles, paramMap, "file");
-        System.out.println("blogFiles : " + noticeFiles);
+		logger.info("noticeFiles" + noticeFiles);
+
+		logger.info("paramMap" + paramMap);
+        fileService.filesRegist(noticeFiles, paramMap, "file"); 
         commonService.insert("notice.insertNotice", paramMap);
     }
 
@@ -43,16 +47,16 @@ public class NoticeService {
     }
 
     public List<Map<String, Object>> selectNoticeList(Map<String, Object> paramMap) {
-		System.out.println("selectList paramMap" + paramMap);
+		logger.info("selectList paramMap" + paramMap);
       //  int dataPerPage = Integer.parseInt(paramMap.get("dataPerPage").toString());
 		//  int currentPage = Integer.parseInt(paramMap.get("currentPage").toString());
 		//   int offsetNumber = (currentPage-1) * dataPerPage;
 		//String noticeSeq = paramMap.get("noticeSeq").toString();
 		//   paramMap.put("noticeSeq", noticeSeq);
-		//	System.out.println("selectList paramMap" + paramMap);
+		//	logger.info("selectList paramMap" + paramMap);
         //   paramMap.put("dataPerPage", dataPerPage);
         //     paramMap.put("currentPage", currentPage);
-        return commonService.selectList("notice.selectNoticeListPaging", paramMap);
+        return commonService.selectList("notice.selectNoticeSlideListPaging", paramMap);
     }
 
     public Map<String, Object> getPagination(Map<String, Object> paramMap) throws Exception {
@@ -203,7 +207,7 @@ public class NoticeService {
 			return null;
 		}
 		// get
-		return commonDao.selectList("Notice.selectNoticeDetail", paramMap);
+		return commonDao.selectList("notice.selectNoticeDetail", paramMap);
 	}
 
 	/*
@@ -221,19 +225,17 @@ public class NoticeService {
 	}
 
 	public int deleteNoticeOne(Map<String, Object> paramMap) throws Exception {
-		if (delete("Notice.deleteNoticeOneFx", paramMap) < 0) {
-			return -1;
-		}
-		if (delete("Notice.deleteNoticeOne", paramMap) < 0) {
+	 
+		if (delete("notice.deleteNoticeOne", paramMap) < 0) {
 			return -1;
 		}
 		return 1;
 	}
 
 	public int delete(String sqlId, Map<String, Object> paramMap) throws Exception {
-		if (sqlId.equals("Notice.deleteNoticeOneFx")) {
+		if (sqlId.equals("notice.deleteNoticeOneFx")) {
 			return commonDao.delete(sqlId, paramMap);
-		} else if (sqlId.equals("Notice.deleteNoticeOne")) {
+		} else if (sqlId.equals("notice.deleteNoticeOne")) {
 			return commonDao.delete(sqlId, paramMap);
 		}
 		return 0;

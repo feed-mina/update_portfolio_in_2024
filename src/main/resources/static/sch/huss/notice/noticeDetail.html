@@ -9,17 +9,25 @@
 	content="A fully featured admin theme which can be used to build CRM, CMS, etc."
 	name="description" />
 <meta name="author" content="">
-<title> 개설</title>
-<link href="/css/style.css" rel="stylesheet" />
+<title>공지사항 상세페이지</title>
+<link rel="stylesheet" href="/css/pc/style.css">
+<link rel="stylesheet" href="/css/pc/aos.css">
+<link rel="stylesheet" href="/css/pc/jquery-ui.css">
+<link rel="stylesheet" href="/css/pc/swiper-bundle.min.css">
+<link rel="stylesheet" href="/css/custom.css" />
+<link rel="stylesheet" href="/css/style_legacy.css">
+<script src="/js/aos.js"></script>
+<script src="/js/swiper-bundle.min.js"></script> 
 <script src="/js/allVendors.js"></script>
 <script src="/js/common.js"></script>
-<script src="/sch/js/admin/noticeExprn/noticeDetail.js"></script>
+
+    <script src="/sch/js/huss/notice/noticeDetail.js"></script> 
 </head>
 
 <body>
 
-	<!-- ===== header ====== -->
-	<header id="header_wrap"></header>
+	   <!-- header --> 
+    <header id="header_wrap"></header>
 	<!-- ===== /header ====== -->
 	<div id="wrapper">
 		<!-- sidebar -->
@@ -28,14 +36,14 @@
 		<div id="content-wrapper" class="d-flex flex-column">
 			<div id="content" class="pt-0">
 				<!-- ===== app ====== -->
-				<div id="app">
+				<div id="app"> 
 					<!-- ===== container ====== -->
 					<div id="container" class="d-flex flex-column">
 						<div class="container-fluid">
 							<!-- ===== container-fluid ====== -->
 							<div
 								class="d-sm-flex align-items-center justify-content-between mb-4">
-								<h1 class="h1 mb-0 text-gray-800"> 개설 상세</h1>
+								<h1 class="h1 mb-0 text-gray-800"> 공지사항 상세 화면</h1>
 							</div>
 							<div class="col">
 								<!-- <div class="row mb-4" v-show="step == 'master'"> -->
@@ -50,111 +58,67 @@
 															<table class="tableForm">
 														<tbody> 
 																<tr>
-																	<!-- ===== 교수명   ====== -->
-																	<th  colspan="1">교수명<span class="required">*</span>:</th> 
-																	<td class="input-group">
-																		<div class="form-control" id="profsrUserSeqText">
-																	{{noticeDetail.userNm}}
-																		</div>
-																	</td> 
-																	
-																	
-																	<th  colspan="6">상담 형태&nbsp;&nbsp;<span class="required">*</span>:</th>
-																	
-																	<td> 
-																			<div id="noticeSe" > 
-																		{{noticeDetail.noticeSeStr}}
-																			</div> 
-																	</td>
-																
-																</tr>
-
- 
-																<tr></tr>
-																<!-- ===== / 상담형태 : 드롭박스 ====== -->
-																<tr>
-																	<th>상담장소 <span class="required">*</span>:
-																	</th>
-																	<td colspan="2"><div class="form-control"  id="noticePlaceNm">  
-																		{{noticeDetail.noticePlaceNm}}</div></td>
-
-																	<th>상담생수<span class="required">*</span>:
-																	</th>
-																	<td colspan="6">
-																		<div>
-																			<div id="noticeCo" > {{noticeDetail.noticeCo}}명
-																			</div>
-																		</div>
-																	</td>
-																</tr>
-																<!-- ===== 상담기간 ====== -->
-																<tr>
-																	<th>상담 기간<span class="required">*</span>:
-																	</th>
-																
-																<td colspan="2" class="col-4">
+																	<th>날짜 </th> 
+																<td  class="col-4">
 																	
 																	<div class="input-group flex-nowrap bx_calendar">
-																		<div class="side-by-side div-input">{{noticeDetail.noticeBeginDate}}</div>
-																		<span class="d-block mx-3" style="line-height: 38px">~</span>
-																		<div class="side-by-side div-input">{{noticeDetail.noticeEndDate}}</div>
+																		<div class="side-by-side div-input">{{noticeDetail.registDt}}</div> 
 																	</div>
-																</td>
-																	<!-- ===== / 상담기간 ====== -->
-														<th class="col-2">
-																	상담요일&nbsp;&nbsp;<span class="required">*</span>:
-																</th>
-																	<!-- ===== 상담요일 ====== -->
-																	<td colspan="6"> 
-																	<div>
-																		<input type="checkbox"  disabled block class="noticeDayArray" name="noticeDayArray" id="monday" v-model="noticeDetail.noticeWeekArray" value="1"/>
-																		<label for="monday" class="form-check-label">월</label>&nbsp;&nbsp;&nbsp;
-																		<input type="checkbox"  disabled block class="noticeDayArray" name="noticeDayArray" id="tuesday" v-model="noticeDetail.noticeWeekArray" value="2"/>
-																		<label for="tuesday" class="form-check-label">화</label>&nbsp;&nbsp;&nbsp;
-																		<input type="checkbox"  disabled block class="noticeDayArray" name="noticeDayArray" id="wednesday" v-model="noticeDetail.noticeWeekArray" value="3"/>
-																		<label for="wednesday" class="form-check-label">수</label>&nbsp;&nbsp;&nbsp;
-																		<input type="checkbox"  disabled block class="noticeDayArray" name="noticeDayArray" id="thursday" v-model="noticeDetail.noticeWeekArray" value="4"/>
-																		<label for="thursday" class="form-check-label">목</label>&nbsp;&nbsp;&nbsp;
-																		<input type="checkbox"  disabled block class="noticeDayArray" name="noticeDayArray" id="friday" v-model="noticeDetail.noticeWeekArray" value="5"/>
-																		<label for="friday" class="form-check-label">금</label>&nbsp;&nbsp;&nbsp;
-																		<input type="checkbox"  disabled block class="noticeDayArray" name="noticeDayArray" id="saturday" v-model="noticeDetail.noticeWeekArray" value="6"/> 
-																		<label for="saturday" class="form-check-label">토</label>
-																</div>
-																	</td>
+																</td>  
+																</tr>  
+														
+																<tr> 
+																	<th  colspan="1">이름 </th> 
+																	<td class="input-group">
+																		<div class="form-control" id="userNm">
+																	{{noticeDetail.userNm}}
+																		</div>
+																	</td>   
 																</tr>
-																<!-- ===== / 상담요일 ====== -->
-																<!-- ===== 상담시간 ====== -->
+ 
 																<tr>
-																	<th class="col-sm-2">상담시간 <span class="required">*</span>
-																		:
-																	</th>
-																	<td colspan="3">
-																		<div class="input-group flex-nowrap">
-																			 {{noticeDetail.noticeBeginTimeHour}}:{{noticeDetail.noticeBeginTimeMinutes}}
-																			 ~{{noticeDetail.noticeEndTimeHour}}:{{noticeDetail.noticeEndTimeMinutes}}
-																		</div>
-																	</td> 
-																</tr>
-
-																<!-- ===== / 상담시간 ====== -->
-																<!-- ===== 모집기간 ====== -->
+																	<th>제목</th>
+																	<td colspan="2"><div class="form-control"  id="noticeSj">  
+																		{{noticeDetail.noticeSj}}</div></td>
+ 
+																</tr> 
+ 
 																<tr>
-																	<th>모집 기간<span class="required">*</span>:
-																	</th>
-																	<td colspan="4">
-																		<div class="input-group calendar">
-																			<div>
-																		</div>
-																			<span class="d-block" style="line-height: 38px">{{noticeDetail.rcritBeginDt}} &nbsp;&nbsp;&nbsp;&nbsp;~ &nbsp;&nbsp;&nbsp;&nbsp;{{noticeDetail.rcritEndDt}} </span>
-																			<div>
-																		</div>
-
-																		</div>
-																	</td>
-
+																	<th>제목</th>
+																	<td><div class="form-control"  id="noticeSj">  
+																		{{noticeDetail.noticeSj}}</div></td> 
+																</tr> 
+																<tr>
+																
+									        					<th>내용</th>
+									        					<td>
+																			<div id=noticeCn></div>
+																		</td>
 																</tr>
-																<!-- ===== / 모집기간 ====== -->
-
+																
+									        				<tr>
+																		<th>첨부파일</th>
+																		<td>
+																			<div class="mt-2 ml-2">
+																				<div class="row col">
+																					<div v-for="(obj, idx) in filesList"
+																						v-if="filesList.length" class="diplay-box row mr-2 justify-content-center align-content-end">
+																						<div v-if="obj.fileType == 'image'">
+																							<img :src="'/UPLOAD_FILES/' + obj.fileNm" @click="downloadFile(obj.fileSeq, obj.fileDetailSn)">
+																						</div>
+																						<div v-else-if="obj.fileType == 'video'">
+																							<video :src="'/UPLOAD_FILES/' + obj.fileNm" controls></video>
+																						</div>
+																						<span @click="downloadFile(obj.fileSeq, obj.fileDetailSn)" class="search_details display-text">
+																							{{obj.orignlFileNm}}
+																						</span>
+																					</div>
+																					<span v-else class="text-gray"> 첨부된 파일이 없습니다. </span>
+																				</div>
+																			</div>
+																		</td>
+																	</tr>
+																
 														</tbody>
 															</table>
 														</div>
@@ -163,20 +127,20 @@
 													<div class="d-flex justify-content-center">
 														<div class="d-flex justify-content-center">
 														<div class="pr-5">
-															<a href="/sch/admin/noticeExprn/noticeList.html"
+															<a href="/sch/huss/notice/noticeList.html"
 																class="btn btn-primary btn-icon btn_search_width" > 
 																<span class="text">목록</span>
 															</a>
 														</div>
 														<div class="pr-5">
-															<a href="#" id="btnUpdateNotice"
+															<a href="javascript:;" id="btnUpdateNotice"  @click="fnUpdtMov()"
 																class="btn btn-primary btn-icon btn_search_width"> 
 																<span class="text">수정</span>
 															</a>
 														</div>
 														<div class="pr-5">
-															<a href="#" class="btn btn-primary btn-icon btn_search_width"
-																id="btnDeleteNotice" > <span class="text">삭제</span>
+															<a href="javascript:;" class="btn btn-primary btn-icon btn_search_width"
+															@click="fnDel()" id="btnDeleteNotice" > <span class="text">삭제</span>
 															</a>
 														</div> 
 													 

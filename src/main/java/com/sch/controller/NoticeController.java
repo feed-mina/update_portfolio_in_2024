@@ -29,19 +29,21 @@ import com.sch.service.NoticeService;
 import com.sch.util.CamelHashMap;
 import com.sch.util.CommonResponse;
 import com.sch.util.CommonUtil;
-import com.sch.util.UserParam;
+import com.sch.util.MySQLPageRequest;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 @Api(tags = "Notice - 공지사항")
 @RestController
 @RequestMapping("/noticeController")
 public class NoticeController {
 
-    private Logger log = LoggerFactory.getLogger(this.getClass());
+    
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     CommonService commonService;
@@ -106,7 +108,7 @@ public class NoticeController {
             "\t")
 	public ResponseEntity<?> selectNoticetestList(@RequestBody Map<String, Object> paramMap) {
 		return CommonResponse.statusResponse(HttpServletResponse.SC_OK,
-				commonService.selectPaging("notice.selectNoticeSlideListPaging", paramMap));
+				commonService.selectPaging("notice.selectNoticeListPaging", paramMap));
 	}
     
     /**
@@ -130,20 +132,6 @@ public class NoticeController {
                 noticeService.selectNoticeList(paramMap));
     }
 
-    /**
-     * 공지사항 Detail
-     *
-     * @param paramMap 공지사항 시퀀스(noticeSeq) 들어있는 맵
-     * @return Map<String, Object> resultMap 공지사항 테이블
-     * @throws Exception
-     */
-    @PostMapping(value = "/selectNotice.api")
-    @ApiOperation(value = "공지사항 상세 페이지", notes = "공지사항 상세내용을 출력합니다.")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "paramMap", required = true, value = "{\"noticeSeq\": \"NOTICE_00000002\"}", example = "{\"noticeSeq\": \"NOTICE_00000002\"}", dataTypeClass = String.class) })
-    public ResponseEntity<?> selectNotice(@RequestBody Map<String, Object> paramMap) throws Exception {
-        return CommonResponse.statusResponse(HttpServletResponse.SC_OK, noticeService.selectNotice(paramMap));
-    }
 
     /**
      * 공지사항 Insert
@@ -172,12 +160,12 @@ public class NoticeController {
 		// 로그인 검증 이후 메모리 loginSession세팅 후 데이터와 accessToken 리턴
 		CommonUtil.loginSession.put((String) tmpMap.get("userSeq"), tmpMap);
 
-		System.out.println("tmpMap : " + tmpMap);
-		System.out.println("paramMap : " + paramMap);
+		logger.info("tmpMap : " + tmpMap);
+		logger.info("paramMap : " + paramMap);
 
 		// String loginUserSeq = (String) sessionMap.get("userSeq");
 		String loginUserSeq = (String) tmpMap.get("userSeq");
-		System.out.println("loginUserSeq : " + loginUserSeq);
+		logger.info("loginUserSeq : " + loginUserSeq);
 		 
         Map<String, Object> userMap = new HashMap<String, Object>();
         userMap.put("userSeq", loginUserSeq);
@@ -212,45 +200,48 @@ public class NoticeController {
                             "\t}\r\n" + //
                             "\t",
                     dataTypeClass = String.class) })
-    public ResponseEntity<?> getPagination(@RequestBody Map<String, Object> paramMap) throws Exception {
-        return CommonResponse.statusResponse(HttpServletResponse.SC_OK, noticeService.getPagination(paramMap));
+    public ResponseEntity<?> getPagination( @ApiParam  MySQLPageRequest pageRequest, @RequestBody Map<String, Object> paramMap) throws Exception {
+     
+
+    	System.out.printf("1.pageRequest :" , pageRequest);
+ 
+    	return CommonResponse.statusResponse(HttpServletResponse.SC_OK, noticeService.getPagination(paramMap));
     }
-    
-    // 2024.03.14 커스텀
- 
 
-	@PostMapping(value = "/selectCusotmNoticeList.api")
-	@ApiOperation(value = " 개설 리스트 조회", notes = "custom 공지 목록을 불러옵니다.")
-	@ApiImplicitParam(name = "paramMap", value = " 시퀀스(noticeSeq) 들어있는 맵", dataTypeClass = String.class)
-	public ResponseEntity<?> SelectCusotmNotice(@RequestBody Map<String, Object> paramMap) throws Exception {
-		return CommonResponse.statusResponse(HttpServletResponse.SC_OK,
-				noticeService.selectNotice("Notice.selectNoticeListPaging", paramMap));
-	}
- 
-	@PostMapping(value = "/selectNoticeFx.api")
-	@ApiOperation(value = "tb_notice_fx 목록", notes = "해당 의 tb_notice_fx을 조회합니다.")
-	@ApiImplicitParam(name = "paramMap", value = " 시퀀스(lctreSeq) 들어있는 맵", dataTypeClass = Map.class)
-	public ResponseEntity<?> selectNoticeFx(@RequestBody Map<String, Object> paramMap) throws Exception {
-		return CommonResponse.statusResponse(HttpServletResponse.SC_OK,
-				commonService.selectList("Notice.selectNoticeFx", paramMap));
-	}
- 
-	@PostMapping(value = "/selectNoticeOperateList.api")
-	@ApiOperation(value = "모든 상담운영 리스트 출력", notes = "현재 DB에 저장된 모든 상담운영 리스트를 출력합니다 .")
-	public ResponseEntity<?> selectNoticeOperateList(@RequestBody Map<String, Object> paramMap) throws Exception {
-		return CommonResponse.statusResponse(HttpServletResponse.SC_OK,
-				commonService.selectPaging("Notice.selectNoticeOperateListPaging", paramMap));
-	}
-
+     
+    /**
+     * 공지사항 Detail
+     *
+     * @param paramMap 공지사항 시퀀스(noticeSeq) 들어있는 맵
+     * @return Map<String, Object> resultMap 공지사항 테이블
+     * @throws Exception
+    @PostMapping(value = "/selectnoticeDetail.api")
+    @ApiOperation(value = "공지사항 상세 페이지", notes = "공지사항 상세내용을 출력합니다.")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "paramMap", required = true, value = "{\"noticeSeq\": \"NOTICE_00000002\"}", example = "{\"noticeSeq\": \"NOTICE_00000002\"}", dataTypeClass = String.class) })
+    public ResponseEntity<?> selectNotice(@RequestBody Map<String, Object> paramMap) throws Exception {
+        return CommonResponse.statusResponse(HttpServletResponse.SC_OK, noticeService.selectNoticeDetail(paramMap));
+    }
+     */
+  
 	/**
 	 *  Detail
 	 */
-	@PostMapping(value = "/selectNoticeDetail.api")
+	@PostMapping(value = "/selectNoticetestDetail.api")
 	@ApiOperation(value = "Notice상세보기", notes = "선택한 Notice의 상세정보를 불러옵니다.")
 	@ApiImplicitParam(name = "paramMap", value = " 시퀀스(noticeSeq) 들어있는 맵", dataTypeClass = Map.class)
-	public ResponseEntity<?> selectNoticeDetail(@UserParam Map<String, Object> paramMap) {
-		return CommonResponse.statusResponse(HttpServletResponse.SC_OK,
-				noticeService.selectNoticeDetail("Notice.selectNoticeDetail", paramMap));
+	public ResponseEntity<?> selectNoticeDetail(@RequestBody Map<String, Object> paramMap) {
+		/* 조회수 증가 */
+	//	commonService.update("Notice.viewsUpdt", paramMap);
+
+		Map<String, Object> noticeMap = commonService.selectMap("notice.selectNoticeDetail", paramMap);
+		if (!CommonUtil.isEmpty(noticeMap.get("fileSeq"))) {
+			paramMap.put("fileSeq", noticeMap.get("fileSeq"));
+			List<Map<String, Object>> fileList = commonService.selectList("file.selectFileDetail", paramMap);
+
+			noticeMap.put("fileList", fileList);
+		}
+		return CommonResponse.statusResponse(HttpServletResponse.SC_OK, noticeMap);
 	}
 
 	/**
