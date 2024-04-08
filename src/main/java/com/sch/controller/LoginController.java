@@ -40,7 +40,8 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/login")
 public class LoginController {
-	private Logger log = LoggerFactory.getLogger(this.getClass());
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final UserManageService userManageService = new UserManageService();
 
 	@Autowired
@@ -131,8 +132,8 @@ public class LoginController {
 		
 		String policyMarktFlag = (String) session.getAttribute("sessionAgreementId1");
 		String policyMberFlag = (String) session.getAttribute("sessionAgreementId2");
-		System.out.println("세션에 저장도있는 policyMarkt 동의변수 :" + policyMarktFlag);
-		System.out.println("세션에 저장도있는 policyMber 동의변수 :" + policyMberFlag);
+		logger.info("세션에 저장도있는 policyMarkt 동의변수 :" + policyMarktFlag);
+		logger.info("세션에 저장도있는 policyMber 동의변수 :" + policyMberFlag);
 		paramMap.put("policyMarkt", policyMarktFlag); 
 		paramMap.put("policyMber", policyMberFlag); 
 		if (policyMarktFlag != null) {
@@ -171,7 +172,7 @@ public class LoginController {
 		if (ObjectUtils.isEmpty(loginMap) || ObjectUtils.isEmpty(loginMap.get("userPassword"))) {
 			return CommonResponse.statusResponse(HttpServletResponse.SC_UNAUTHORIZED, "로그인 정보를 확인하세요.");
 		}
-		System.out.println("SHA256Encrypt userPassword:	"+(SHA256Encrypt.encrypt((String) paramMap.get("userPassword"))));
+		logger.info("SHA256Encrypt userPassword:	"+(SHA256Encrypt.encrypt((String) paramMap.get("userPassword"))));
 		// 비밀번호가 틀렸을경우
 		if (!loginMap.get("userPassword").equals(SHA256Encrypt.encrypt((String) paramMap.get("userPassword")))) {
 			return CommonResponse.statusResponse(HttpServletResponse.SC_UNAUTHORIZED, "비밀번호가 일치하지않습니다.");
@@ -203,7 +204,7 @@ public class LoginController {
 		String accessToken = jwtTokenProvider.createToken((String) loginMap.get("userSeq"),
 				(String) loginMap.get("userAuthor"));
 		loginMap.put("accessToken", accessToken);
-		System.out.println("accessToken : " + accessToken);
+		logger.info("accessToken : " + accessToken);
 
 		return CommonResponse.statusResponse(HttpServletResponse.SC_OK, loginMap);
 	}
@@ -237,8 +238,9 @@ public class LoginController {
 			}else if(CommonUtil.isEmpty(tmpMap.get("userNm"))) {
 				return CommonResponse.statusResponse(HttpServletResponse.SC_BAD_REQUEST, "계정을 찾을수 없습니다.");
 			};
-			System.out.println(tmpMap.get("userNm"));
-System.out.println(tmpMap);
+
+				System.out.println(tmpMap.get("userNm"));
+				System.out.println(tmpMap);
 		return CommonResponse.statusResponse(HttpServletResponse.SC_OK, tmpMap);
 	}
 
@@ -317,12 +319,12 @@ System.out.println(tmpMap);
 		List<String> requiredList = Arrays.asList("userSeq"); 
 
 
-		System.out.println("userPassword : "+paramMap.get("userPassword")); 
+		logger.info("userPassword : "+paramMap.get("userPassword")); 
 		Map<String, Object> loginMap = commonService.selectMap("login.selectLoginMap", paramMap);
 
-		System.out.println("loginMap userPassword : "+loginMap.get("userPassword")); 
-		// System.out.println("paramMap.get(\"userSeq\") : "+ SHA256Encrypt.encrypt((String) loginMap.get("userPassword")));
-		// System.out.println("SHA256Encrypt userPassword:	"+(SHA256Encrypt.encrypt((String) paramMap.get("userPassword"))));
+		logger.info("loginMap userPassword : "+loginMap.get("userPassword")); 
+		// logger.info("paramMap.get(\"userSeq\") : "+ SHA256Encrypt.encrypt((String) loginMap.get("userPassword")));
+		// logger.info("SHA256Encrypt userPassword:	"+(SHA256Encrypt.encrypt((String) paramMap.get("userPassword"))));
 		// 비밀번호가 틀렸을경우
 		if (!loginMap.get("userPassword").equals(SHA256Encrypt.encrypt((String) paramMap.get("userPassword")))) {
 			return CommonResponse.statusResponse(HttpServletResponse.SC_UNAUTHORIZED, "비밀번호가 틀렸습니다. 다시 입력해주세요.");
@@ -352,11 +354,11 @@ System.out.println(tmpMap);
 
 		Map<String, Object> loginMap = commonService.selectMap("login.selectLoginMap", paramMap);
 		
-System.out.println("loginMap: "+loginMap);
-System.out.println("paramMap: "+paramMap);
-System.out.println("SHA256Encrypt.encrypt((String) paramMap.get(\"userNewPassword\")): "+SHA256Encrypt.encrypt((String) paramMap.get("userNewPassword")) );
+logger.info("loginMap: "+loginMap);
+logger.info("paramMap: "+paramMap);
+logger.info("SHA256Encrypt.encrypt((String) paramMap.get(\"userNewPassword\")): "+SHA256Encrypt.encrypt((String) paramMap.get("userNewPassword")) );
 
-System.out.println("SHA256Encrypt.encrypt((String) paramMap.get(\"userPassword\")): "+SHA256Encrypt.encrypt((String) paramMap.get("userPassword")) );
+logger.info("SHA256Encrypt.encrypt((String) paramMap.get(\"userPassword\")): "+SHA256Encrypt.encrypt((String) paramMap.get("userPassword")) );
 
 		List<String> requiredList = Arrays.asList("userSeq");
 		if (!CommonUtil.validation(paramMap, requiredList)) {
@@ -446,9 +448,9 @@ System.out.println("SHA256Encrypt.encrypt((String) paramMap.get(\"userPassword\"
 		HttpStatus status = null;
 
 
-		System.out.println("paramMap" + paramMap.toString());
+		logger.info("paramMap" + paramMap.toString());
 		List<String> requiredList = Arrays.asList("userEmail", "userPassword");
-		System.out.println("requiredList" + requiredList);
+		logger.info("requiredList" + requiredList);
 		try {
 			if (!CommonUtil.validation(paramMap, requiredList)) {
 				return null;
@@ -535,14 +537,14 @@ System.out.println("SHA256Encrypt.encrypt((String) paramMap.get(\"userPassword\"
 		String encData = AES256Encrypt.decrypt((String) paramMap.get("encData"));
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> encDatamap = mapper.readValue(encData, Map.class);
-		System.out.println("encDatamap" + encDatamap);
+		logger.info("encDatamap" + encDatamap);
 		// 이미 이메일 인증을 한 유저인경우 처리
 		Map<String, Object> tmpMap = new CamelHashMap();
 		tmpMap.put("userSeq", encDatamap.get("userSeq"));
 		encDatamap.put("user", tmpMap);
 		List<Map<String, Object>> userList = commonService.selectList("login.selectLoginMap", encDatamap);
-		System.out.println("userList" + userList);
-		System.out.println("userList.size()" + userList.size());
+		logger.info("userList" + userList);
+		logger.info("userList.size()" + userList.size());
 		if (userList.size() == 1) {
 			return CommonResponse.statusResponse(HttpServletResponse.SC_OK, "유저가 존재");
 		}

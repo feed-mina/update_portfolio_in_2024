@@ -106,7 +106,7 @@ public class JwtTokenProvider { // JWT 토큰을 생성 및 검증 모듈
 
 		String loginUserSeq = (String) sessionMap.get("userSeq");
 		String loginUserAuthor = (String) sessionMap.get("userAuthor"); 
-System.out.println("loginUserAuthor : " + loginUserAuthor);
+		// System.out.println("loginUserAuthor : " + loginUserAuthor);
 		if (loginUserSeq.equals(registId) || loginUserAuthor.equals("SA") || CommonUtil.isNotEmpty(registId)) {
 			return true;
 		} else {

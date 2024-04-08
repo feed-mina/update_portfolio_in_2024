@@ -40,8 +40,8 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/communityController")
 public class CommunityController {
-
-	private Logger log = LoggerFactory.getLogger(this.getClass());
+ 
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	CommonService commonService;
@@ -98,12 +98,12 @@ public class CommunityController {
 		// 로그인 검증 이후 메모리 loginSession세팅 후 데이터와 accessToken 리턴
 		CommonUtil.loginSession.put((String) tmpMap.get("userSeq"), tmpMap);
 
-		System.out.println("tmpMap : " + tmpMap);
-		System.out.println("paramMap : " + paramMap);
+		logger.info("tmpMap : " + tmpMap);
+		logger.info("paramMap : " + paramMap);
 
 		// String loginUserSeq = (String) sessionMap.get("userSeq");
 		String loginUserSeq = (String) tmpMap.get("userSeq");
-		System.out.println("loginUserSeq : " + loginUserSeq);
+		logger.info("loginUserSeq : " + loginUserSeq);
 		if (loginUserSeq.equals(paramMap.get("registId")) || CommonUtil.isEmpty(paramMap.get("registId"))) {
 			Map<String, Object> userMap = new HashMap<String, Object>();
 			userMap.put("userSeq", loginUserSeq);

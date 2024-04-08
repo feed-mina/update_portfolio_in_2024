@@ -26,7 +26,8 @@ import com.sch.util.CamelHashMap;
 @Service("fileService")
 public class FileService {
 
-	private Logger log = LoggerFactory.getLogger(this.getClass());
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private CommonDao commonDao;
@@ -43,9 +44,9 @@ public class FileService {
 
 	public boolean filesRegist(MultipartFile[] uploadfile, Map<String, Object> paramMap, String dirSe) throws Exception {
 		int count = 1;
-		System.out.println("uploadfile : "+ uploadfile);
-		System.out.println("paramMap : "+ paramMap);
-		System.out.println("dirSe : "+ dirSe);
+		logger.info("uploadfile : "+ uploadfile);
+		logger.info("paramMap : "+ paramMap);
+		logger.info("dirSe : "+ dirSe);
 		if (uploadfile == null || uploadfile.length == 0) {
 			return false;
 		}
@@ -53,7 +54,7 @@ public class FileService {
 		// dir 없으면 생성
 		File fileDir = new File(uploadDir + File.separator + dirSe);
 
-		System.out.println("fileDir : "+ fileDir);
+		logger.info("fileDir : "+ fileDir);
 		if (!fileDir.exists()) {
 			fileDir.mkdirs();
 		}
@@ -80,8 +81,8 @@ public class FileService {
 				String playTimeStr = playTimeArr.get(fileNum++);
 				paramMap.put("playTimeStr", playTimeStr);
 			}
-			System.out.println("mpFile : " + mpFile);
-			System.out.println("paramMap : " + paramMap);
+			logger.info("mpFile : " + mpFile);
+			logger.info("paramMap : " + paramMap);
 			commonDao.insert("file.insertFileDetail", paramMap);
 			paramMap.put("fileSeq", paramMap.get("fileSeq"));
 		//	paramMap.put("fileDetailSn" + count, count);
@@ -89,7 +90,7 @@ public class FileService {
 			paramMap.put("fileMg" + count, mpFile.getSize());
 			paramMap.put("fileCours" + count, path.toFile().getAbsolutePath());
 
-			System.out.println("paramMap : "+ paramMap);
+			logger.info("paramMap : "+ paramMap);
 			count++;
 		}
 
@@ -237,7 +238,7 @@ public class FileService {
 				}
 			}
 		} catch (Exception e) {
-			log.debug("파일 삭제 실패");
+			logger.debug("파일 삭제 실패");
 		}
 		// detail 삭제
 		commonDao.delete("file.deleteFileDetail", paramMap);
@@ -329,6 +330,6 @@ public class FileService {
 
 	@CacheEvict(value = "fileMapCache", key = "#fileSeq")
 	public void fileMapRefresh(String fileSeq) throws Exception {
-		log.info("fileMapCache 캐시해제 >> " + fileSeq);
+		logger.info("fileMapCache 캐시해제 >> " + fileSeq);
 	}
 }

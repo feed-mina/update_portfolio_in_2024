@@ -27,6 +27,7 @@ import org.springframework.web.servlet.mvc.method.annotation.PrincipalMethodArgu
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sch.config.security.JwtTokenProvider;
 import com.sch.util.CommonUtil;
+import com.sch.util.MySQLPageRequestHandleMethodArgumentResolver;
 import com.sch.util.UserParam;
 @Configuration
 public class WebConfig<CustomRequestMappingHandlerAdapter> implements WebMvcConfigurer {
@@ -68,6 +69,9 @@ public class WebConfig<CustomRequestMappingHandlerAdapter> implements WebMvcConf
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
 		resolvers.add(loginUserResolver());
+		/** 페이징 처리 */
+	    // 페이지 리졸버 등록
+	    resolvers.add(new MySQLPageRequestHandleMethodArgumentResolver());
 	}
 
 	public HandlerMethodArgumentResolver loginUserResolver() {

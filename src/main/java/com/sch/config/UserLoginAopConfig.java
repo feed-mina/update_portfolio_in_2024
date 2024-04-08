@@ -34,13 +34,13 @@ public class UserLoginAopConfig {
         HttpServletRequest request = attributes.getRequest();
 
 		String accessToken = jwtTokenProvider.resolveToken(request);
-		// System.out.println(accessToken);
+	 	logger.info(accessToken);
 
 		// X-AUTH-TOKEN 있으면 tb_user_login에 endDt 업데이트
 		if(CommonUtil.isNotEmpty(accessToken)){
 			try{
 				String userSeq = jwtTokenProvider.getUserPk(accessToken);
-				// System.out.println(userSeq);
+				  logger.info(userSeq);
 
 				Map<String, Object> paramMap = new HashMap<String, Object>();
 				Map<String, Object> userMap = new HashMap<String, Object>();
