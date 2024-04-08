@@ -90,8 +90,8 @@
 																v-if="noticeList.length" v-bind:key="noticeList.id">
 
 																<td>{{totalCount - (searchData.pageNo - 1) * 10 -
-																	idx}}</td>
-																<td>{{obj.noticeSj}}</td>
+																	idx+1}}</td>
+																<td>	<a	 href="javascript:;"  @click="fnDtail(obj.noticeSeq)" >{{obj.noticeSj}}</a></td>
 																<td>{{obj.noticeCn}}</td>
 																<td>{{obj.registDt}}</td> 
 															<!-- 	<td>{{obj.noticeImageCn}}</td> -->

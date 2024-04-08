@@ -726,7 +726,7 @@ var util = {
 	},
 	getKakaoLogin: () => { 
 
-let KAKAO_GET = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=bc6f76bb8856c35bd57a3fa6a4331069&redirect_uri=http://www.arcadeframes.net:8189/auth/register.api";
+let KAKAO_GET = "https://kauth.kakao.com/oauth/authorize?client_id=bc6f76bb8856c35bd57a3fa6a4331069&redirect_uri=http://localhost:8189/auth/register.api&response_type=code";
 
 var MAIN_PAGE = "/sch/huss/dashBoard/main.html";
 console.log('카카오 로그인');

@@ -45,13 +45,13 @@ var vueInit = () => {
 	//let noticeSeq = 'CNSLT_0001'
 	//let paramMap = {'noticeSeq': ''};
 		$.sendAjax({
-			url: "/noticeController/selectNoticeSlidetestList.api", 
+			url: "/noticeController/selectNoticeSlideList.api", 
 	    	data: vm.searchData,
 			contentType: "application/json",
 			success: (res) => { 
 				console.log(res.data) 
 				let totalCount = res.data.length;
-				vm.noticeSlideList = res.data.list;
+				vm.noticeSlideList = res.data;
 				for (var i = 0; i <totalCount; i++) {
 				// 글자가 8글자 이상일때 ...
 					if(vm.noticeSlideList[i].noticeSj.length>= 8){

@@ -38,7 +38,7 @@ let vueInit = () => {
 let event = {
     getNoticeList: () => {
         $.sendAjax({
-            url: "/noticeController/selectNoticetestList.api",
+            url: "/noticeController/selectNoticeSlidetestList.api",
             data: vm.searchData,
             contentType: "application/json",
             success: (res) => {

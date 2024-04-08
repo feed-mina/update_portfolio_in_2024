@@ -7,9 +7,10 @@
 
 	<sql id="PAGING">
 
-		<if test="@com.sch.util.CommonUtil@isNotEmpty(pageLength) and @com.sch.util.CommonUtil@isNotEmpty(pageNo)"> 
-		LIMIT #{pageLength}  
-		</if>
+		<if test="@com.sch.util.CommonUtil@isNotEmpty(pageLength) and @com.sch.util.CommonUtil@isNotEmpty(pageNo)">  
+			<bind name="pageOffset" value="(pageNo-1)*pageLength"/>
+			LIMIT #{pageLength} 
+			</if>
 	</sql>
 
 	<sql id="COUNT_HEAD">

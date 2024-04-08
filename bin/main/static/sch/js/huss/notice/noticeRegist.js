@@ -11,7 +11,7 @@ var vueData = {
 	},
 	cmmnCode: [],
 	filesList: [],
-	blogFiles: [],
+	noticeFiles: [],
 	filesNo: 0,
 	fLabel: '파일찾기'
 }
@@ -31,13 +31,13 @@ var vueInit = () => {
 			  event.editorToTextarea();
  
 				if (util.sjChk(vm.noticeData.noticeSj)) {
-					$.alert("제목은 100자 이내로 작성해주세요.");
+					alert("제목은 100자 이내로 작성해주세요.");
 					return false;
 				} 
 				
 				let valiChk = event.removeHtml(vm.noticeData.noticeCn);
 				if (util.cnChk(valiChk)) {
-					$.alert("내용은 2000자 이내로 작성해주세요.");
+					alert("내용은 2000자 이내로 작성해주세요.");
 					return false;
 				}
 
@@ -72,21 +72,21 @@ var vueInit = () => {
 					cache: false,
 					success: (res) => {
 					console.log(res)
-						$.alert("등록이 완료되었습니다. 목록으로 이동합니다.", () => {
-							// location.href = "noticeList.html";
+						 alert("등록이 완료되었습니다. 목록으로 이동합니다.", () => {
+						 	location.href = "noticeList.html";
 						});
 					}
 				})
 			},
 			fnCancel: () => {
-				$.confirm("지금까지 입력한 내용이 모두 사라집니다. 정말 취소하시겠습니까?", () => {
+				confirm("지금까지 입력한 내용이 모두 사라집니다. 정말 취소하시겠습니까?", () => {
 					vm.noticeData = {};
 					vm.noticeData.division = "";
 					vm.noticeData.tag = "NOTICE";
 					vm.noticeData.useAt = "";
 					vm.filesList = [];
 					oEditors.getById["noticeCn"].exec("SET_IR", [""]); //내용초기화
-					$.confirm("입력한 내용이 취소되어 목록으로 이동합니다.", () => {
+					alert("입력한 내용이 취소되어 목록으로 이동합니다.", () => {
 						location.href = "noticeList.html"
 					})
 				})
@@ -158,7 +158,7 @@ let event = {
 
 		//첨부파일 갯수 확인
 		if (currentFileCnt > ableFileCnt) {
-			$.alert('첨부파일은 최대 12개까지만 가능합니다.');
+			alert('첨부파일은 최대 12개까지만 가능합니다.');
 		} else {
 			$.each(obj.target.files, function(i, val) {
 				// 첨부파일 검증
