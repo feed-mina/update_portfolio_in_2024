@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HUSS</title>
+
+<link rel="stylesheet" href="/css/pc/style.css">
+<link rel="stylesheet" href="/css/pc/aos.css">
+<link rel="stylesheet" href="/css/pc/jquery-ui.css">
+<link rel="stylesheet" href="/css/pc/swiper-bundle.min.css">
+<link rel="stylesheet" href="/css/custom.css" />
+<script src="/js/jqery-3.6.0.js"></script>
+
+<script src="/js/allVendors.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/swiper-bundle.min.js"></script>
+<script src="/js/aos.js"></script>
+</head>
+<body>
+<body>
+
+	<!-- skip -->
+	<div class="skip">
+		<a href="#container">인증번호 확인하기</a>
+	</div>
+	<!-- ===== header ====== -->
+	<!-- // skip -->
+	<div class="wrapper">
+		<!-- background -->
+
+		<!-- header -->
+		<header id="header_wrap"></header>
+		<!-- // header -->
+		<!-- container -->
+		<div class="container " id="container">
+			<div class="contents_03" style="padding-bottom: 339px;">
+				<h2 class="login_tilte mt90">인증번호 확인하기</h2>
+
+				<div id="inputline" class="join_input_wrap mt40">
+
+
+					<div class="bx_flex ai_center">
+						<div class="input_title type01">
+							<h2>아이디</h2>
+						</div>
+						<div class="input_wrap bx_flex ai_center gap10 fw100">
+							<h3 id="userEmail"></h3>
+						</div>
+					</div>
+					<div class="bx_flex ai_center">
+						<div class="input_title type01">
+							<h2>인증번호</h2>
+						</div>
+						 
+						<div class="input_wrap bx_flex ai_center gap10 fw100">
+							<input type="password" id="code" class="inp_text fw100"
+								placeholder="코드를 입력하세요." />
+						</div>
+					</div>
+
+				</div>
+				<a onclick="util.checkEmail()" id="checkEmail" href="javascript:;"
+					class="btn_type04">확인</a>
+				<hr /> 
+			</div>
+		</div>
+
+	</div>
+
+	<script>
+		const code = document.querySelector("#code"); 
+		let codeValue = code.value;  
+		const form = document.querySelector("#formTag");
+		const inputList = document.querySelectorAll("input");
+		const p = document.createElement("p"); 
+ 
+	//	userEmailtxt.innerHTML = util.getUserEmail()
+	 
+	</script>
+	<script>
+					AOS.init();
+	</script>
+</body>
+</html>

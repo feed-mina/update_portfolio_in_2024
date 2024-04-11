@@ -118,6 +118,17 @@
 	</insert>
 
 
+	<!-- login.userDelete 회원탈퇴 -->
+	<update id="kakaoUserUpdate" parameterType="map">
+		UPDATE tb_user
+			SET
+			updt_id = #{userSeq}
+			,updt_dt = current_timestamp()
+			<if test='@com.sch.util.CommonUtil@isNotEmpty(userNewPassword)'>
+				,user_password = #{userNewPassword}
+			</if>
+		WHERE user_seq = #{userSeq}
+	</update>
 	<!-- login.userRegist 일반회원가입-->
 	<insert id="userRegist" parameterType="map">
 		
@@ -166,6 +177,17 @@
 				</if>
 			)
 	</insert>
+	
+		<update id="emailUserUpdate" parameterType="map">
+		UPDATE tb_user
+			SET
+			updt_id = #{userSeq}
+			,updt_dt = current_timestamp()
+			<if test='@com.sch.util.CommonUtil@isNotEmpty(userNewPassword)'>
+				,user_password = #{userNewPassword}
+			</if>
+		WHERE user_seq = #{userSeq}
+	</update>
 
 	<!-- login.userUpdate 비밀번호수정 -->
 	<update id="userUpdate" parameterType="map">

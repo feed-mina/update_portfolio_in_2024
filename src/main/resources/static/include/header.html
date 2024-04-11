@@ -15,7 +15,7 @@
 				href="/sch/huss/notice/noticeList.html">NOTICE</a></li>
 			<li class="nav-item" id="community"><a class="nav-link"
 				href="/sch/huss/community/communityList.html">COMMUNITY</a></li>
-				
+
 			<!-- 
 			
 			<li class="nav-item" id="gallery"><a class="nav-link"
@@ -24,15 +24,18 @@
 				href="/sch/huss/board/boardList.html">게시판</a></li>
 			 -->
 			<div class="h_information_wrap">
-				<div class="header" >
-					<ul style="display: flex; justify-content: space-around; align-items: center;">
+				<div class="header">
+					<ul
+						style="display: flex; justify-content: space-around; align-items: center;">
 						<li class="nav-item" id="login"><a
-							href="/sch/huss/login/login.html"> 로그인 </a></li>
-							 |
+							href="/sch/huss/login/login.html"> 로그인 </a></li> |
 						<li class="nav-item" id="join"><a
-							href="/sch/huss/auth/register.html" class="h_infor_logout"> 회원가입</a></li>
+							href="/sch/huss/auth/register.html" class="h_infor_logout">
+								회원가입</a></li>
 						<li class="nav-item" id="logout"><a onclick="util.logout()"
 							class="h_infor_name"> 로그아웃 </a></li>
+						<li class="nav-item" id="kakaoLogout"><a
+							onclick="util.kakaoLogout()" class="h_infor_name">로그아웃</a></li>
 
 					</ul>
 				</div>
@@ -45,38 +48,53 @@
 	 
 
 	function changeStatus() {
-		const kakaoAccessToken = document.cookie.split("; ")[0].split("=")[1]
+		const kakaoAccessToken =  document.cookie.split(`; `).map((el) => el.split('='));
+		 
+		if( document.cookie.split("; ")[0].split("=")[1] != null){
+			sessionStorage.setItem(kakaoAccessToken[0][0],kakaoAccessToken[0][1])
+			sessionStorage.setItem(kakaoAccessToken[1][0],kakaoAccessToken[1][1])
+			sessionStorage.setItem(kakaoAccessToken[2][0],kakaoAccessToken[2][1])
+			if(document.cookie.split("; ")[3] != null){
+				sessionStorage.setItem(kakaoAccessToken[3][0],kakaoAccessToken[3][1])
+			}
+		}
+	
+		
+		const userEmail = sessionStorage.getItem("userEmail")
+		const userSeq = sessionStorage.getItem("userSeq")
 
-		if(window.sessionStorage.getItem("email") !== null){
+		if(window.sessionStorage.getItem("userEmail") !== null && window.sessionStorage.getItem("loginMode") === null ){
 			console.log('header_회원가입단계')
 			document.querySelector("#join").classList.add("toggleJoin"); // 회원가입탭 
 			document.querySelector("#logout").classList.add("toggleLogout"); // 로그아웃탭 
 
-		} else if (util.getUserSeq() === null &&window.sessionStorage.getItem("email") === null ) { 
-			console.log(window.sessionStorage.getItem("email"))
+		} else if (util.getUserSeq() === null && document.cookie.split("; ")[0].split("=")[1] === null ) { 
+			console.log(window.sessionStorage.getItem("userEmail"))
 			console.log('header_로그인 안한 상태이다.');
 		//	util.setStorage('loginMode', 'true');
 			util.clearloginMode();
 			logoutmode.remove();
-			document.querySelector("#logout").classList.add("toggleLogout"); // 로그아웃탭 
+			
 			document.querySelector("#community").classList.add("toggleCommunity")  // 커뮤니티탭 
 			// 	document.querySelector("#board").classList.add("toggleBoard") 게시글탭 
 		} else if(util.getUserSeq() !== null) {
 		// 일반 로그인 한 상태	
 		console.log('header_일반 로그인 한 상태')
+	  	document.querySelector("#kakaoLogout").classList.add("toggleLogout"); // 로그인탭 
 	  	document.querySelector("#login").classList.add("toggleLogin"); // 로그인탭 
 		document.querySelector("#join").classList.add("toggleJoin"); // 회원가입탭 
-		}else if (kakaoAccessToken !== null || kakaoAccessToken !== undefined) { 
-			console.log('header_카카오 로그인 한 상태.'); 
-			document.querySelector("#login").classList.add("toggleLogin"); // 로그인탭 
-			document.querySelector("#loginbox").classList.add("toggleLogin"); // 로그인탭 
+		}else if ( document.cookie.split("; ")[0].split("=")[1] != null) { 
+			console.log('header_카카오 로그인 한 상태.');  
+			 document.querySelector("#logout").classList.add("toggleLogout");
+		  	document.querySelector("#login").classList.add("toggleLogin"); // 로그인탭 
 			document.querySelector("#join").classList.add("toggleJoin"); // 회원가입탭 
-		} else if (kakaoAccessToken !== null || kakaoAccessToken !== undefined) { 
-			console.log('header_카카오 로그인 한 상태.'); 
-			document.querySelector("#login").classList.add("toggleLogin"); // 로그인탭 
-			document.querySelector("#loginbox").classList.add("toggleLogin"); // 로그인탭 
-			document.querySelector("#join").classList.add("toggleJoin"); // 회원가입탭 
-		} 
+		}  
+		  else if(document.cookie.split("; ")[0].split("=")[1] == undefined && util.getUserSeq() == null){ 
+			  console.log('로그인안한상태');
+			  //	document.querySelector("#logout").classList.add("toggleLogout"); // 로그아웃탭  
+			 document.querySelector("#logout").classList.add("toggleLogout");
+			 document.querySelector("#kakaoLogout").classList.add("toggleLogout"); // 로그아웃탭 
+			  } 
 	}
 	changeStatus()
 </script>

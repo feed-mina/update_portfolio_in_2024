@@ -53,7 +53,7 @@ small {
 	display: none;
 }
 
-.toggleLogin, .toggleGalleryOut , .toggleBoardOut , .toggleCommunityOut , .toggleBoard, .toggleCommunity, .toggleJoin, .toggleLogout
+.logout, .toggleLogin, .toggleGalleryOut , .toggleBoardOut , .toggleCommunityOut , .toggleBoard, .toggleCommunity, .toggleJoin, .toggleLogout
  .beforeLogin, .afterLoginON, .afterLogin, .toggleLogout {
 	display: none;
 } 

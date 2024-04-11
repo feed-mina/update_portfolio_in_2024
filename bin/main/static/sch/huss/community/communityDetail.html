@@ -1,10 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html lang="ko">
+  <head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="mask-icon" href="/favicon.svg" color="#000000">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>HUSS</title>
 
-</body>
+    <link rel="stylesheet" href="/css/common.css" />
+
+    <link rel="stylesheet" href="/resources/css/common/aos.css" />
+    <link rel="stylesheet" href="/resources/css/common/jquery-ui.css" />
+    <link rel="stylesheet" href="/resources/css/pc/style.css" />
+
+    <script src="/js/allVendors.js"></script>
+    <script src="/js/common.js"></script>
+
+    <script src="/sch/js/huss/community/communityDetail.js"></script>
+  </head>
+
+  <body>
+    <!-- skip -->
+    <div class="skip">
+      <a href="#container">본문 바로가기</a>
+    </div>
+    <!-- // skip -->
+    <div class="wrapper">
+      <!-- background -->
+
+      <!-- header -->
+      <header class="header_wrap">
+        <div class="header"></div>
+      </header>
+      <!-- // header -->
+      <!-- container -->
+      <div class="container" id="container">
+        <div class="contents_full sub_top_banner_wrap">
+          <div class="sub_top_banner02">
+            <h2>정보마당</h2>
+          </div>
+        </div>
+        <div class="contents_02" style="padding-bottom: 100px">
+          <div class="announcement_line mt80"></div>
+          <div class="view_details_wrap">
+            <div class="view_details_head">
+              <div class="bx_flex jc_sb">
+                <h2 v-text="community.communitySj"></h2>
+                <div class="btn_box tr" v-if="isControllable">
+                  <button @click="fnDelete" class="btn_type10">글 삭제</button>
+                  <button @click="fnUpdate" class="btn_type10">글 수정하기</button>
+                </div>
+              </div>
+              <div class="mt24 bx_flex gap16 ai_center view_details_head_text">
+                <p>작성자<span class="ml8" v-text="community.registUserNm"></span></p>
+                <img src="/resources/images/pc/Line03.png" alt="" />
+                <p>게시날짜<span class="ml8" v-text="community.registDt"></span></p>
+                <img src="/resources/images/pc/Line03.png" alt="" />
+                <p>태그 <span class="ml8" v-text="community.tagAt == 'P' ? 'Poster' : 'Video'"></span></p>
+              </div>
+            </div>
+            <div class="announcement_line02"></div>
+            <div class="view_details_body">
+              <pre class="view_details_body_content_area" v-text="community.communityCn"></pre>
+
+              <div :data-tag="community.tagAt" class="mt50">
+                <img style="max-width: 100%;" v-if="community.tagAt == 'P'" :src="util().getDownloadUrl(community.fileSeq)" alt="">
+
+                <video style="max-width: 100%;" controls v-if="community.tagAt == 'V'">
+                  <source :src="util().getPlayVideoUrl(community.fileSeq)" type="video/mp4">
+                </video>
+              </div>
+              <div class="bx_flex mt40" v-show="false">
+                <div class="view_details_file_title mr24">
+                  <h2>첨부파일</h2>
+                </div>
+                <div class="view_details_file">
+                  <a v-text="community.files?.[0]?.orignlFileNm" :href="util().getDownloadUrl(community.fileSeq)" download></a>
+                  <!-- <a v-text="community.files?.[0]?.orignlFileNm" :href="`/sample/fileDownload.api?fileSeq=${community.fileSeq}`" download></a> -->
+                </div>
+              </div>
+            </div>
+            <div class="announcement_line02"></div>
+            <div class="btn_box mt40 bx_flex jc_ct">
+              <button onclick="location.href='/sch/huss/community/communityList.html'" class="btn_type04 w295">목록</button>
+            </div>
+            <div class="announcement_line03 mt60"></div>
+            <div class="view_details_bottom_wrap bx_flex">
+              <div class="view_details_file_title mr40">
+                <h2>이전글</h2>
+              </div>
+              <div v-if="community.communitySeq" class="view_details_file">
+                <a
+                  v-if="community.prevNoitceSeq"
+                  :href="`/sch/huss/community/communityDetail.html?communitySeq=${community.prevNoitceSeq}`"
+                  v-text="community.prevNoitceSj"
+                ></a>
+                <a v-else href="javascript:void(0);">이전 글이 없습니다.</a>
+              </div>
+            </div>
+            <div class="announcement_line02"></div>
+            <div class="view_details_bottom_wrap bx_flex">
+              <div class="view_details_file_title mr40">
+                <h2>다음글</h2>
+              </div>
+              <div v-if="community.communitySeq" class="view_details_file">
+                <a
+                  v-if="community.nextCommunitySeq"
+                  :href="`/sch/huss/community/communityDetail.html?communitySeq=${community.nextCommunitySeq}`"
+                  v-text="community.nextCommunitySj"
+                ></a>
+                <a v-else href="javascript:void(0);">다음 글이 없습니다.</a>
+              </div>
+            </div>
+            <div class="announcement_line03"></div>
+          </div>
+        </div>
+      </div>
+      <!-- // container -->
+      <!-- footer -->
+      <footer class="footer"></footer>
+      <!-- // footer -->
+    </div>
+  </body>
 </html>

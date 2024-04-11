@@ -727,11 +727,9 @@ var util = {
 	getKakaoLogin: () => {
 
 		let KAKAO_GET = "https://kauth.kakao.com/oauth/authorize?client_id=bc6f76bb8856c35bd57a3fa6a4331069&redirect_uri=http://localhost:8189/auth/register.api&response_type=code";
-
-		var MAIN_PAGE = "/sch/huss/dashBoard/main.html";
+ 
 		console.log('카카오 로그인');
-		window.location.assign(KAKAO_GET); 
-		console.log('메인페이지로 이동 시도'); 
+		window.location.assign(KAKAO_GET);  
 	},
 	/**getKakaoLogin: () => {
 		var MAIN_PAGE = "/sch/huss/dashBoard/main.html";
@@ -836,8 +834,7 @@ var util = {
 		}
 	}
 	,
-	logout: () => {
-		const kakaoAccessToken = document.cookie.split("; ")[0].split("=")[1];
+	logout: () => { 
 		if (!(JSON.parse(window.localStorage.getItem("sch")).userSeq === null)) {
 			$.sendAjax({
 				url: "/login/logout.api",
@@ -851,23 +848,112 @@ var util = {
 					util.clearStorage();
 				}
 			})
-		} else if (!(kakaoAccessToken === null || kakaoAccessToken === undefined)) {
+		} 
+	},
+	 
+	kakaoLogout: () => {
+		const kakaoAccessToken = document.cookie.split("; ")[0].split("=")[1];
+		console.log( document.cookie.split("; ")[0].split("=")[1]) 
+		console.log( document.cookie.split(`; `).map((el) => el.split('='))) 
+		/**
+		let KAKAO_Logout = "https://kauth.kakao.com/oauth/authorize?client_id=bc6f76bb8856c35bd57a3fa6a4331069&redirect_uri=http://localhost:8189/auth/register.api&response_type=code";
+ 
+		console.log('카카오 로그아웃');
+		window.location.assign(KAKAO_Logout);  
+		 
+		*/
+		if (kakaoAccessToken !== null  || kakaoAccessToken !== undefined) {
+					
 			$.sendAjax({
 				url: "/auth/kakaoLogout.api",
 				data: {},
 				contentType: "application/json",
 				success: (res) => {
-					console.log("🚀 ~ res:", res);
-					location.href = "/sch/huss/dashBoard/main.html"
+					console.log("🚀 ~ res:", res); 
+					sessionStorage.removeItem("loginMode")
+					sessionStorage.removeItem("accessToken")
+					sessionStorage.removeItem("userEmail")
+					sessionStorage.removeItem("userSeq")
+					window.location.reload(true)
 				},
 				error: function (err) {
-					console.log(err.responseJSON.message);
-					alert(err.responseJSON.message);
+					console.log(err.responseJSON);
+					window.location.reload(true)
+					// alert(err.responseJSON);
 
 				},
 			})
 
 		}
+	},
+	checkEmail: async  () => { 
+        let params =  document.querySelector("#userEmail").innerText;
+         let response = await fetch(`/login/mailConfirm/?email=${params}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+        let data = await response.json()
+        console.log(data)
+        console.log(data.result.code)
+           if(response.ok){
+            console.log("메세지가 전송되었습니다 email을 확인하세요")
+        }else
+        {
+            console.log("오류가 발생하여 메세지가 전송되지 못하였습니다.")
+        }
+		/**
+		
+		if (window.sesssionStorage.getItem("email") != null ||util.getUserEmail() != null) {
+			let email = util.getUserEmail() ? window.sesssionStorage.getItem("email") : util.getUserEmail() ; 
+			$.sendAjax({
+				url: "/mail/confirm.json?email="+email,
+				method: "POST",
+				data: { userSeq: util.getUserSeq() }, 
+				contentType: "application/json",
+				success: (res) => {
+					console.log("🚀 ~ res:", res); 
+					console.log(email);
+				}
+			})
+		} 
+		*/
+		
+	},
+	checkCode :async  () =>{ 
+	   let emailSesion = window.sessionStorage.getItem("email")
+	   let userNmSesion = window.sessionStorage.getItem("userNm")
+	   
+	  	let params = document.getElementById("memailconfirm").value;
+        let response = await fetch(`/mail/verifyCode/?code=${params}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },body: JSON.stringify({
+
+                code: document.getElementById("memailconfirm"),
+            })
+        })
+        let data = await response.json()
+        console.log(data)
+        if(data==1){
+            console.log("확인되었습니다.")
+            const btn = document.getElementById("last")
+            btn.style.display='block'
+            
+	 var MAIN_PAGE = "/sch/huss/dashBoard/main.html";
+  	document.querySelector("#mainbutton").addEventListener('click', (event) => { 
+  		console.log("메인페이지로 이동");
+	   	window.location.assign(MAIN_PAGE); 
+	   	window.sessionStorage.removeItem("userNm");
+	   	window.sessionStorage.removeItem("email");
+	}) 
+        }else
+        {
+             console.log("인증번호가 일치하지 않습니다.")
+             window.location.reload(true);
+        }
 	},
 	setStorage: (key, val) => {
 		const storage = window.localStorage.getItem("sch");
@@ -966,19 +1052,7 @@ var util = {
 			results = regex.exec(location.search);
 		return results == null ? "" : results[1];
 	},
-	// 미사용시 삭제요망
-	//   canvasToBlob: (dataURI) => {
-	//     var byteString = atob(dataURI.split(",")[1]);
-	//     var mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
-	//     var ab = new ArrayBuffer(byteString.length);
-	//     var ia = new Uint8Array(ab);
-	//     for (var i = 0; i < byteString.length; i++) {
-	//       ia[i] = byteString.charCodeAt(i);
-	//     }
-
-	//     var bb = new Blob([ab], { type: mimeString });
-	//     return bb;
-	//   },
+	 
 	tableSetting: () => {
 		var sortdir = "";
 		/**
@@ -1163,8 +1237,7 @@ var util = {
 		}
 		return type;
 	},
-	getDownloadUrl: (fileSeq) => {
-		// const host = "https://schback2.musicen.com";
+	getDownloadUrl: (fileSeq) => { 
 		const host = "";
 		return host + `/cmmn/fileDownload.api?fileSeq=${fileSeq}`
 	},
@@ -1174,11 +1247,7 @@ var util = {
 			userChk = true
 		}
 		return userChk
-	},
-	myPage: () => {
-		const userSeq = util.getUserSeq();
-		location.href = `/sch/admin/sysManage/mberDetail.html?userSeq=${userSeq}&flag=admin`
-	},
+	}, 
 	screenToggle: (flag) => {
 		window.scrollTo({ top: 0 });
 		if (flag) {

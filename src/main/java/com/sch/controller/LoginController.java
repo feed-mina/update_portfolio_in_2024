@@ -167,7 +167,11 @@ public class LoginController {
 		}
 
 		Map<String, Object> loginMap = commonService.selectMap("login.selectLogin", paramMap);
-
+		// logger.info("login Map param email : "+loginMap.get("userEmail"));
+		if (!ObjectUtils.isEmpty(loginMap.get("userEmail"))) { 
+			logger.info("userSeq : " + loginMap.get("userSeq"));
+			commonService.update("login.emailUserUpdate", loginMap);
+		}
 		// 유저가없거나 패스워드가 없을경우
 		if (ObjectUtils.isEmpty(loginMap) || ObjectUtils.isEmpty(loginMap.get("userPassword"))) {
 			return CommonResponse.statusResponse(HttpServletResponse.SC_UNAUTHORIZED, "로그인 정보를 확인하세요.");
@@ -191,7 +195,7 @@ public class LoginController {
 		// loginMap 에 userSeq를 추가한다.
 		paramMap.put("userSeq", loginMap.get("userSeq"));
 
-		// tb_user_login 체류시간테이블에 loginDt insert commonService.insert("login.loginDt", loginMap);
+		// tb_user_login 체류시간테이블에 loginDt insert commonService.insert("login.emailUserUpdate", loginMap);
 
 		// 로그인 검증 이후 메모리 loginSession세팅 후 데이터와 accessToken 리턴
 		CommonUtil.loginSession.put((String) loginMap.get("userSeq"), loginMap);

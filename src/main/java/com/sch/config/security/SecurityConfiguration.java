@@ -35,7 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.and().authorizeRequests()
 				.antMatchers(HttpMethod.OPTIONS, "/**").permitAll() 
 				 
-				.antMatchers("/","/index","/sch/js/huss/**","/error","/error/**","/sch/test/**","/sch/huss/**","/sch/huss/auth/**","/sch/huss/login/**","/sch/huss/community/**", "/sch/huss/dashBoard/**","/sch/huss/user/**","/sch/huss/notice/**","/cmmn/**","/communityController/**" , "/noticeController/**", "/login/**","/admin/**","/auth/**","/login/**","/dashBoard/**","/experience/**","/notice/**","/board/**")
+				.antMatchers("/","/index","/sch/js/huss/**","/error","/error/**","/sch/test/**","/sch/huss/**","/sch/huss/auth/**","/sch/huss/login/**","/sch/huss/community/**", "/sch/huss/dashBoard/**","/sch/huss/user/**","/mail/**","/sch/huss/mail/**","/sch/huss/notice/**","/cmmn/**","/communityController/**" , "/noticeController/**", "/login/**","/admin/**","/auth/**","/login/**","/dashBoard/**","/experience/**","/notice/**","/board/**")
 				.permitAll() // 이하 라우팅은 인증필요없음(X-AUTH-TOKEN);
 				.anyRequest().authenticated() // 위 request외 모두인증필요
 				.and().exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()).and()

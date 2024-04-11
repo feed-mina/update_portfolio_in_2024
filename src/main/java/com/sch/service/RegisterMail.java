@@ -20,7 +20,9 @@ public class RegisterMail implements MailServiceInter {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     JavaMailSender emailSender; // MailConfig에서 등록해둔 Bean을 autowired하여 사용하기
-
+    
+    public  final String code = createKey(); // 인증번호
+    
     private String ePw; // 사용자가 메일로 받을 인증번호
 
     // 메일 내용 작성
@@ -47,7 +49,7 @@ public class RegisterMail implements MailServiceInter {
 
         message.setText(msgg, "utf-8", "html"); // 메일 내용, charset타입, subtype
         // 보내는 사람의 이메일 주소, 보내는 사람 이름
-        message.setFrom(new InternetAddress("alsdpfls_@naver.com", "testcase"));
+        message.setFrom(new InternetAddress("myelin24@naver.com", "testcase"));
         logger.info("********creatMessage 함수에서 생성된 msgg 메시지********" + msgg);
 
         logger.info("********creatMessage 함수에서 생성된 리턴 메시지********" + message);
@@ -55,20 +57,31 @@ public class RegisterMail implements MailServiceInter {
         return message;
     }
 
-    // 랜덤 인증코드 생성
-    @Override
-    public String createKey() {
-            int leftLimit = 48; // numeral '0'
-            int rightLimit = 122; // letter 'z'
-            int targetStringLength = 10;
-            Random random = new Random();
-            String key = random.ints(leftLimit, rightLimit + 1)
-                                           .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-                                           .limit(targetStringLength)
-                                           .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                                           .toString();
-            logger.info("생성된 랜덤 인증코드"+ key);
-            return key;
+    // 랜덤 인증코드 생성 
+	@Override
+	public  String createKey() {
+    	 StringBuffer key = new StringBuffer();
+         Random rnd = new Random();
+  
+         for (int i = 0; i < 8; i++) { // 인증코드 8자리
+             int index = rnd.nextInt(3); // 0~2 까지 랜덤
+  
+             switch (index) {
+                 case 0:
+                     key.append((char) ((rnd.nextInt(26)) + 97));
+                     //  a~z  (ex. 1+97=98 => (char)98 = 'b')
+                     break;
+                 case 1:
+                     key.append((char) ((rnd.nextInt(26)) + 65));
+                     //  A~Z
+                     break;
+                 case 2:
+                     key.append((rnd.nextInt(10)));
+                     // 0~9
+                     break;
+             }
+         }
+         return key.toString();
     }
 
     // 메일 발송

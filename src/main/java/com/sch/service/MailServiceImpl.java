@@ -20,10 +20,10 @@ import org.springframework.stereotype.Component;
 @Primary
 public class MailServiceImpl implements MailService {
  
-	final String HOST = "smtps.hiworks.com";
+	final String HOST = "smtps.naver.com";
 	final int PORT = 465;
-	final String PASSWORD = "eoqkr!@345";
-	final String FROM = "system@musicen.com";
+	final String PASSWORD = "qawsedrf12";
+	final String FROM = "myelin24@naver.com";
 	/*
 	 * @Bean
 	public JavaMailSender mailSender(){

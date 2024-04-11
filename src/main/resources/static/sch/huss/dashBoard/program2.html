@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="mask-icon" href="/favicon.svg" color="#000000">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>HUSS</title>
+
+    <link rel="stylesheet" href="/css/common.css" />
+
+    <link rel="stylesheet" href="/resources/css/common/aos.css" />
+    <link rel="stylesheet" href="/resources/css/common/jquery-ui.css" />
+    <link rel="stylesheet" href="/resources/css/pc/style.css" />
+
+    <script src="/js/allVendors.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/sch/js/huss/program/program.js"></script>
+
+    <style>
+      .pro_hide{
+        display: none;
+      }
+      .btn_pro_apply{
+        background: #294A9B;
+        color: #fff;
+        border: none;
+      }
+      .btn_pro_cancel{
+        background: #F7444E;
+        color: #fff;
+        border: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- skip -->
+    <div class="skip">
+      <a href="#container">본문 바로가기</a>
+    </div>
+    <!-- // skip -->
+    <div class="wrapper">
+      <!-- background -->
+
+      <!-- header -->
+      <header class="header_wrap"></header>
+      <!-- // header -->
+      <!-- container -->
+      <div class="container" id="container">
+        <div class="contents_full sub_top_banner_wrap">
+          <div class="sub_top_banner">
+            <h2>교과/비교과프로그램</h2>
+          </div>
+        </div>
+        <div class="contents_02 mt60">
+          <div id="tabs" class="program_tabs">
+            <ul class="tabsContainer">
+              <div class="active_back"></div>
+              <li class="tabs_left"><a href="#tabs-2">교과</a></li>
+              <li class="tabs_right"><a href="#tabs-1">비교과</a></li>
+            </ul>
+
+            <!-- 비교과 -->
+            <div id="tabs-1">
+              <div class="program_content01 mt60">
+                <h2 class="program_content_title">프로젝트 참여 안내</h2>
+                <div class="program_table_wrap">
+                  <div class="mt80 program_img01_area">
+                    <img src="/resources/images/pc/program02.png" alt="" />
+                  </div>
+                </div>
+                <div class="program_table_wrap">
+                  <table class="program_table02 mt80">
+                    <colgroup>
+                      <col width="287px" />
+                      <col width="*" />
+                    </colgroup>
+
+                    <tbody>
+                      <tr>
+                        <th>
+                          위험사회 치유콘텐츠 공모전
+                          <div v-if="isLogin" class="pro_hide">
+                            <button @click="fnReqst(key1, 'Y')" v-if="key1.reqstYn=='N'" class="btn_type02 btn_pro_apply">신청하기</button>
+                            <button @click="fnReqst(key1, 'N')" v-if="key1.reqstYn=='Y'" class="btn_type02 btn_pro_cancel">취소하기</button>
+                          </div>
+                        </th>
+                        <td>
+                          <h2>사업목적</h2>
+                          <ul class="program_table_textlist mt8">
+                            <li>
+                              <p>
+                                초연결사회의 심리적 고립과 인간소외·편향된 정보습득으로 인한 반사회적 인격
+                                형성·디지털기술을 활용한 범죄 등은 우리 사회를 위험사회로 규정하고 있음.
+                              </p>
+                            </li>
+                            <li>
+                              <p>
+                                이러한 위험사회의 갈등 해결과 치유를 위한 콘텐츠 공모전을 개최하여,
+                                IT·문화콘텐츠·데이터를 융합한 사회문제해결 및 치유 아이디어 성과를 공유하고자 함.
+                              </p>
+                            </li>
+                          </ul>
+                          <h2 class="mt16">사업 추진</h2>
+                          <div class="program_table_imgbox mt8">
+                            <img src="/resources/images/pc/grogram_table01.png" alt="" />
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          HUSS-HUB(동아리)
+                          <div v-if="isLogin" class="pro_hide">
+                            <button @click="fnReqst(key2, 'Y')" v-if="key2.reqstYn=='N'" class="btn_type02 btn_pro_apply">신청하기</button>
+                            <button @click="fnReqst(key2, 'N')" v-if="key2.reqstYn=='Y'" class="btn_type02 btn_pro_cancel">취소하기</button>
+                          </div>
+                        </th>
+                        <td>
+                          <h2>사업목적</h2>
+                          <ul class="program_table_textlist mt8">
+                            <li>
+                              <p>HUSS융합학부 교육과정과 연계하여 동아리를 구성</p>
+                            </li>
+                            <li>
+                              <p>동아리의 다각화 지원을 통한 자기개발 역량 증진 및 대학 내 취·창업분위기 확산</p>
+                            </li>
+                            <li>
+                              <p>사업화 역량을 갖춘 창업동아리의 우수 아이템 발굴 및 지원</p>
+                            </li>
+                            <li>
+                              <p>
+                                초연결사회가 유발하는 사회적 피로와 고립감 해소에 도움이 되는 문화컨텐츠 발굴 및 제작
+                              </p>
+                            </li>
+                          </ul>
+                          <h2 class="mt16">사업 추진</h2>
+                          <div class="program_table_imgbox mt8">
+                            <img src="/resources/images/pc/grogram_table02.png" alt="" />
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          전문가 초청 특강
+                          <div v-if="isLogin" class="pro_hide">
+                            <button @click="fnReqst(key3, 'Y')" v-if="key3.reqstYn=='N'" class="btn_type02 btn_pro_apply">신청하기</button>
+                            <button @click="fnReqst(key3, 'N')" v-if="key3.reqstYn=='Y'" class="btn_type02 btn_pro_cancel">취소하기</button>
+                          </div>
+                        </th>
+
+                        <td>
+                          <h2>사업목적</h2>
+                          <ul class="program_table_textlist mt8">
+                            <li>
+                              <p>위험사회의 문제와 대응 전략에 관한 전문가와의 소통을 통한 전공‧취업역량 강화</p>
+                            </li>
+                            <li>
+                              <p>초연결사회에 대한 총체적 이해 및 융합적 사고 함양을 통한 창의적 인재 양성</p>
+                            </li>
+                            <li>
+                              <p>
+                                위험사회에 대한 인문학, 사회과학 등 학문간의 교류를 통해 탈위험사회로 나아가는 해결방안
+                                모색
+                              </p>
+                            </li>
+                          </ul>
+                          <h2 class="mt16">사업 추진</h2>
+                          <div class="program_table_imgbox mt8">
+                            <img src="/resources/images/pc/grogram_table03.png" alt="" />
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          글로벌 캠프
+                          <div v-if="isLogin" class="pro_hide">
+                            <button @click="fnReqst(key4, 'Y')" v-if="key4.reqstYn=='N'" class="btn_type02 btn_pro_apply">신청하기</button>
+                            <button @click="fnReqst(key4, 'N')" v-if="key4.reqstYn=='Y'" class="btn_type02 btn_pro_cancel">취소하기</button>
+                          </div>
+                        </th>
+
+                        <td>
+                          <h2>사업목적</h2>
+                          <ul class="program_table_textlist mt8">
+                            <li>
+                              <p>
+                                국제사회 사회문제 및 글로벌치유에 대한 현장 체험기회를 제공하여 국제적인 위험 사회 대응,
+                                융복합의 이슈와 국제적 감각을 키워 글로벌 인재로의 도약
+                              </p>
+                            </li>
+                            <li>
+                              <p>
+                                국내외 사회문제 해결분야의 인사 및 학생이 참여하는 글로벌 인식확장을 위한 분야별
+                                연구결과 발표 및 아이디어를 공유하는 장을 마련
+                              </p>
+                            </li>
+                            <li>
+                              <p>
+                                전 세계 다양한 학생들과 함께 수업을 들을 수 있는 수업으로 구성되어 언어적, 문화적 교류의
+                                최적화 프로그램
+                              </p>
+                            </li>
+                          </ul>
+                          <h2 class="mt16">사업 추진</h2>
+                          <ul class="program_table_textlist mt8">
+                            <li>
+                              <p>
+                                컨소시엄 5개 대학 공통 운영(순천향대학교, 선문대학교, 세종대학교, 순천대학교,
+                                한밭대학교)
+                              </p>
+                            </li>
+                            <li>
+                              <p>집중이수제+마이크로디그리와 연계</p>
+                            </li>
+                            <li>
+                              <p>초연결 사회문제해결을 위한 컨소시엄 대학간 연합하여 팀구성 캠프 진행</p>
+                            </li>
+                          </ul>
+                          <div class="program_table_imgbox mt8">
+                            <img src="/resources/images/pc/grogram_table04.png" alt="" />
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          IT 교육과정
+                          <div v-if="isLogin" class="pro_hide">
+                            <button @click="fnReqst(key5, 'Y')" v-if="key5.reqstYn=='N'" class="btn_type02 btn_pro_apply">신청하기</button>
+                            <button @click="fnReqst(key5, 'N')" v-if="key5.reqstYn=='Y'" class="btn_type02 btn_pro_cancel">취소하기</button>
+                          </div>
+                        </th>
+
+                        <td>
+                          <h2>사업목적</h2>
+                          <ul class="program_table_textlist mt8">
+                            <li>
+                              <p>인문사회계열의 사회문제 해결을 위한 전문자격 및 기초 교육훈련 기회 제공</p>
+                            </li>
+                            <li>
+                              <p>
+                                필수적 IT 기술과 문제해결인식능력, 콘텐츠 활용능력을 달성하여 사회문제해결 실무자
+                                인재양성
+                              </p>
+                            </li>
+                          </ul>
+                          <h2 class="mt16">사업 추진</h2>
+                          <p class="mt8">기초코딩과정 / 파이썬 프로그래밍 / 전산회계 등</p>
+
+                          <div class="program_table_imgbox mt8">
+                            <img src="/resources/images/pc/grogram_table05.png" alt="" />
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <!-- 교과 -->
+            <div id="tabs-2">
+              <div class="program_content01 mt60">
+                <h2 class="program_content_title">프로젝트 참여 안내</h2>
+
+                <div class="program_notice">
+                  <div class="program_notice_content">
+                    <ul>
+                      <li>
+                        1. 위험사회에 대한 국가전략 모색 융합인재양성 컨소시엄 참여 학교와 이수 과정을 확인해 주세요
+                      </li>
+                      <li>2. 과목 확인 후 아래 참여 신청하기 버튼을 누르면 참여 신청이 완료됩니다.</li>
+                      <li>3. 신청 시 등록된 연락처로 프로젝트 참여 상세 안내 연락을 받을 수 있습니다.</li>
+                    </ul>
+                  </div>
+                  <div class="program_notice_button_bg">
+                    <p>인문사회 융합인재양성사업에 참여하시겠습니까?</p>
+                    <a href="https://sugang.sch.ac.kr" target="_blank" >
+                      <button class="btn_type03 ml24">참여 신청하기</button>
+                    </a>
+                  </div>
+                </div>
+
+                <h2 class="program_content_title mt60">프로젝트 참여 대학 및 교과목 이수체계</h2>
+                <div class="program_table_wrap">
+                  <h2 class="mt40">순천향대 (참여)</h2>
+                  <div class="mt24 program_img01_area">
+                    <img src="/resources/images/pc/program01.png" alt="" />
+                  </div>
+                </div>
+                <div class="program_table_wrap">
+                  <table class="program_table01 mt80">
+                    <colgroup>
+                      <col width="166px" />
+                      <col width="79px" />
+                      <col width="79px" />
+                      <col width="107px" />
+                      <col width="*" />
+                      <col width="79px" />
+                      <col width="79px" />
+                      <col width="94px" />
+                      <col width="79px" />
+                      <col width="110px" />
+                    </colgroup>
+                    <thead>
+                      <tr>
+                        <th rowspan="2">과정명</th>
+                        <th rowspan="2">학년</th>
+                        <th rowspan="2">학기</th>
+                        <th rowspan="2">교과구분</th>
+                        <th rowspan="2">교과목명</th>
+                        <th rowspan="2">학점</th>
+                        <th colspan="3" class="border_b_line">강의시간</th>
+                        <th rowspan="2">개설대학</th>
+                      </tr>
+                      <tr>
+                        <th>이론</th>
+                        <th>실험실습</th>
+                        <th>실기</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td rowspan="5" class="border_b_line02">
+                          로컬문화 <br />
+                          크리에이터 <br />
+                          마이크로디그리 <br />
+                        </td>
+                        <td></td>
+                        <td>1</td>
+                        <td>전공선택</td>
+                        <td>소셜벤처창업</td>
+                        <td>3</td>
+                        <td></td>
+                        <td>3</td>
+                        <td></td>
+                        <td>순천향</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td>2</td>
+                        <td>전공선택</td>
+                        <td>글로컬적정기술</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>순천향</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td>1</td>
+                        <td>전공선택</td>
+                        <td>로컬크리에이터(캡스톤디자인)</td>
+                        <td>3</td>
+                        <td></td>
+                        <td>3</td>
+                        <td></td>
+                        <td>순천향</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td>2</td>
+                        <td>전공선택</td>
+                        <td>AI마을리빙랩(캡스톤디자인)</td>
+                        <td>3</td>
+                        <td></td>
+                        <td>3</td>
+                        <td></td>
+                        <td>순천향</td>
+                      </tr>
+                      <tr>
+                        <td class="border_b_line02"></td>
+                        <td class="border_b_line02">2</td>
+                        <td class="border_b_line02">전공선택</td>
+                        <td class="border_b_line02">스토리텔링치료</td>
+                        <td class="border_b_line02">3</td>
+                        <td class="border_b_line02">3</td>
+                        <td class="border_b_line02"></td>
+                        <td class="border_b_line02"></td>
+                        <td class="border_b_line02">순천향</td>
+                      </tr>
+
+                      <!--  -->
+                      <tr>
+                        <td rowspan="3" class="border_b_line02">
+                          ICT인문사회융합 <br />
+                          나노디그리 / ICT인<br />문사회융합 <br />
+                          마이크로디그리 <br />
+                        </td>
+                        <td rowspan="3" class="border_b_line02">1</td>
+                        <td>1,2</td>
+                        <td>전공필수</td>
+                        <td>초연결사회와 기술의 이해</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>선문</td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>전공필수</td>
+                        <td>데이터분석기술의 이해</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>세종</td>
+                      </tr>
+                      <tr>
+                        <td class="border_b_line02">1</td>
+                        <td class="border_b_line02">전공선택</td>
+                        <td class="border_b_line02">AI리터러시의 이해</td>
+                        <td class="border_b_line02">3</td>
+                        <td class="border_b_line02">3</td>
+                        <td class="border_b_line02"></td>
+                        <td class="border_b_line02"></td>
+                        <td class="border_b_line02">선문</td>
+                      </tr>
+
+                      <!--  -->
+                      <tr>
+                        <td rowspan="15" class="border_b_line02">
+                          ICT인문 사회 융합 <br />
+                          소셜 비즈니스<br />
+                          기획 전공
+                        </td>
+                        <td rowspan="7">2</td>
+                        <td rowspan="4">1</td>
+                        <td>전공선택</td>
+                        <td>Chat-GPT와 사회이슈</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>선문</td>
+                      </tr>
+                      <tr>
+                        <td>전공선택</td>
+                        <td>일본 디지털 사회문제의 이해</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>선문</td>
+                      </tr>
+                      <tr>
+                        <td>전공선택</td>
+                        <td>프로젝트 기획론</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>선문</td>
+                      </tr>
+                      <tr>
+                        <td>전공선택</td>
+                        <td>동아시아문화정책비교</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>순천향</td>
+                      </tr>
+                      <tr>
+                        <td rowspan="3">2</td>
+                        <td>전공선택</td>
+                        <td>초연결사회의 국가정책</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>세종</td>
+                      </tr>
+                      <tr>
+                        <td>전공선택</td>
+                        <td>디지털 사회법정책</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>한밭</td>
+                      </tr>
+                      <tr>
+                        <td>전공선택</td>
+                        <td>사회적 기업과 조직이론</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>한밭</td>
+                      </tr>
+                      <tr>
+                        <td rowspan="7">3</td>
+                        <td rowspan="3">1</td>
+
+                        <td>전공선택</td>
+                        <td>시민활동가의 역할과 자질</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>선문</td>
+                      </tr>
+                      <tr>
+                        <td>전공선택</td>
+                        <td>사업기획론(심화)</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>선문</td>
+                      </tr>
+                      <tr>
+                        <td>전공선택</td>
+                        <td>초연결시대 사업전략</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>한밭</td>
+                      </tr>
+                      <tr>
+                        <td rowspan="4">2</td>
+                        <td>전공선택</td>
+                        <td>AI시대의 정책결정론</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>세종</td>
+                      </tr>
+                      <tr>
+                        <td>전공선택</td>
+                        <td>디지털 사회문제와 정책</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>순천</td>
+                      </tr>
+                      <tr>
+                        <td>전공선택</td>
+                        <td>사회 빅데이터 분석</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>한밭</td>
+                      </tr>
+                      <tr>
+                        <td>전공선택</td>
+                        <td>사회적 가치와 공공윤리</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>한밭</td>
+                      </tr>
+                      <tr>
+                        <td class="border_b_line02">4</td>
+                        <td class="border_b_line02">1</td>
+                        <td class="border_b_line02">전공선택</td>
+                        <td class="border_b_line02">스마트계약과 지식재산</td>
+                        <td class="border_b_line02">3</td>
+                        <td class="border_b_line02">3</td>
+                        <td class="border_b_line02"></td>
+                        <td class="border_b_line02"></td>
+                        <td class="border_b_line02">한밭</td>
+                      </tr>
+
+                      <!--  -->
+
+                      <tr>
+                        <td rowspan="14">
+                          ICT 인문사회융합 <br />
+                          문화 콘텐츠 <br />
+                          기획 전공
+                        </td>
+                        <td rowspan="5">2</td>
+                        <td rowspan="2">1</td>
+                        <td>전공선택</td>
+                        <td>한·일 위험사회 비교</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>선문</td>
+                      </tr>
+                      <tr>
+                        <td>전공선택</td>
+                        <td>중국역사문화컨텐츠의 이해</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>순천향</td>
+                      </tr>
+                      <tr>
+                        <td rowspan="3">2</td>
+                        <td>전공선택</td>
+                        <td>미디어와 글로벌 문화</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>선문</td>
+                      </tr>
+                      <tr>
+                        <td>전공선택</td>
+                        <td>초연결사회와 문해력 기술의 이해</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>순천</td>
+                      </tr>
+                      <tr>
+                        <td>전공선택</td>
+                        <td>초연결사회의 치유와 문화산업</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>순천향</td>
+                      </tr>
+                      <tr>
+                        <td rowspan="8">3</td>
+                        <td>1,2</td>
+                        <td>전공선택</td>
+                        <td>한·중 문화콘텐츠 개발(PBL) 1·2</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>순천향</td>
+                      </tr>
+                      <tr>
+                        <td rowspan="3">1</td>
+                        <td>전공선택</td>
+                        <td>AI기반 영어학습</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>선문</td>
+                      </tr>
+                      <tr>
+                        <td>전공선택</td>
+                        <td>시와 콘텐츠 창작</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>선문</td>
+                      </tr>
+                      <tr>
+                        <td>전공선택</td>
+                        <td>컨텐츠 창업과 법률</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>한밭</td>
+                      </tr>
+                      <tr>
+                        <td rowspan="4">2</td>
+
+                        <td>전공선택</td>
+                        <td>사회이슈 프로젝트 분석론</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>선문</td>
+                      </tr>
+                      <tr>
+                        <td>전공선택</td>
+                        <td>일본 정보 사회분석 비교</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>선문</td>
+                      </tr>
+                      <tr>
+                        <td>전공선택</td>
+                        <td>경제성 분석</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>한밭</td>
+                      </tr>
+                      <tr>
+                        <td>전공선택</td>
+                        <td>디지털 기술트렌드</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>한밭</td>
+                      </tr>
+                      <tr>
+                        <td>4</td>
+                        <td>1,2</td>
+                        <td>전공선택</td>
+                        <td>글로벌 문화콘텐츠 개발(PBL) 1·2</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                        <td>순천향</td>
+                      </tr>
+                      <tr>
+                        <th colspan="10" class="border_b_line02">계</th>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="mt24">
+                  <p class="program_sub_text">
+                      * ICT인문사회융합 나노디그리/ 마이크로디그리/ 부전공디그리/ 학사 취득을 위해서는 전공필수과목(초연결사회와 기술의 이해, 데이터분석기술의 이해)을 수강하여야 함. <br>  
+                      * ICT인문사회융합 부전공디그리/학사 취득을 위해서는 컨소시엄 내 3개 대학 이상 교차 수강을 하여야 함.  
+                  </p>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- // container -->
+      <!-- footer -->
+      <footer class="footer"></footer>
+      <!-- // footer -->
+    </div>
+  </body>
+</html>
