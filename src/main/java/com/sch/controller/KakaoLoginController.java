@@ -119,7 +119,8 @@ public class KakaoLoginController {
 		
 		kakaoParamMap.add("grant_type", "authorization_code");
 		kakaoParamMap.add("client_id", "bc6f76bb8856c35bd57a3fa6a4331069"); 
-		kakaoParamMap.add("redirect_uri", "http://localhost:8189/auth/register.api"); 
+		// kakaoParamMap.add("redirect_uri", "http://localhost:8189/auth/register.api");  
+		kakaoParamMap.add("redirect_uri", "http://ec2-52-78-212-203.ap-northeast-2.compute.amazonaws.com:8189/auth/register.api"); 
 		kakaoParamMap.add("code", code);
 		
 		// 3-3. 만들어진 header와 body를 가진 HttpEntity(ex kakaoTokenRequest) 객체 생성
@@ -242,8 +243,8 @@ public class KakaoLoginController {
 			paramMap.put("id", id);  
 			
 			Cookie Token = new Cookie("accessToken",  cookieToken);
-			Token.setDomain("localhost");
-			// Token.setDomain("52.78.212.203");
+			// Token.setDomain("localhost");
+			Token.setDomain("52.78.212.203");
 			Token.setPath("/");
 			// 30초간 저장
 			Token.setMaxAge( 60 * 60 * 10); 
@@ -252,16 +253,16 @@ public class KakaoLoginController {
 			
 
 			Cookie loginMode = new Cookie("loginMode", "true");
-			loginMode.setDomain("localhost");
-			// loginMode.setDomain("52.78.212.203");
+			// loginMode.setDomain("localhost");
+			loginMode.setDomain("52.78.212.203");
 			loginMode.setPath("/");
 			loginMode.setMaxAge( 60 * 60 * 10);
 			loginMode.setSecure(true);
 			response.addCookie(loginMode);
 
 			Cookie userEmail = new Cookie("userEmail", email);
-			userEmail.setDomain("localhost");
-			// userEmail.setDomain("52.78.212.203");
+			// userEmail.setDomain("localhost");
+			userEmail.setDomain("52.78.212.203");
 			userEmail.setPath("/");
 			userEmail.setMaxAge( 60 * 60 * 10);
 			userEmail.setSecure(true);
@@ -278,8 +279,8 @@ public class KakaoLoginController {
 				commonService.update("login.kakaoUserUpdate", loginMap);
 				
 				Cookie userSeq = new Cookie("userSeq", (String) loginMap.get("userSeq")); // kakaoaccessToken
-				userSeq.setDomain("localhost");
-				// userSeq.setDomain("52.78.212.203");
+				// userSeq.setDomain("localhost");
+				userSeq.setDomain("52.78.212.203");
 				userSeq.setPath("/");
 				userSeq.setMaxAge( 60 * 60 * 10);
 				userSeq.setSecure(true);
@@ -373,39 +374,40 @@ public class KakaoLoginController {
 	 	Cookie[] cookies = request.getCookies();
 	  
 		    			Cookie JSESSIONID = new Cookie("JSESSIONID", null);
-		    			JSESSIONID.setDomain("localhost");
-		    			// Token.setDomain("52.78.212.203");
+		    			// JSESSIONID.setDomain("localhost");
+		    			JSESSIONID.setDomain("52.78.212.203");
 		    			JSESSIONID.setPath("/");
 		    			JSESSIONID.setMaxAge(0);
 		    			JSESSIONID.setSecure(true);
 		    			response.addCookie(JSESSIONID);
 		    			Cookie Token = new Cookie("accessToken", null);
-		    			Token.setDomain("localhost");
-		    			// Token.setDomain("52.78.212.203");
+		    			
+						// Token.setDomain("localhost");
+		    			Token.setDomain("52.78.212.203");
 		    			Token.setPath("/");
 		    			Token.setMaxAge(0);
 		    			Token.setSecure(true);
 		    			response.addCookie(Token);
 
 		    			Cookie loginMode = new Cookie("loginMode", null);
-		    			loginMode.setDomain("localhost");
-		    			// loginMode.setDomain("52.78.212.203");
+		    			// loginMode.setDomain("localhost");
+		    			loginMode.setDomain("52.78.212.203");
 		    			loginMode.setPath("/");
 		    			loginMode.setMaxAge(0);
 		    			loginMode.setSecure(true);
 		    			response.addCookie(loginMode);
 
 		    			Cookie userEmail = new Cookie("userEmail", null);
-		    			userEmail.setDomain("localhost");
-		    			// userEmail.setDomain("52.78.212.203");
+		    			// userEmail.setDomain("localhost");
+		    			userEmail.setDomain("52.78.212.203");
 		    			userEmail.setPath("/");
 		    			userEmail.setMaxAge(0);
 		    			userEmail.setSecure(true);
 		    			response.addCookie(userEmail);
 
 		    			Cookie userSeq = new Cookie("userSeq", null);
-		    			userSeq.setDomain("localhost");
-		    			// userSeq.setDomain("52.78.212.203");
+		    			// userSeq.setDomain("localhost");
+		    			userSeq.setDomain("52.78.212.203");
 		    			userSeq.setPath("/");
 		    			userSeq.setMaxAge(0);
 		    			userSeq.setSecure(true);

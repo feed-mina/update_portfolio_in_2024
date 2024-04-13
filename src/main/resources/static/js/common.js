@@ -726,7 +726,9 @@ var util = {
 	},
 	getKakaoLogin: () => {
 
-		let KAKAO_GET = "https://kauth.kakao.com/oauth/authorize?client_id=bc6f76bb8856c35bd57a3fa6a4331069&redirect_uri=http://localhost:8189/auth/register.api&response_type=code";
+		let KAKAO_GET = "https://kauth.kakao.com/oauth/authorize?client_id=bc6f76bb8856c35bd57a3fa6a4331069&redirect_uri=http://ec2-52-78-212-203.ap-northeast-2.compute.amazonaws.com:8189/auth/register.api&response_type=code";
+ 
+		// let KAKAO_GET = "https://kauth.kakao.com/oauth/authorize?client_id=bc6f76bb8856c35bd57a3fa6a4331069&redirect_uri=http://localhost:8189/auth/register.api&response_type=code";
  
 		console.log('카카오 로그인');
 		window.location.assign(KAKAO_GET);  

@@ -157,8 +157,8 @@ public class LoginController {
 			"\t\"userEmail\":\"이용자이메일\",\r\n" + //
 			"\t\"userPassword\":\"이용자 비밀번호\"\r\n" + //
 			"}", example = "{\r\n" + //
-					"\t\"userEmail\":\"minyerin@musicen.com\",\r\n" + //
-					"\t\"userPassword\":\"eoqkr!@34\"\r\n" + //
+					"\t\"userEmail\":\"myelin24@naver.com\",\r\n" + //
+					"\t\"userPassword\":\"qawsedrf12!@\"\r\n" + //
 					"}")
 	public ResponseEntity<?> login(@RequestBody Map<String, Object> paramMap) throws Exception {
 		List<String> requiredList = Arrays.asList("userEmail", "userPassword");
