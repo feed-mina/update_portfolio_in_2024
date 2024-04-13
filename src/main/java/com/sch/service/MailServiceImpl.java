@@ -111,8 +111,8 @@ public class MailServiceImpl implements MailService {
 			
 			props.setProperty("mail.smtp.starttls.enable", "true");
 			props.setProperty("mail.smtp.ssl.trust", "*");
-			props.setProperty("mail.smtp.ssl.enable", "true");
-			
+			props.setProperty("mail.smtp.ssl.enable", String.valueOf(true));
+			props.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2"); 
 			props.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
 			javaMailSender();
 		} catch (MessagingException e) {

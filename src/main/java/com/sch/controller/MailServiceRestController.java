@@ -1,23 +1,13 @@
 package com.sch.controller;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sch.service.RegisterMail;
-import com.sch.util.CommonResponse;
-
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping(value = "/mail")
@@ -35,7 +25,8 @@ public class MailServiceRestController {
         return code;
     }
 
-    
+/*
+ *     
     @PostMapping("/emailConfirm")
     @ApiOperation(value = "회원 가입시 이메인 인증", notes = "기존사용하고 있는 이메일을 통해 인증")
     @ApiResponses({
@@ -45,12 +36,19 @@ public class MailServiceRestController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<?> emailConfirm(
-            @RequestBody @ApiParam(value="이메일정보 정보", required = true) String email) throws Exception {
+            @RequestBody @ApiParam(value="이메일정보 정보", required = true) String email)  {
  
-        String confirm = registerMail.sendSimpleMessage(email);
+        MimeMessage confirm = null;
+		try {
+			confirm = registerMail.creatMessage(email);
+		} catch (UnsupportedEncodingException | MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
  
         return CommonResponse.statusResponse(HttpServletResponse.SC_OK, confirm);   
     }
+ * */
 
     @PostMapping("/verifyCode")
     @ResponseBody

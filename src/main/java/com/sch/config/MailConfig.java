@@ -14,7 +14,7 @@ public class MailConfig {
 	        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
 
 	        javaMailSender.setHost("smtp.naver.com");  // SMTP 서버명
-	        javaMailSender.setUsername("alsdPfls_"); // 네이버 아이디
+	        javaMailSender.setUsername("myelin24@naver.com"); // 네이버 아이디
 	        javaMailSender.setPassword("qawsedrf12!@"); // 네이버 비밀번호
 
 	        javaMailSender.setPort(465); // SMTP 포트
@@ -35,8 +35,9 @@ public class MailConfig {
 	        properties.setProperty("mail.smtp.starttls.enable", "true"); // smtp strattles 사용
 	        properties.setProperty("mail.debug", "true"); // 디버그 사용
 	        properties.setProperty("mail.smtp.ssl.trust", "smtp.naver.com"); // ssl 인증 서버 (smtp 서버명)
+	        properties.setProperty("mail.smtps.ssl.protocols","TLSv1.2"); //SSLHandshakeException  protocol is disabled or cipher suites are inappropriate
 	        properties.setProperty("mail.smtp.ssl.enable", "true"); // ssl 사용
-
+	        properties.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2"); 
 	        return properties;
 	    }
 }
