@@ -75,6 +75,12 @@ var vueInit = () => {
 
 var event = {
 	
+    init: () => {
+        	const updateButton = document.getElementById("btnUpdateNotice");
+        	const deleteButton = document.getElementById("btnDeleteNotice");
+       		updateButton.style.display = "none";
+        	deleteButton.style.display = "none";
+    },
 	
 }
 
@@ -82,5 +88,6 @@ var event = {
 $(document).ready( () => {
 	vueInit();
 	vm.noticeDetailOne();
+	event.init();
 })
 
