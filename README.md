@@ -1,4 +1,4 @@
-# 2024년 3월 update 
+# 2024년 4월 update 
 - JWT
 - security config
 - OAuth2 (카카오 로그인)
@@ -7,7 +7,5 @@
 - 슬라이드 기능
 - CRUD custom
   
-  업데이트 할 목록
-- 이미지 gallary
-- smtp 
+ ec2 주소 : http://ec2-52-78-212-203.ap-northeast-2.compute.amazonaws.com:8189)
  
